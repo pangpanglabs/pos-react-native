@@ -13,18 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 
-Array.prototype.indexOf = function (val) {
-    for (var i = 0; i < this.length; i++) {
-        if (this[i] == val) return i;
-    }
-    return -1;
-};
-Array.prototype.remove = function (val) {
-    var index = this.indexOf(val);
-    if (index > -1) {
-        this.splice(index, 1);
-    }
-};
+
 const navigatorTitle = "CardItemList";
 var PangPangBridge = require('react-native').NativeModules.PangPangBridge;
 export default class BasketList extends React.Component {
@@ -48,7 +37,7 @@ export default class BasketList extends React.Component {
         this.seachCartItems();
     }
     refreshDataSource(items) {
-        this.setState({ cardItems: items?items:[] });
+        this.setState({ cardItems: items ? items : [] });
         this.computeTatol();
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(this.state.cardItems),

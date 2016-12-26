@@ -11,8 +11,8 @@ import {
   TextInput,
   TouchableHighlight,
 } from 'react-native';
-// import Icon from 'react-native-vector-icons/FontAwesome';
-// // <Icon name="rocket" size={30} color="#3e9ce9"></Icon>
+import Icon from 'react-native-vector-icons/FontAwesome';
+// <Icon name="rocket" size={30} color="#3e9ce9"></Icon>
 var PangPangBridge = require('react-native').NativeModules.PangPangBridge;
 
 export default class Login extends Component {
@@ -23,6 +23,7 @@ export default class Login extends Component {
       token: "",
       userName: "admin",
       password: "123qwe",
+      showLoading: false
     }
   }
   componentDidMount() {
@@ -40,10 +41,13 @@ export default class Login extends Component {
 
   }
   login() {
+
     let self = this;
     const { navigator } = this.props;
     let userName = this.state.userName;
     let password = this.state.password;
+    self.setState({ showLoading: true });
+
     PangPangBridge.loginAsync(userName, password).then(
       (data) => {
         var rs = JSON.parse(data);
@@ -64,13 +68,24 @@ export default class Login extends Component {
         } else {
           console.log(rs.error.message);
         }
+        self.setState({ showLoading: false });
+
       }
     );
   }
 
 
   render() {
-  
+    let loginButtonContent;
+    if (this.state.showLoading) {
+      loginButtonContent = <Icon name="spinner" size={25} color="#fff" ></Icon>
+    } else {
+      loginButtonContent = (
+        <Text style={styles.btnText}>
+          登录
+          </Text>
+      )
+    }
     return (
       <View style={styles.container}>
         <TextInput
@@ -87,11 +102,9 @@ export default class Login extends Component {
         <View style={styles.inputTextLine} />
 
         <TouchableHighlight style={styles.loginButton} underlayColor={'#7fc0ff'} onPress={() => this.login()}>
-          <Text style={styles.btnText}>
-            登录
-          </Text>
+          {loginButtonContent}
         </TouchableHighlight>
-        
+
       </View>
     );
   }
@@ -104,7 +117,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingTop:150,
+    paddingTop: 150,
   },
 
   inputText: {
