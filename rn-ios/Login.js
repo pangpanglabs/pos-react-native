@@ -98,6 +98,7 @@ export default class Login extends Component {
           style={styles.inputText}
           onChangeText={(text) => this.setState({ password: text })}
           value={this.state.password}
+          secureTextEntry={true}
           />
         <View style={styles.inputTextLine} />
 

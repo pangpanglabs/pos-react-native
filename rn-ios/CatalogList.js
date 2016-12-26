@@ -6,6 +6,7 @@ import {
     StyleSheet,
     View,
     Text,
+    TextInput,
     TouchableOpacity,
     AsyncStorage
 } from 'react-native';
@@ -25,6 +26,7 @@ export default class CatalogList extends React.Component {
         super(props);
         var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
+            searchKey: "",
             catalogData: [],
             dataSource: ds,
             totalPrice: 0,
@@ -100,7 +102,9 @@ export default class CatalogList extends React.Component {
     }
     searchProducts() {
         var self = this;
-        PangPangBridge.searchProducts("A", pageNum, pageSize).then(
+        var key = this.state.searchKey;
+
+        PangPangBridge.searchProducts(key ? key : "", pageNum, pageSize).then(
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
@@ -169,11 +173,17 @@ export default class CatalogList extends React.Component {
         const {menuToggle} = this.props;
         menuToggle();
     }
+    _pressSearchButton() {
+        pageNum = 0;
+        this.setState({ catalogData: [] });
+
+        this.searchProducts(this.state.searchKey);
+    }
     _renderFooter() {
         if (this.state.foot === 1) {//加载完毕  
             return (
                 <View style={{ height: 40, alignItems: 'center', justifyContent: 'flex-start', }}>
-                    <Text style={{ color: '#999999', fontSize: 12, marginTop: 10,width: 100 }}>
+                    <Text style={{ color: '#999999', fontSize: 12, marginTop: 10, width: 100 }}>
                         {this.state.moreText}
                     </Text>
                 </View>);
@@ -205,7 +215,17 @@ export default class CatalogList extends React.Component {
             <View style={{ backgroundColor: 'white', }}>
                 <View style={styles.navigatorBar} >
                     <TouchableOpacity onPress={this._pressMenuButton.bind(this)} style={styles.backBtn}>
-                        <Icon name="bars" style={styles.backBtnText} ></Icon>
+                        <Icon name="bars" style={styles.backBtnImg} ></Icon>
+                    </TouchableOpacity>
+                    <TextInput
+                        style={styles.inputSearchText}
+                        onChangeText={(text) => this.setState({ searchKey: text })}
+                        value={this.state.searchKey}
+                        placeholder="搜索"
+                        clearButtonMode="always"
+                        />
+                    <TouchableOpacity style={styles.rightBtn} onPress={this._pressSearchButton.bind(this)}>
+                        <Icon name="search" style={styles.backBtnImg} ></Icon>
                     </TouchableOpacity>
                 </View>
 
@@ -236,9 +256,12 @@ const styles = StyleSheet.create({
     navigatorBar: {
         backgroundColor: "#3e9ce9",
         height: 64,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     backBtn: {
-        // backgroundColor:'green',
+        // backgroundColor: 'green',
         marginTop: 20,
         height: 40,
         width: 50,
@@ -247,10 +270,26 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         justifyContent: 'center',
     },
-    backBtnText: {
+    backBtnImg: {
         fontSize: 25,
         textAlign: 'center',
         color: 'white',
+    },
+    inputSearchText: {
+        marginTop: 29,
+        width: 200,
+        backgroundColor: 'white',
+        height: 25,
+        paddingLeft: 5,
+        color: 'gray',
+        fontSize: 15,
+    },
+    rightBtn: {
+        //  backgroundColor:'green',
+        marginTop: 20,
+        height: 40,
+        width: 50,
+        justifyContent: 'center',
     },
     count: {
         height: 60,
