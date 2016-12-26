@@ -1,0 +1,8 @@
+framework module "Pos" {
+	header "ref.h"
+    header "P2Pos.h"
+    header "GoUniverse.h"
+    header "Pos.h"
+
+    export *
+}
