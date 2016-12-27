@@ -27,6 +27,7 @@
 		C10F7AA01E04066F00711137 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C10F7A971E04066F00711137 /* FontAwesome.ttf */; };
 		C16B7BF91E077C5200D3229D /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C16B7BF81E077C5200D3229D /* Ionicons.ttf */; };
 		C16B7C121E10EB0000D3229D /* Pos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C16B7C111E10EB0000D3229D /* Pos.framework */; };
+		C16B7C141E11F6CE00D3229D /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = C16B7C131E11F6CE00D3229D /* bundle */; };
 		C17E3A281DFE80F900CBDCEC /* PangPangBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = C17E3A271DFE80F900CBDCEC /* PangPangBridge.m */; };
 		C17E3A291DFE80F900CBDCEC /* PangPangBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = C17E3A271DFE80F900CBDCEC /* PangPangBridge.m */; };
 /* End PBXBuildFile section */
@@ -200,6 +201,7 @@
 		C10F7A971E04066F00711137 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = pangpangPos/FontAwesome.ttf; sourceTree = "<group>"; };
 		C16B7BF81E077C5200D3229D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		C16B7C111E10EB0000D3229D /* Pos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Pos.framework; sourceTree = "<group>"; };
+		C16B7C131E11F6CE00D3229D /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
 		C17E3A261DFE80F900CBDCEC /* PangPangBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PangPangBridge.h; sourceTree = "<group>"; };
 		C17E3A271DFE80F900CBDCEC /* PangPangBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PangPangBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -388,6 +390,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				C16B7C131E11F6CE00D3229D /* bundle */,
 				13B07FAE1A68108700A75B9A /* pangpangPos */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* pangpangPosTests */,
@@ -676,6 +679,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C16B7C141E11F6CE00D3229D /* bundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C10F7AA01E04066F00711137 /* FontAwesome.ttf in Resources */,
 				C16B7BF91E077C5200D3229D /* Ionicons.ttf in Resources */,

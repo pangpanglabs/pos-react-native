@@ -152,7 +152,7 @@ export default class CatalogList extends React.Component {
         var rowData = this.state.catalogData[rowID];
         await PangPangBridge.addItem(this.state.cardId, rowData.skuCode, 1).then((data) => {
             var rs = JSON.parse(data);
-            console.log(rs.result);
+            // console.log(rs.result);
             self.refreshDataSource();
         });
 
@@ -182,15 +182,15 @@ export default class CatalogList extends React.Component {
     _renderFooter() {
         if (this.state.foot === 1) {//加载完毕  
             return (
-                <View style={{ height: 40, alignItems: 'center', justifyContent: 'flex-start', }}>
-                    <Text style={{ color: '#999999', fontSize: 12, marginTop: 10, width: 100 }}>
-                        {this.state.moreText}
+                <View style={{ height: 40, alignItems: 'center', justifyContent: 'center', }}>
+                    <Text style={{ color: '#999', fontSize: 13, marginTop: 1, width: 100 ,textAlign:'center'}}>
+                        {moreText}
                     </Text>
                 </View>);
         } else if (this.state.foot === 2) {//加载中  
             return (
                 <View style={{ height: 40, alignItems: 'center', justifyContent: 'center', }}>
-                    <Text style={{ width: 100, height: 20, textAlign: 'center' }} > 加载中</Text>
+                    <Text style={{ width: 100, height: 20, fontSize: 13,textAlign: 'center' }} > 加载中</Text>
                 </View>);
         }
     }
