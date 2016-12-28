@@ -3,7 +3,7 @@
 try {
     var path = require("path");
     var Launcher = require("/Users/liche/.vscode/extensions/vsmobile.vscode-react-native-0.2.4/out/debugger/launcher.js").Launcher;
-    new Launcher("/Users/liche/RN/demo1/pangpangPos", "/Users/liche/RN/demo1/pangpangPos").launch();
+    new Launcher("/Users/liche/RN/demo1/pangpangPosRN", "/Users/liche/RN/demo1/pangpangPosRN").launch();
 } catch (e) {
     throw new Error("Unable to launch application. Try deleting .vscode/launchReactNative.js and restarting vscode.");
 }
