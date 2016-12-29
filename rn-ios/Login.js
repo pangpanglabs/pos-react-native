@@ -48,7 +48,7 @@ export default class Login extends Component {
     let password = this.state.password;
     self.setState({ showLoading: true });
 
-    PangPangBridge.loginAsync(userName, password).then(
+    PangPangBridge.login(userName, password).then(
       (data) => {
         var rs = JSON.parse(data);
         // console.log(rs);

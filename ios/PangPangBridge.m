@@ -24,7 +24,7 @@ RCT_EXPORT_METHOD(doSomething:(NSString *)name callback:(RCTResponseSenderBlock)
 //    NSLog(@"doSomething:%@",name);
 //  return result
 }
-RCT_EXPORT_METHOD(loginAsync:(NSString *)userName  password:(NSString *)pw
+RCT_EXPORT_METHOD(login:(NSString *)userName  password:(NSString *)pw
                                              resolver:(RCTPromiseResolveBlock)resolve
                                              rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -44,22 +44,7 @@ RCT_EXPORT_METHOD(loginAsync:(NSString *)userName  password:(NSString *)pw
   }
 }
 
-RCT_EXPORT_METHOD(searchContents:(NSString *)q  skipCount:(NSInteger )skipCount maxResultCount:(NSInteger )maxResultCount
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///catalog/search-contents?q=%@&skipCount=%ld&maxResultCount=%ld",q,(long)skipCount,(long)maxResultCount];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
+
 RCT_EXPORT_METHOD(searchProducts:(NSString *)q  skipCount:(NSInteger )skipCount maxResultCount:(NSInteger )maxResultCount
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -140,12 +125,12 @@ RCT_EXPORT_METHOD(removeCart:(NSInteger)cartId
     reject(code,nil,nil);
   }
 }
-RCT_EXPORT_METHOD(addItem:(NSInteger)cartId skuCode:(NSString *)skuCode quantity:(NSInteger)quantity
+RCT_EXPORT_METHOD(addItem:(NSInteger)cartId skuId:(NSInteger)skuId quantity:(NSInteger)quantity
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
   
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/add-item?cartId=%ld&skuCode=%@&quantity=%ld",(long)cartId,skuCode,(long)quantity];
+  NSString *url = [NSString stringWithFormat:@"pp:///cart/add-item?cartId=%ld&skuId=%ld&quantity=%ld",(long)cartId,(long)skuId,(long)quantity];
   
   NSString* result = P2PosCall(url);
   NSLog(@"doSomething: %@",result);
@@ -156,12 +141,12 @@ RCT_EXPORT_METHOD(addItem:(NSInteger)cartId skuCode:(NSString *)skuCode quantity
     reject(code,nil,nil);
   }
 }
-RCT_EXPORT_METHOD(removeItem:(NSInteger)cartId skuCode:(NSString *)skuCode quantity:(NSInteger)quantity
+RCT_EXPORT_METHOD(removeItem:(NSInteger)cartId skuId:(NSInteger)skuId quantity:(NSInteger)quantity
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
   
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/remove-item?cartId=%ld&skuCode=%@&quantity=%ld",(long)cartId,skuCode,(long)quantity];
+  NSString *url = [NSString stringWithFormat:@"pp:///cart/remove-item?cartId=%ld&skuCode=%ld&quantity=%ld",(long)cartId,(long)skuId,(long)quantity];
   
   NSString* result = P2PosCall(url);
   NSLog(@"doSomething: %@",result);
@@ -179,6 +164,55 @@ RCT_EXPORT_METHOD(placeOrder:(NSInteger)cartId
 {
   
   NSString *url = [NSString stringWithFormat:@"pp:///order/place-order?cartId=%ld",(long)cartId];
+  
+  NSString* result = P2PosCall(url);
+  NSLog(@"doSomething: %@",result);
+  NSString *code = @"500";
+  if (result) {
+    resolve(result);
+  } else {
+    reject(code,nil,nil);
+  }
+}
+RCT_EXPORT_METHOD(allOrders:
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  
+  NSString *url = [NSString stringWithFormat:@"pp:///order/all-orders"];
+  
+  NSString* result = P2PosCall(url);
+  NSLog(@"doSomething: %@",result);
+  NSString *code = @"500";
+  if (result) {
+    resolve(result);
+  } else {
+    reject(code,nil,nil);
+  }
+}
+
+RCT_EXPORT_METHOD(user:
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  
+  NSString *url = [NSString stringWithFormat:@"pp:///context/user"];
+  
+  NSString* result = P2PosCall(url);
+  NSLog(@"doSomething: %@",result);
+  NSString *code = @"500";
+  if (result) {
+    resolve(result);
+  } else {
+    reject(code,nil,nil);
+  }
+}
+RCT_EXPORT_METHOD(settings:
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  
+  NSString *url = [NSString stringWithFormat:@"pp:///context/settings"];
   
   NSString* result = P2PosCall(url);
   NSLog(@"doSomething: %@",result);

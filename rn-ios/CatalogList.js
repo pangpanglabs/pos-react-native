@@ -104,16 +104,16 @@ export default class CatalogList extends React.Component {
         var self = this;
         var key = this.state.searchKey;
 
-        PangPangBridge.searchProducts(key ? key : "", pageNum, pageSize).then(
+        PangPangBridge.searchProducts(key ? key : "", pageSize * pageNum, pageSize).then(
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
                 if (rs.success) {
-                    self.setState({ catalogData: [...self.state.catalogData, ...rs.result] });
+                    self.setState({ catalogData: [...self.state.catalogData, ...rs.result.items] });
                     self.setState({
                         dataSource: self.state.dataSource.cloneWithRows(self.state.catalogData),
                     });
-                    if (rs.result.length < pageSize) {
+                    if (pageSize * pageNum > rs.result.totalCount) {
                         self.setState({ foot: 1 });
                     } else {
                         self.setState({ foot: 0 });
@@ -150,10 +150,11 @@ export default class CatalogList extends React.Component {
     async _pressRow(rowID) {
         var self = this;
         var rowData = this.state.catalogData[rowID];
-        await PangPangBridge.addItem(this.state.cardId, rowData.skuCode, 1).then((data) => {
+        console.log(this.state.cardId+" "+rowData.skuId);
+        await PangPangBridge.addItem(this.state.cardId, rowData.skuId, 1).then((data) => {
             var rs = JSON.parse(data);
-            // console.log(rs.result);
-            self.refreshDataSource();
+            console.log(rs);
+            // self.refreshDataSource();
         });
 
     }
@@ -163,6 +164,7 @@ export default class CatalogList extends React.Component {
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) } } style={styles.row}>
                 <View style={styles.rowContent}>
                     <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
+                    <Text>{rowData.skuId}</Text>
                     <Text style={styles.rowContentPrice}>¥{rowData.price}</Text>
                 </View>
                 <View style={styles.line}></View>
@@ -183,14 +185,14 @@ export default class CatalogList extends React.Component {
         if (this.state.foot === 1) {//加载完毕  
             return (
                 <View style={{ height: 40, alignItems: 'center', justifyContent: 'center', }}>
-                    <Text style={{ color: '#999', fontSize: 13, marginTop: 1, width: 100 ,textAlign:'center'}}>
+                    <Text style={{ color: '#999', fontSize: 13, marginTop: 1, width: 100, textAlign: 'center' }}>
                         {moreText}
                     </Text>
                 </View>);
         } else if (this.state.foot === 2) {//加载中  
             return (
                 <View style={{ height: 40, alignItems: 'center', justifyContent: 'center', }}>
-                    <Text style={{ width: 100, height: 20, fontSize: 13,textAlign: 'center' }} > 加载中</Text>
+                    <Text style={{ width: 100, height: 20, fontSize: 13, textAlign: 'center' }} > 加载中</Text>
                 </View>);
         }
     }
