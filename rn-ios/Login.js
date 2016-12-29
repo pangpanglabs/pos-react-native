@@ -66,7 +66,8 @@ export default class Login extends Component {
           // SetToken(storage, rs.result.token);
           // self.props.loginComplete();
         } else {
-          console.log(rs.error.message);
+          console.log(rs);
+          alert('login faild')
         }
         self.setState({ showLoading: false });
 

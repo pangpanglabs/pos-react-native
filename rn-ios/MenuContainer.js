@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SideMenu from 'react-native-side-menu';
-import Navi from './Navi'
+import Navi from './Navi';
+import LeftMenu from './LeftMenu';
 import {
   Dimensions,
   TouchableOpacity,
@@ -9,17 +10,7 @@ import {
   Text,
   View
 } from 'react-native';
-class Menu extends React.Component {
-  render() {
-    return (
-      <View style={styles.menuContainer}>
-        <Text >
-          111111
-        </Text>
-      </View>
-    );
-  }
-}
+
 export default class MenuContainer extends Component {
   constructor(){
     super();
@@ -45,7 +36,7 @@ export default class MenuContainer extends Component {
     });
   }
   render() {
-    const menu = <Menu navigator={navigator}/>;
+    const menu = <LeftMenu navigator={navigator}/>;
 
     return (
       <SideMenu 
@@ -60,10 +51,5 @@ export default class MenuContainer extends Component {
   }
 }
 const styles = StyleSheet.create({
-  menuContainer:{
-    flex: 1,
-    marginTop:64,
-    // justifyContent: 'center',
-    backgroundColor: 'red',
-  },
+
 });

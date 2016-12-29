@@ -95,10 +95,17 @@ export default class CatalogList extends React.Component {
         });
     }
     componentDidMount() {
+        this.settings();
         this.initCard();
         this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
         this.searchProducts();
 
+    }
+    settings() {
+        PangPangBridge.settings(0).then((data) => {
+            console.log("settings");
+            console.log(data);
+        });
     }
     searchProducts() {
         var self = this;
@@ -150,7 +157,7 @@ export default class CatalogList extends React.Component {
     async _pressRow(rowID) {
         var self = this;
         var rowData = this.state.catalogData[rowID];
-        console.log(this.state.cardId+" "+rowData.skuId);
+        console.log(this.state.cardId + " " + rowData.skuId);
         await PangPangBridge.addItem(this.state.cardId, rowData.skuId, 1).then((data) => {
             var rs = JSON.parse(data);
             console.log(rs);

@@ -33,7 +33,7 @@ RCT_EXPORT_METHOD(login:(NSString *)userName  password:(NSString *)pw
   
   //  @"pp:///account/login?username=admin&password=123qwe"
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"account/login: %@",result);
   NSString *code = @"500";
 //  NSError *error = [NSError errorWithDomain:@"" code:500 userInfo:nil];
 //  NSString *message = @"error message";
@@ -53,7 +53,7 @@ RCT_EXPORT_METHOD(searchProducts:(NSString *)q  skipCount:(NSInteger )skipCount 
   NSString *url = [NSString stringWithFormat:@"pp:///catalog/search-products?q=%@&skipCount=%ld&maxResultCount=%ld",q,(long)skipCount,(long)maxResultCount];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"catalog/searchProducts: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -69,7 +69,7 @@ RCT_EXPORT_METHOD(createCart:
   NSString *url = [NSString stringWithFormat:@"pp:///cart/create-cart"];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"cart/createCart: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -85,7 +85,7 @@ RCT_EXPORT_METHOD(allCart:(NSInteger)cartId
   NSString *url = [NSString stringWithFormat:@"pp:///cart/all-cart?cartId=%ld",(long)cartId];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"cart/allCart: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -101,7 +101,7 @@ RCT_EXPORT_METHOD(getCart:(NSInteger)cartId
   NSString *url = [NSString stringWithFormat:@"pp:///cart/get-cart?cartId=%ld",(long)cartId];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"cart/getCart: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -117,7 +117,7 @@ RCT_EXPORT_METHOD(removeCart:(NSInteger)cartId
   NSString *url = [NSString stringWithFormat:@"pp:///cart/remove-cart?cartId=%ld",(long)cartId];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"cart/removeCart: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -133,7 +133,7 @@ RCT_EXPORT_METHOD(addItem:(NSInteger)cartId skuId:(NSInteger)skuId quantity:(NSI
   NSString *url = [NSString stringWithFormat:@"pp:///cart/add-item?cartId=%ld&skuId=%ld&quantity=%ld",(long)cartId,(long)skuId,(long)quantity];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"cart/addItem: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -149,7 +149,7 @@ RCT_EXPORT_METHOD(removeItem:(NSInteger)cartId skuId:(NSInteger)skuId quantity:(
   NSString *url = [NSString stringWithFormat:@"pp:///cart/remove-item?cartId=%ld&skuCode=%ld&quantity=%ld",(long)cartId,(long)skuId,(long)quantity];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"cart/removeItem: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -166,7 +166,7 @@ RCT_EXPORT_METHOD(placeOrder:(NSInteger)cartId
   NSString *url = [NSString stringWithFormat:@"pp:///order/place-order?cartId=%ld",(long)cartId];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"order/placeOrder: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -182,7 +182,7 @@ RCT_EXPORT_METHOD(allOrders:
   NSString *url = [NSString stringWithFormat:@"pp:///order/all-orders"];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"order/allOrders: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -199,7 +199,7 @@ RCT_EXPORT_METHOD(user:
   NSString *url = [NSString stringWithFormat:@"pp:///context/user"];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"context/user: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
@@ -215,7 +215,7 @@ RCT_EXPORT_METHOD(settings:
   NSString *url = [NSString stringWithFormat:@"pp:///context/settings"];
   
   NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
+  NSLog(@"context/settings: %@",result);
   NSString *code = @"500";
   if (result) {
     resolve(result);
