@@ -2,6 +2,7 @@ import React from 'react';
 import Redirect from './Redirect';
 import { LoadLocalStorage, LoadToken, SetToken } from '../common/LocalStorage';
 import Login from './Login';
+import Setting from './Setting';
 import {
     View,
     Text,
@@ -9,7 +10,7 @@ import {
     StyleSheet,
     Navigator
 } from 'react-native';
-
+import { signalObj } from './Signals';
 
 export default class Navi extends React.Component {
     constructor(props) {
@@ -26,6 +27,30 @@ export default class Navi extends React.Component {
             <Component {...route.params}  {...this.props} navigator={navigator} />
         );
     }
+    componentDidMount() {
+        // Event
+        signalObj.removeAll();
+        signalObj.add(function (signal, param) {
+            if (signal === "naviReplace") {
+                console.log(param);
+                switch (param) {
+                    case "settings":
+                        global.myNavigator.replace({
+                            name: 'Setting',
+                            component: Setting,
+                        });
+                        break;
+                    case "user":
+                        alert(param);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+    }
+
     render() {
         let defaultName = 'Redirect';
         let defaultComponent = Redirect;

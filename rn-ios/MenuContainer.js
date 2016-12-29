@@ -10,6 +10,7 @@ import {
   Text,
   View
 } from 'react-native';
+import { signalObj } from './Signals';
 
 export default class MenuContainer extends Component {
   constructor(){
@@ -30,11 +31,12 @@ export default class MenuContainer extends Component {
   }
 
   onMenuItemSelected = (item) => {
-    console.log(item)
+    // console.log(item)
     this.setState({
       isOpen: false,
       selectedItem: item,
     });
+    signalObj.dispatch("naviReplace",item);
   }
   render() {
     const menu = <LeftMenu onItemSelected={this.onMenuItemSelected}/>;

@@ -26,6 +26,12 @@ export default class Redirect extends React.Component {
             redirectPageState: "loading",
         }
     }
+    
+    componentWillMount() {
+        const { navigator } = this.props;
+        global.myNavigator = navigator;
+    }
+    
     componentDidMount() {
         var self = this;
         const { navigator } = this.props;
