@@ -22,6 +22,9 @@ var pageNum = 0;
 const pageSize = 5;
 
 export default class CatalogList extends React.Component {
+    static propTypes = {
+        updateMenuState: React.PropTypes.func.isRequired,
+    };
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -179,8 +182,8 @@ export default class CatalogList extends React.Component {
         )
     }
     _pressMenuButton() {
-        const {menuToggle} = this.props;
-        menuToggle();
+        const {updateMenuState} = this.props;
+        updateMenuState(true);
     }
     _pressSearchButton() {
         pageNum = 0;

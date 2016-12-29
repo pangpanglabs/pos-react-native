@@ -16,7 +16,7 @@ export default class MenuContainer extends Component {
     super();
     this.state={
       isOpen: false,
-      selectedItem: 'About',
+      selectedItem: '',
       openMenuOffset:Dimensions.get('window').width/2,
     }
   }
@@ -30,13 +30,14 @@ export default class MenuContainer extends Component {
   }
 
   onMenuItemSelected = (item) => {
+    console.log(item)
     this.setState({
       isOpen: false,
       selectedItem: item,
     });
   }
   render() {
-    const menu = <LeftMenu navigator={navigator}/>;
+    const menu = <LeftMenu onItemSelected={this.onMenuItemSelected}/>;
 
     return (
       <SideMenu 
@@ -45,7 +46,7 @@ export default class MenuContainer extends Component {
         openMenuOffset={this.state.openMenuOffset}
         onChange={(isOpen) => this.updateMenuState(isOpen)}
       >
-        <Navi {...this.state} menuToggle={() => this.toggle()}  />
+        <Navi {...this.state} updateMenuState={(isOpen) => this.updateMenuState(isOpen)}  />
       </SideMenu>
     );
   }
