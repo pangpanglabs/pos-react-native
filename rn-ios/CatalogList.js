@@ -163,8 +163,8 @@ export default class CatalogList extends React.Component {
         console.log(this.state.cardId + " " + rowData.skuId);
         await PangPangBridge.addItem(this.state.cardId, rowData.skuId, 1).then((data) => {
             var rs = JSON.parse(data);
-            console.log(rs);
-            // self.refreshDataSource();
+            // console.log(rs);
+            self.refreshDataSource();
         });
 
     }

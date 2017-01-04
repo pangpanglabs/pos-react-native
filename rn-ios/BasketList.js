@@ -70,7 +70,7 @@ export default class BasketList extends React.Component {
         if (this.props.cardId) {
             PangPangBridge.getCart(parseInt(this.props.cardId)).then((card) => {
                 var rs = JSON.parse(card);
-                // console.log(rs)
+                // console.log(rs.result.items)
                 this.refreshDataSource(rs.result.items);
             });
         }
