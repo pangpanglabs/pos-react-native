@@ -1,6 +1,5 @@
 import React from 'react';
 import Redirect from './Redirect';
-import { LoadLocalStorage, LoadToken, SetToken } from '../common/LocalStorage';
 import Login from './Login';
 import Setting from './Setting';
 import {

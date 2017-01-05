@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
-import { LoadLocalStorage, LoadToken, SetToken } from '../common/LocalStorage';
 import CatalogList from './CatalogList';
 import {
   Dimensions,
@@ -32,13 +31,6 @@ export default class Login extends Component {
     AsyncStorage.getItem("token").then((data) => {
       console.log(data);
     })
-    // var storage = LoadLocalStorage();
-    // LoadToken(storage, function (exist, data) {
-    //   // console.log(exist ? data : "");
-    //   var token = exist ? data : "";
-    //   self.setState({ token: token })
-    // });
-
   }
   login() {
 
@@ -61,10 +53,6 @@ export default class Login extends Component {
               })
             }
           })
-          // self.setState({ token: rs.result.token });
-          // var storage = LoadLocalStorage();
-          // SetToken(storage, rs.result.token);
-          // self.props.loginComplete();
         } else {
           console.log(rs);
           alert('login faild')

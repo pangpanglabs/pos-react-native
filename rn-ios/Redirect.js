@@ -7,7 +7,6 @@ import {
     Navigator
 } from 'react-native';
 import CatalogList from './CatalogList';
-import { LoadLocalStorage, LoadToken, SetToken } from '../common/LocalStorage';
 import Login from './Login';
 class Loading extends React.Component {
     render() {
