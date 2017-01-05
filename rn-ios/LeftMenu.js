@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 let tempMenuData = [
+    { menuName: "catalogList", menuCode: "catalogList" },    
     { menuName: "user", menuCode: "user" },
     { menuName: "settings", menuCode: "settings" },
 ];
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     },
     line: {
         backgroundColor: "gray",
-        height: 1,
+        height: 0.5,
         width: Dimensions.get('window').width / 2 - 20,
         alignSelf: 'center',
         opacity: 0.4,

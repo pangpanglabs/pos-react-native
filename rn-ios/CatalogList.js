@@ -20,7 +20,7 @@ const moreText = "加载完毕";    //foot显示的文案
 //页码  
 var pageNum = 0;
 //每页显示数据的条数  
-const pageSize = 5;
+const pageSize = 10;
 
 export default class CatalogList extends React.Component {
     static propTypes = {
@@ -50,7 +50,7 @@ export default class CatalogList extends React.Component {
         this.subscription.remove();
     }
     changeTotal(data) {
-        console.log('changeTotal');
+        // console.log('changeTotal');
         this.initCard();
     }
     refreshDataSource() {
@@ -86,7 +86,7 @@ export default class CatalogList extends React.Component {
                     self.refreshDataSource();
                 });
             } else {
-                PangPangBridge.callAPI("/cart/create-cart",null).then((data) => {
+                PangPangBridge.callAPI("/cart/create-cart", null).then((data) => {
                     var rs = JSON.parse(data);
                     console.log(rs.result);
                     self.setState({ cardId: parseInt(rs.result.id) });
@@ -98,24 +98,20 @@ export default class CatalogList extends React.Component {
             }
         });
     }
-    componentDidMount() {
-        this.settings();
-        this.initCard();
-        this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
-        this.searchProducts();
 
+    componentWillMount() {
+        setTimeout(() => {
+            this.initCard();
+            this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
+            this.searchProducts();
+        }, 300);
     }
-    settings() {
-        PangPangBridge.callAPI("/context/settings",null).then((data) => {
-            console.log("settings");
-            console.log(data);
-        });
-    }
+    
     searchProducts() {
         var self = this;
         var key = this.state.searchKey;
 
-        PangPangBridge.callAPI( "/catalog/search-products",{q:key,skipCount: pageSize * pageNum,maxResultCount: pageSize}).then(
+        PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
@@ -162,7 +158,7 @@ export default class CatalogList extends React.Component {
         var self = this;
         var rowData = this.state.catalogData[rowID];
         console.log(this.state.cardId + " " + rowData.skuId);
-        await PangPangBridge.callAPI("/cart/add-item",{cartId:this.state.cardId,skuId:rowData.skuId,quantity:1}).then((data) => {
+        await PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: rowData.skuId, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
             self.refreshDataSource();
@@ -359,7 +355,7 @@ const styles = StyleSheet.create({
     },
     line: {
         backgroundColor: "gray",
-        height: 1,
+        height: 0.5,
         width: Dimensions.get('window').width - 20,
         alignSelf: 'center',
         opacity: 0.4,
