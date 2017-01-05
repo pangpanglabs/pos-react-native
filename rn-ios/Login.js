@@ -41,7 +41,7 @@ export default class Login extends Component {
     let password = this.state.password;
     self.setState({ showLoading: true });
 
-    PangPangBridge.callAPI("/account/login",{username:userName,password:password}).then(
+    PangPangBridge.callAPI("/account/login",{tenant:"Default",username:userName,password:password}).then(
       (data) => {
         var rs = JSON.parse(data);
         // console.log(rs);
