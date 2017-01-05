@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SideMenu from 'react-native-side-menu';
-import Navi from './Navi'
+import Navi from './Navi';
+import LeftMenu from './LeftMenu';
 import {
   Dimensions,
   TouchableOpacity,
@@ -9,23 +10,14 @@ import {
   Text,
   View
 } from 'react-native';
-class Menu extends React.Component {
-  render() {
-    return (
-      <View style={styles.menuContainer}>
-        <Text >
-          111111
-        </Text>
-      </View>
-    );
-  }
-}
+import { signalObj } from './Signals';
+
 export default class MenuContainer extends Component {
   constructor(){
     super();
     this.state={
       isOpen: false,
-      selectedItem: 'About',
+      selectedItem: '',
       openMenuOffset:Dimensions.get('window').width/2,
     }
   }
@@ -39,13 +31,15 @@ export default class MenuContainer extends Component {
   }
 
   onMenuItemSelected = (item) => {
+    // console.log(item)
     this.setState({
       isOpen: false,
       selectedItem: item,
     });
+    signalObj.dispatch("naviReplace",item);
   }
   render() {
-    const menu = <Menu navigator={navigator}/>;
+    const menu = <LeftMenu onItemSelected={this.onMenuItemSelected}/>;
 
     return (
       <SideMenu 
@@ -54,16 +48,11 @@ export default class MenuContainer extends Component {
         openMenuOffset={this.state.openMenuOffset}
         onChange={(isOpen) => this.updateMenuState(isOpen)}
       >
-        <Navi {...this.state} menuToggle={() => this.toggle()}  />
+        <Navi {...this.state} updateMenuState={(isOpen) => this.updateMenuState(isOpen)}  />
       </SideMenu>
     );
   }
 }
 const styles = StyleSheet.create({
-  menuContainer:{
-    flex: 1,
-    marginTop:64,
-    // justifyContent: 'center',
-    backgroundColor: 'red',
-  },
+
 });

@@ -7,7 +7,6 @@ import {
     Navigator
 } from 'react-native';
 import CatalogList from './CatalogList';
-import { LoadLocalStorage, LoadToken, SetToken } from '../common/LocalStorage';
 import Login from './Login';
 class Loading extends React.Component {
     render() {
@@ -26,6 +25,12 @@ export default class Redirect extends React.Component {
             redirectPageState: "loading",
         }
     }
+    
+    componentWillMount() {
+        const { navigator } = this.props;
+        global.myNavigator = navigator;
+    }
+    
     componentDidMount() {
         var self = this;
         const { navigator } = this.props;

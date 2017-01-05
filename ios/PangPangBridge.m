@@ -24,170 +24,35 @@ RCT_EXPORT_METHOD(doSomething:(NSString *)name callback:(RCTResponseSenderBlock)
 //    NSLog(@"doSomething:%@",name);
 //  return result
 }
-RCT_EXPORT_METHOD(loginAsync:(NSString *)userName  password:(NSString *)pw
-                                             resolver:(RCTPromiseResolveBlock)resolve
-                                             rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(callAPI:(NSString *)path params:(NSDictionary *)paramsDic
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
-
-  NSString *url = [NSString stringWithFormat:@"pp:///account/login?username=%@&password=%@",userName,pw];
+  NSString *params = @"";
+  NSString *url = @"";
+  if (paramsDic != nil) {
+    for(id key in paramsDic) {
+      //        NSLog(@"key :%@  value :%@", key, [paramsDic objectForKey:key]);
+      NSString *temp = [NSString stringWithFormat:@"%@=%@&",key,[paramsDic objectForKey:key]];
+      params =[params stringByAppendingString:temp];
+    }
+    params = [params substringToIndex:[params length] - 1];
+    url = [NSString stringWithFormat:@"pp://%@?%@",path,params];
+  }else{
+    url = [NSString stringWithFormat:@"pp://%@",path];
+  }
   
   //  @"pp:///account/login?username=admin&password=123qwe"
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-//  NSError *error = [NSError errorWithDomain:@"" code:500 userInfo:nil];
-//  NSString *message = @"error message";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
 
-RCT_EXPORT_METHOD(searchContents:(NSString *)q  skipCount:(NSInteger )skipCount maxResultCount:(NSInteger )maxResultCount
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///catalog/search-contents?q=%@&skipCount=%ld&maxResultCount=%ld",q,(long)skipCount,(long)maxResultCount];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
-RCT_EXPORT_METHOD(searchProducts:(NSString *)q  skipCount:(NSInteger )skipCount maxResultCount:(NSInteger )maxResultCount
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///catalog/search-products?q=%@&skipCount=%ld&maxResultCount=%ld",q,(long)skipCount,(long)maxResultCount];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
-RCT_EXPORT_METHOD(createCart:
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/create-cart"];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
-RCT_EXPORT_METHOD(allCart:(NSInteger)cartId
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/all-cart?cartId=%ld",(long)cartId];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
-RCT_EXPORT_METHOD(getCart:(NSInteger)cartId
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/get-cart?cartId=%ld",(long)cartId];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
-RCT_EXPORT_METHOD(removeCart:(NSInteger)cartId
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/remove-cart?cartId=%ld",(long)cartId];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
-RCT_EXPORT_METHOD(addItem:(NSInteger)cartId skuCode:(NSString *)skuCode quantity:(NSInteger)quantity
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/add-item?cartId=%ld&skuCode=%@&quantity=%ld",(long)cartId,skuCode,(long)quantity];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
-RCT_EXPORT_METHOD(removeItem:(NSInteger)cartId skuCode:(NSString *)skuCode quantity:(NSInteger)quantity
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///cart/remove-item?cartId=%ld&skuCode=%@&quantity=%ld",(long)cartId,skuCode,(long)quantity];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
-    resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
-}
 
-RCT_EXPORT_METHOD(placeOrder:(NSInteger)cartId
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-  
-  NSString *url = [NSString stringWithFormat:@"pp:///order/place-order?cartId=%ld",(long)cartId];
-  
-  NSString* result = P2PosCall(url);
-  NSLog(@"doSomething: %@",result);
-  NSString *code = @"500";
-  if (result) {
+  @try {
+    NSString* result = P2PosCall(url);
+    NSLog(@"%@ :%@",path,result);
     resolve(result);
-  } else {
-    reject(code,nil,nil);
-  }
+  } @catch (NSException *exception) {
+    reject(@"500",[exception name],[NSError errorWithDomain:path code:500 userInfo:exception.userInfo]);
+  } 
+  
 }
 
 @end

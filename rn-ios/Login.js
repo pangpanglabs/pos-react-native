@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
-import { LoadLocalStorage, LoadToken, SetToken } from '../common/LocalStorage';
 import CatalogList from './CatalogList';
 import {
   Dimensions,
@@ -10,10 +9,11 @@ import {
   Button,
   TextInput,
   TouchableHighlight,
+  NativeModules
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // <Icon name="rocket" size={30} color="#3e9ce9"></Icon>
-var PangPangBridge = require('react-native').NativeModules.PangPangBridge;
+var PangPangBridge = NativeModules.PangPangBridge;
 
 export default class Login extends Component {
   constructor() {
@@ -32,13 +32,6 @@ export default class Login extends Component {
     AsyncStorage.getItem("token").then((data) => {
       console.log(data);
     })
-    // var storage = LoadLocalStorage();
-    // LoadToken(storage, function (exist, data) {
-    //   // console.log(exist ? data : "");
-    //   var token = exist ? data : "";
-    //   self.setState({ token: token })
-    // });
-
   }
   login() {
 
@@ -48,11 +41,9 @@ export default class Login extends Component {
     let password = this.state.password;
     self.setState({ showLoading: true });
 
-    console.log(PangPangBridge)
-    PangPangBridge.login(userName, password).then(
+    PangPangBridge.callAPI("/account/login",{tenant:"Default",username:userName,password:password}).then(
       (data) => {
         var rs = JSON.parse(data);
-        console.log(rs)
         // console.log(rs);
         if (rs.success) {
           AsyncStorage.setItem("token", rs.result.token).then((aa) => {
@@ -63,12 +54,9 @@ export default class Login extends Component {
               })
             }
           })
-          // self.setState({ token: rs.result.token });
-          // var storage = LoadLocalStorage();
-          // SetToken(storage, rs.result.token);
-          // self.props.loginComplete();
         } else {
-          console.log(rs.error.message);
+          console.log(rs);
+          alert('login faild')
         }
         self.setState({ showLoading: false });
 
@@ -128,7 +116,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: 'gray',
     fontSize: 20,
-    width: 300
+
   },
   inputTextLine: {
     width: Dimensions.get('window').width - 10,

@@ -8,12 +8,13 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    AsyncStorage
+    AsyncStorage,
+    NativeModules
 } from 'react-native';
 import BasketList from './BasketList';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-var PangPangBridge = require('react-native').NativeModules.PangPangBridge;
+var PangPangBridge = NativeModules.PangPangBridge;
 
 const moreText = "加载完毕";    //foot显示的文案  
 //页码  
@@ -22,6 +23,9 @@ var pageNum = 0;
 const pageSize = 5;
 
 export default class CatalogList extends React.Component {
+    static propTypes = {
+        updateMenuState: React.PropTypes.func.isRequired,
+    };
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -51,7 +55,7 @@ export default class CatalogList extends React.Component {
     }
     refreshDataSource() {
         var self = this;
-        PangPangBridge.getCart(parseInt(this.state.cardId)).then((card) => {
+        PangPangBridge.callAPI("/cart/get-cart", { cartId: this.state.cardId }).then((card) => {
             var rs = JSON.parse(card);
             // console.log(rs.result.items);
             if (!rs.result.items || rs.result.items.length === 0) {
@@ -76,13 +80,13 @@ export default class CatalogList extends React.Component {
             if (data) {
                 self.setState({ cardId: parseInt(data) });
                 // global.cardId = parseInt(data);
-                PangPangBridge.getCart(parseInt(data)).then((card) => {
+                PangPangBridge.callAPI("/cart/get-cart", { cartId: data }).then((card) => {
                     var rs = JSON.parse(card);
                     // console.log(rs.result);
                     self.refreshDataSource();
                 });
             } else {
-                PangPangBridge.createCart(0).then((data) => {
+                PangPangBridge.callAPI("/cart/create-cart",null).then((data) => {
                     var rs = JSON.parse(data);
                     console.log(rs.result);
                     self.setState({ cardId: parseInt(rs.result.id) });
@@ -95,25 +99,32 @@ export default class CatalogList extends React.Component {
         });
     }
     componentDidMount() {
+        this.settings();
         this.initCard();
         this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
         this.searchProducts();
 
     }
+    settings() {
+        PangPangBridge.callAPI("/context/settings",null).then((data) => {
+            console.log("settings");
+            console.log(data);
+        });
+    }
     searchProducts() {
         var self = this;
         var key = this.state.searchKey;
 
-        PangPangBridge.searchProducts(key ? key : "", pageNum, pageSize).then(
+        PangPangBridge.callAPI( "/catalog/search-products",{q:key,skipCount: pageSize * pageNum,maxResultCount: pageSize}).then(
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
                 if (rs.success) {
-                    self.setState({ catalogData: [...self.state.catalogData, ...rs.result] });
+                    self.setState({ catalogData: [...self.state.catalogData, ...rs.result.items] });
                     self.setState({
                         dataSource: self.state.dataSource.cloneWithRows(self.state.catalogData),
                     });
-                    if (rs.result.length < pageSize) {
+                    if (pageSize * pageNum > rs.result.totalCount) {
                         self.setState({ foot: 1 });
                     } else {
                         self.setState({ foot: 0 });
@@ -150,9 +161,10 @@ export default class CatalogList extends React.Component {
     async _pressRow(rowID) {
         var self = this;
         var rowData = this.state.catalogData[rowID];
-        await PangPangBridge.addItem(this.state.cardId, rowData.skuCode, 1).then((data) => {
+        console.log(this.state.cardId + " " + rowData.skuId);
+        await PangPangBridge.callAPI("/cart/add-item",{cartId:this.state.cardId,skuId:rowData.skuId,quantity:1}).then((data) => {
             var rs = JSON.parse(data);
-            // console.log(rs.result);
+            // console.log(rs);
             self.refreshDataSource();
         });
 
@@ -163,6 +175,7 @@ export default class CatalogList extends React.Component {
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) } } style={styles.row}>
                 <View style={styles.rowContent}>
                     <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
+                    <Text>{rowData.skuId}</Text>
                     <Text style={styles.rowContentPrice}>¥{rowData.price}</Text>
                 </View>
                 <View style={styles.line}></View>
@@ -170,8 +183,8 @@ export default class CatalogList extends React.Component {
         )
     }
     _pressMenuButton() {
-        const {menuToggle} = this.props;
-        menuToggle();
+        const {updateMenuState} = this.props;
+        updateMenuState(true);
     }
     _pressSearchButton() {
         pageNum = 0;
@@ -183,14 +196,14 @@ export default class CatalogList extends React.Component {
         if (this.state.foot === 1) {//加载完毕  
             return (
                 <View style={{ height: 40, alignItems: 'center', justifyContent: 'center', }}>
-                    <Text style={{ color: '#999', fontSize: 13, marginTop: 1, width: 100 ,textAlign:'center'}}>
+                    <Text style={{ color: '#999', fontSize: 13, marginTop: 1, width: 100, textAlign: 'center' }}>
                         {moreText}
                     </Text>
                 </View>);
         } else if (this.state.foot === 2) {//加载中  
             return (
                 <View style={{ height: 40, alignItems: 'center', justifyContent: 'center', }}>
-                    <Text style={{ width: 100, height: 20, fontSize: 13,textAlign: 'center' }} > 加载中</Text>
+                    <Text style={{ width: 100, height: 20, fontSize: 13, textAlign: 'center' }} > 加载中</Text>
                 </View>);
         }
     }
