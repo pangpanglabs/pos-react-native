@@ -9,10 +9,11 @@ import {
   Button,
   TextInput,
   TouchableHighlight,
+  NativeModules
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // <Icon name="rocket" size={30} color="#3e9ce9"></Icon>
-var PangPangBridge = require('react-native').NativeModules.PangPangBridge;
+var PangPangBridge = NativeModules.PangPangBridge;
 
 export default class Login extends Component {
   constructor() {
@@ -40,7 +41,7 @@ export default class Login extends Component {
     let password = this.state.password;
     self.setState({ showLoading: true });
 
-    PangPangBridge.login(userName, password).then(
+    PangPangBridge.callAPI("/account/login",{username:userName,password:password}).then(
       (data) => {
         var rs = JSON.parse(data);
         // console.log(rs);

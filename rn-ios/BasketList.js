@@ -8,14 +8,15 @@ import {
     TouchableOpacity,
     PanResponder,
     ListView,
-    AsyncStorage
+    AsyncStorage,
+    NativeModules
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const navigatorTitle = "CardItemList";
-var PangPangBridge = require('react-native').NativeModules.PangPangBridge;
+var PangPangBridge = NativeModules.PangPangBridge;
 export default class BasketList extends React.Component {
 
     constructor(props) {
@@ -52,7 +53,7 @@ export default class BasketList extends React.Component {
             self.setState({ totalCount: 0 });
             return;
         }
-        PangPangBridge.getCart(parseInt(this.props.cardId)).then((card) => {
+        PangPangBridge.callAPI("/cart/get-cart",{cartId:this.props.cardId}).then((card) => {
             var rs = JSON.parse(card);
             if (!rs.result.items) return;
             var totalCount = 0;
@@ -68,7 +69,7 @@ export default class BasketList extends React.Component {
     seachCartItems() {
         var self = this;
         if (this.props.cardId) {
-            PangPangBridge.getCart(parseInt(this.props.cardId)).then((card) => {
+            PangPangBridge.callAPI("/cart/get-cart",{cartId:this.props.cardId}).then((card) => {
                 var rs = JSON.parse(card);
                 // console.log(rs.result.items)
                 this.refreshDataSource(rs.result.items);
@@ -85,7 +86,7 @@ export default class BasketList extends React.Component {
     _longPressRow(rowID, rowData) {
         // var target = this.state.basketData.concat([]);
         var self = this;
-        PangPangBridge.removeItem(parseInt(this.props.cardId), rowData.skuCode, 1).then((card) => {
+        PangPangBridge.callAPI("/cart/remove-item",{cartId:this.props.cardId,skuId:rowData.skuId,quantity:1}).then((card) => {
             var rs = JSON.parse(card);
             self.refreshDataSource(rs.result.items);
         });
@@ -94,7 +95,7 @@ export default class BasketList extends React.Component {
 
     _goPay() {
         var self = this;
-        PangPangBridge.placeOrder(parseInt(this.props.cardId)).then((card) => {
+        PangPangBridge.callAPI("/order/place-order",{cartId:this.props.cardId}).then((card) => {
             var rs = JSON.parse(card);
             console.log(rs);
             AsyncStorage.removeItem("cartId").done((data) => {

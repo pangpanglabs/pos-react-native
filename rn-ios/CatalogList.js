@@ -8,12 +8,13 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    AsyncStorage
+    AsyncStorage,
+    NativeModules
 } from 'react-native';
 import BasketList from './BasketList';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-var PangPangBridge = require('react-native').NativeModules.PangPangBridge;
+var PangPangBridge = NativeModules.PangPangBridge;
 
 const moreText = "加载完毕";    //foot显示的文案  
 //页码  
@@ -54,7 +55,7 @@ export default class CatalogList extends React.Component {
     }
     refreshDataSource() {
         var self = this;
-        PangPangBridge.getCart(parseInt(this.state.cardId)).then((card) => {
+        PangPangBridge.callAPI("/cart/get-cart", { cartId: this.state.cardId }).then((card) => {
             var rs = JSON.parse(card);
             // console.log(rs.result.items);
             if (!rs.result.items || rs.result.items.length === 0) {
@@ -79,13 +80,13 @@ export default class CatalogList extends React.Component {
             if (data) {
                 self.setState({ cardId: parseInt(data) });
                 // global.cardId = parseInt(data);
-                PangPangBridge.getCart(parseInt(data)).then((card) => {
+                PangPangBridge.callAPI("/cart/get-cart", { cartId: data }).then((card) => {
                     var rs = JSON.parse(card);
                     // console.log(rs.result);
                     self.refreshDataSource();
                 });
             } else {
-                PangPangBridge.createCart(0).then((data) => {
+                PangPangBridge.callAPI("/cart/create-cart",null).then((data) => {
                     var rs = JSON.parse(data);
                     console.log(rs.result);
                     self.setState({ cardId: parseInt(rs.result.id) });
@@ -105,7 +106,7 @@ export default class CatalogList extends React.Component {
 
     }
     settings() {
-        PangPangBridge.settings(0).then((data) => {
+        PangPangBridge.callAPI("/context/settings",null).then((data) => {
             console.log("settings");
             console.log(data);
         });
@@ -114,7 +115,7 @@ export default class CatalogList extends React.Component {
         var self = this;
         var key = this.state.searchKey;
 
-        PangPangBridge.searchProducts(key ? key : "", pageSize * pageNum, pageSize).then(
+        PangPangBridge.callAPI( "/catalog/search-products",{q:key,skipCount: pageSize * pageNum,maxResultCount: pageSize}).then(
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
@@ -161,7 +162,7 @@ export default class CatalogList extends React.Component {
         var self = this;
         var rowData = this.state.catalogData[rowID];
         console.log(this.state.cardId + " " + rowData.skuId);
-        await PangPangBridge.addItem(this.state.cardId, rowData.skuId, 1).then((data) => {
+        await PangPangBridge.callAPI("/cart/add-item",{cartId:this.state.cardId,skuId:rowData.skuId,quantity:1}).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
             self.refreshDataSource();
