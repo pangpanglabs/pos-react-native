@@ -1,4 +1,4 @@
-package com.pangpangpos;
+package com.platform_posrn;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "pangpangPos";
+        return "platform_PosRN";
     }
 }

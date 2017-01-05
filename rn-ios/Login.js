@@ -48,9 +48,11 @@ export default class Login extends Component {
     let password = this.state.password;
     self.setState({ showLoading: true });
 
-    PangPangBridge.loginAsync(userName, password).then(
+    console.log(PangPangBridge)
+    PangPangBridge.login(userName, password).then(
       (data) => {
         var rs = JSON.parse(data);
+        console.log(rs)
         // console.log(rs);
         if (rs.success) {
           AsyncStorage.setItem("token", rs.result.token).then((aa) => {
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: 'gray',
     fontSize: 20,
-
+    width: 300
   },
   inputTextLine: {
     width: Dimensions.get('window').width - 10,

@@ -1,4 +1,4 @@
-package com.pangpangpos;
+package com.platform_posrn;
 
 import android.app.Application;
 import android.util.Log;
@@ -13,6 +13,8 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
+import cn.p2shop.pos.Pos;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -24,7 +26,7 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(), new RNJavaReactPackage()
       );
     }
   };
@@ -38,5 +40,14 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+
+    //for pos init
+    String path;
+    if (android.os.Build.VERSION.SDK_INT >=android.os.Build.VERSION_CODES.LOLLIPOP){
+      path = getNoBackupFilesDir().getAbsolutePath();
+    } else{
+      path = getFilesDir().getAbsolutePath();
+    }
+    Pos.init(path);
   }
 }
