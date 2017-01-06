@@ -268,14 +268,14 @@ export default class CatalogList extends React.Component {
 const styles = StyleSheet.create({
     navigatorBar: {
         backgroundColor: "#3e9ce9",
-        height: 44,
+        height: 64,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     backBtn: {
         // backgroundColor: 'green',
-        // marginTop: 20,
+        marginTop: 20,
         height: 40,
         width: 50,
         // alignSelf:'center',
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     inputSearchText: {
-        marginTop: 9,
+        marginTop: 29,
         width: 200,
         backgroundColor: 'white',
         height: 25,
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     },
     rightBtn: {
         //  backgroundColor:'green',
-        // marginTop: 20,
+        marginTop: 20,
         height: 40,
         width: 50,
         justifyContent: 'center',
