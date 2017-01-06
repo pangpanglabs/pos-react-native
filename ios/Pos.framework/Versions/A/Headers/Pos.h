@@ -7,7 +7,7 @@
 #ifndef __Pos_H__
 #define __Pos_H__
 
-#include "P2Pos.h"
-#include "GoUniverse.h"
+#include "P2Pos.objc.h"
+#include "Universe.objc.h"
 
 #endif
