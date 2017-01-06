@@ -16,7 +16,7 @@ RCT_EXPORT_MODULE();    //此处不添加参数即默认为这个OC类的名字
 
 RCT_EXPORT_METHOD(doSomething:(NSString *)name callback:(RCTResponseSenderBlock)callback)
 {
-  NSString* result = P2PosCall(@"pp:///account/login?username=admin&password=123qwe");
+  NSString* result = P2PosCall(@"pp:///v1/account/login?username=admin&password=123qwe");
   NSLog(@"doSomething: %@",result);
   dispatch_async(dispatch_get_main_queue(), ^{
     callback(@[result]);
@@ -37,9 +37,9 @@ RCT_EXPORT_METHOD(callAPI:(NSString *)path params:(NSDictionary *)paramsDic
       params =[params stringByAppendingString:temp];
     }
     params = [params substringToIndex:[params length] - 1];
-    url = [NSString stringWithFormat:@"pp://%@?%@",path,params];
+    url = [NSString stringWithFormat:@"pp:///v1%@?%@",path,params];
   }else{
-    url = [NSString stringWithFormat:@"pp://%@",path];
+    url = [NSString stringWithFormat:@"pp:///v1%@",path];
   }
   
   //  @"pp:///account/login?username=admin&password=123qwe"
