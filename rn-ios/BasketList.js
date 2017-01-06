@@ -123,7 +123,7 @@ export default class BasketList extends React.Component {
             <View style={{ backgroundColor: 'white', }}>
                 <View style={styles.navigatorBar} >
                     <TouchableOpacity onPress={this._pressBackButton.bind(this)} style={styles.backBtn}>
-                        <Icon style={styles.backBtnText} name="chevron-left"></Icon>
+                        <Icon style={styles.backBtnText} name="angle-left"></Icon>
 
                     </TouchableOpacity>
                     <View style={styles.navigatorTitle}>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     backBtnText: {
-        fontSize: 25,
+        fontSize: 35,
         textAlign: 'center',
         color: 'white',
     },

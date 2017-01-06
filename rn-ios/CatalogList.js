@@ -286,12 +286,14 @@ const styles = StyleSheet.create({
     },
     inputSearchText: {
         marginTop: 29,
-        width: 200,
+        width: Dimensions.get('window').width-100,
         backgroundColor: 'white',
         height: 25,
-        paddingLeft: 5,
-        color: 'gray',
+        paddingLeft: 10,
+        color: 'black',
         fontSize: 15,
+        borderRadius:12,
+        opacity:0.5,
     },
     rightBtn: {
         //  backgroundColor:'green',

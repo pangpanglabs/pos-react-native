@@ -64,24 +64,18 @@ export default class LeftMenu extends Component {
 }
 
 const styles = StyleSheet.create({
-    menuContainer: {
-        flex: 1,
-        marginTop: 64,
-        // justifyContent: 'center',
-        backgroundColor: '#3e9ce9',
-    },
     naviContainer: {
         height: 64,
-        backgroundColor: '#3e9ce9',
+        backgroundColor: '#22242f',
 
     },
     listView: {
         height: Dimensions.get('window').height - 64,
-        // backgroundColor: "red",
+        backgroundColor: "#22242f",
     },
     rowContent: {
         flex: 1,
-        height: 39,
+        height: 48,
         flexDirection: 'row',
         alignItems: 'center',
         // justifyContent:'space-between',
@@ -91,13 +85,14 @@ const styles = StyleSheet.create({
         // backgroundColor: 'blue',
         paddingLeft: 20,
         fontSize: 16,
+        color:'white',
     },
     line: {
         backgroundColor: "gray",
         height: 0.5,
         width: Dimensions.get('window').width / 2 - 20,
         alignSelf: 'center',
-        opacity: 0.4,
+        opacity: 0.2,
 
     }
 });

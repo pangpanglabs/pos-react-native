@@ -63,7 +63,7 @@ export default class Navi extends React.Component {
             <View style={{ flex: 1 }}>
                 <StatusBar
                     backgroundColor="#3e9ce9"
-                    barStyle="default"
+                    barStyle="light-content"
                     />
                 <Navigator
                     style={styles.navigator}
