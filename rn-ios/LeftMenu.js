@@ -10,7 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 let tempMenuData = [
-    { menuName: "catalogList", menuCode: "catalogList" },    
+    { menuName: "cart", menuCode: "catalogList" },    
     { menuName: "user", menuCode: "user" },
     { menuName: "settings", menuCode: "settings" },
 ];
