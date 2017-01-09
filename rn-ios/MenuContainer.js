@@ -18,7 +18,7 @@ export default class MenuContainer extends Component {
     this.state={
       isOpen: false,
       selectedItem: '',
-      openMenuOffset:Dimensions.get('window').width/2,
+      openMenuOffset:Dimensions.get('window').width*3/4,
     }
   }
   toggle() {

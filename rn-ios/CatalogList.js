@@ -20,7 +20,7 @@ const moreText = "加载完毕";    //foot显示的文案
 //页码  
 var pageNum = 0;
 //每页显示数据的条数  
-const pageSize = 5;
+const pageSize = 10;
 
 export default class CatalogList extends React.Component {
     static propTypes = {
@@ -50,7 +50,7 @@ export default class CatalogList extends React.Component {
         this.subscription.remove();
     }
     changeTotal(data) {
-        console.log('changeTotal');
+        // console.log('changeTotal');
         this.initCard();
     }
     refreshDataSource() {
@@ -86,7 +86,7 @@ export default class CatalogList extends React.Component {
                     self.refreshDataSource();
                 });
             } else {
-                PangPangBridge.callAPI("/cart/create-cart",null).then((data) => {
+                PangPangBridge.callAPI("/cart/create-cart", null).then((data) => {
                     var rs = JSON.parse(data);
                     console.log(rs.result);
                     self.setState({ cardId: parseInt(rs.result.id) });
@@ -98,24 +98,20 @@ export default class CatalogList extends React.Component {
             }
         });
     }
-    componentDidMount() {
-        this.settings();
-        this.initCard();
-        this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
-        this.searchProducts();
 
+    componentWillMount() {
+        setTimeout(() => {
+            this.initCard();
+            this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
+            this.searchProducts();
+        }, 300);
     }
-    settings() {
-        PangPangBridge.callAPI("/context/settings",null).then((data) => {
-            console.log("settings");
-            console.log(data);
-        });
-    }
+    
     searchProducts() {
         var self = this;
         var key = this.state.searchKey;
 
-        PangPangBridge.callAPI( "/catalog/search-products",{q:key,skipCount: pageSize * pageNum,maxResultCount: pageSize}).then(
+        PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
@@ -162,7 +158,7 @@ export default class CatalogList extends React.Component {
         var self = this;
         var rowData = this.state.catalogData[rowID];
         console.log(this.state.cardId + " " + rowData.skuId);
-        await PangPangBridge.callAPI("/cart/add-item",{cartId:this.state.cardId,skuId:rowData.skuId,quantity:1}).then((data) => {
+        await PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: rowData.skuId, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
             self.refreshDataSource();
@@ -225,7 +221,7 @@ export default class CatalogList extends React.Component {
     }
     render() {
         return (
-            <View style={{ backgroundColor: 'white', }}>
+            <View style={{ backgroundColor: '#f0f0f0', }}>
                 <View style={styles.navigatorBar} >
                     <TouchableOpacity onPress={this._pressMenuButton.bind(this)} style={styles.backBtn}>
                         <Icon name="bars" style={styles.backBtnImg} ></Icon>
@@ -243,10 +239,14 @@ export default class CatalogList extends React.Component {
                 </View>
 
                 <TouchableOpacity onPress={this._pressTopButton.bind(this)} style={styles.count}>
-                    <Text style={styles.countText}>结算({this.state.totalCount})</Text>
-                    <Text style={styles.totalCountText}>合计：¥{this.state.totalPrice} </Text>
+                    <Icon name="shopping-cart" style={styles.cartBtnImg} ></Icon>
+                    <Text style={styles.countText}>{this.state.totalCount}</Text>
+
+                    <View style={styles.totalCountContent}>
+                        <Text style={styles.totalCountText}>¥{this.state.totalPrice} </Text>
+                    </View>
+                    <Icon name="angle-right" style={styles.angleRight} ></Icon>
                 </TouchableOpacity>
-                <View style={styles.line}></View>
 
                 <View >
                     <ListView style={styles.listView}
@@ -290,12 +290,14 @@ const styles = StyleSheet.create({
     },
     inputSearchText: {
         marginTop: 29,
-        width: 200,
+        width: Dimensions.get('window').width-100,
         backgroundColor: 'white',
         height: 25,
-        paddingLeft: 5,
-        color: 'gray',
+        paddingLeft: 10,
+        color: 'black',
         fontSize: 15,
+        borderRadius:12,
+        opacity:0.5,
     },
     rightBtn: {
         //  backgroundColor:'green',
@@ -306,32 +308,55 @@ const styles = StyleSheet.create({
     },
     count: {
         height: 60,
-        // backgroundColor: "aliceblue",
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom:5,
+        backgroundColor:'white',        
+    },
+    cartBtnImg:{
+        fontSize: 40,
+        textAlign: 'center',
+        color: '#3e9ce9',
+        marginLeft: 20,
     },
     countText: {
-        flex: 1.5,
-        fontSize: 16,
-        marginLeft: 20,
-        backgroundColor: "orange",
+        flex: 1,
+        fontSize: 12,
+        backgroundColor: "transparent",
+        // backgroundColor: "red",
+        width:30,
         color: 'white',
         textAlign: 'center',
-        alignSelf: 'center',
-        lineHeight: 40,
-        height: 40,
-
+        position:'absolute',
+        left:28,
+        top:19,
     },
-    totalCountText: {
-        flex: 5,
-        fontSize: 16,
+    totalCountContent: {
+        flex: 1,
         // backgroundColor:"green",
-        textAlign: 'right',
-        paddingRight: 20,
-        color: 'orange'
+        marginRight: 10,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        // color: 'orange'
+    },
+    totalCountText:{
+        fontSize: 30,
+        textAlign: 'center',
+        alignItems:'center',
+        // backgroundColor:"red",
+        height:40,
+        lineHeight:40,
+    },
+    angleRight:{
+        fontSize: 30,
+        // backgroundColor:"black",
+        color: '#b9b9b9',
+        marginRight:20,
+        
     },
     listView: {
         height: Dimensions.get('window').height - 64 - 60,
+        backgroundColor:'white',
     },
     row: {
         // backgroundColor:"red",
@@ -359,7 +384,7 @@ const styles = StyleSheet.create({
     },
     line: {
         backgroundColor: "gray",
-        height: 1,
+        height: 0.5,
         width: Dimensions.get('window').width - 20,
         alignSelf: 'center',
         opacity: 0.4,
