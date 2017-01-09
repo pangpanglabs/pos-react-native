@@ -221,7 +221,7 @@ export default class CatalogList extends React.Component {
     }
     render() {
         return (
-            <View style={{ backgroundColor: 'white', }}>
+            <View style={{ backgroundColor: '#f0f0f0', }}>
                 <View style={styles.navigatorBar} >
                     <TouchableOpacity onPress={this._pressMenuButton.bind(this)} style={styles.backBtn}>
                         <Icon name="bars" style={styles.backBtnImg} ></Icon>
@@ -239,10 +239,14 @@ export default class CatalogList extends React.Component {
                 </View>
 
                 <TouchableOpacity onPress={this._pressTopButton.bind(this)} style={styles.count}>
-                    <Text style={styles.countText}>结算({this.state.totalCount})</Text>
-                    <Text style={styles.totalCountText}>合计：¥{this.state.totalPrice} </Text>
+                    <Icon name="shopping-cart" style={styles.cartBtnImg} ></Icon>
+                    <Text style={styles.countText}>{this.state.totalCount}</Text>
+
+                    <View style={styles.totalCountContent}>
+                        <Text style={styles.totalCountText}>¥{this.state.totalPrice} </Text>
+                    </View>
+                    <Icon name="angle-right" style={styles.angleRight} ></Icon>
                 </TouchableOpacity>
-                <View style={styles.line}></View>
 
                 <View >
                     <ListView style={styles.listView}
@@ -304,32 +308,55 @@ const styles = StyleSheet.create({
     },
     count: {
         height: 60,
-        // backgroundColor: "aliceblue",
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom:5,
+        backgroundColor:'white',        
+    },
+    cartBtnImg:{
+        fontSize: 40,
+        textAlign: 'center',
+        color: '#3e9ce9',
+        marginLeft: 20,
     },
     countText: {
-        flex: 1.5,
-        fontSize: 16,
-        marginLeft: 20,
-        backgroundColor: "orange",
+        flex: 1,
+        fontSize: 12,
+        backgroundColor: "transparent",
+        // backgroundColor: "red",
+        width:30,
         color: 'white',
         textAlign: 'center',
-        alignSelf: 'center',
-        lineHeight: 40,
-        height: 40,
-
+        position:'absolute',
+        left:28,
+        top:19,
     },
-    totalCountText: {
-        flex: 5,
-        fontSize: 16,
+    totalCountContent: {
+        flex: 1,
         // backgroundColor:"green",
-        textAlign: 'right',
-        paddingRight: 20,
-        color: 'orange'
+        marginRight: 10,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        // color: 'orange'
+    },
+    totalCountText:{
+        fontSize: 30,
+        textAlign: 'center',
+        alignItems:'center',
+        // backgroundColor:"red",
+        height:40,
+        lineHeight:40,
+    },
+    angleRight:{
+        fontSize: 30,
+        // backgroundColor:"black",
+        color: '#b9b9b9',
+        marginRight:20,
+        
     },
     listView: {
         height: Dimensions.get('window').height - 64 - 60,
+        backgroundColor:'white',
     },
     row: {
         // backgroundColor:"red",

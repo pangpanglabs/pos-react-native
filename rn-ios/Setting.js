@@ -48,7 +48,7 @@ class Setting extends Component {
     }
     render() {
         return (
-            <View style={{ backgroundColor: '#e0e0e0', height: Dimensions.get('window').height }}>
+            <View style={{ backgroundColor: '#f0f0f0', height: Dimensions.get('window').height }}>
                 <View style={styles.navigatorBar} >
                     <TouchableOpacity onPress={this._pressMenuButton.bind(this)} style={styles.backBtn}>
                         <Icon name="bars" style={styles.backBtnImg} ></Icon>

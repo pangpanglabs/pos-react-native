@@ -7,6 +7,7 @@ import {
     View,
     ListView
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 let tempMenuData = [
     { menuName: "catalogList", menuCode: "catalogList" },    
@@ -36,12 +37,22 @@ export default class LeftMenu extends Component {
 
     }
     _renderRow(rowData, sectionID, rowID) {
+         let iconContent;
+        if (rowData.menuCode === "user") {
+            iconContent = <Icon name="user-o" style={styles.backBtnImg} ></Icon>
+        }
+        if (rowData.menuCode === "catalogList") {
+            iconContent = <Icon name="shopping-cart" style={styles.backBtnImg} ></Icon>
+        }
+        if (rowData.menuCode === "settings") {
+            iconContent = <Icon name="cog" style={styles.backBtnImg} ></Icon>
+        }
         return (
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) } } >
-                <View style={styles.rowContent}>
+                <View style={styles.rowContent}>{}
+                    {iconContent}
                     <Text style={styles.rowContentCode}>{rowData.menuName}</Text>
                 </View>
-                <View style={styles.line}></View>
             </TouchableOpacity>
         )
     }
@@ -80,10 +91,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // justifyContent:'space-between',
     },
+    backBtnImg: {
+        marginLeft:20,
+        fontSize: 20,
+        textAlign: 'center',
+        color: 'white',
+    },
     rowContentCode: {
         flex: 5,
         // backgroundColor: 'blue',
-        paddingLeft: 20,
+        paddingLeft: 10,
         fontSize: 16,
         color:'white',
     },
@@ -94,5 +111,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         opacity: 0.2,
 
-    }
+    },
+    
 });
