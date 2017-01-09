@@ -46,14 +46,13 @@ export default class BasketList extends React.Component {
 
     }
     computeTatol() {
-        var self = this;
         // console.log(this.state.cardItems.length);
         if (!this.state.cardItems || this.state.cardItems.length === 0) {
-            self.setState({ totalPrice: 0 });
-            self.setState({ totalCount: 0 });
+            this.setState({ totalPrice: 0 });
+            this.setState({ totalCount: 0 });
             return;
         }
-        PangPangBridge.callAPI("/cart/get-cart",{cartId:this.props.cardId}).then((card) => {
+        PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
             var rs = JSON.parse(card);
             if (!rs.result.items) return;
             var totalCount = 0;
@@ -61,15 +60,14 @@ export default class BasketList extends React.Component {
                 totalCount = totalCount + parseInt(rs.result.items[index].quantity);
             }
             // console.log(rs.result.total);
-            self.setState({ totalPrice: rs.result.total });
-            self.setState({ totalCount: totalCount });
+            this.setState({ totalPrice: rs.result.total });
+            this.setState({ totalCount: totalCount });
 
         });
     }
     seachCartItems() {
-        var self = this;
         if (this.props.cardId) {
-            PangPangBridge.callAPI("/cart/get-cart",{cartId:this.props.cardId}).then((card) => {
+            PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
                 var rs = JSON.parse(card);
                 // console.log(rs.result.items)
                 this.refreshDataSource(rs.result.items);
@@ -85,24 +83,22 @@ export default class BasketList extends React.Component {
     }
     _longPressRow(rowID, rowData) {
         // var target = this.state.basketData.concat([]);
-        var self = this;
-        PangPangBridge.callAPI("/cart/remove-item",{cartId:this.props.cardId,skuId:rowData.skuId,quantity:1}).then((card) => {
+        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: rowData.skuId, quantity: 1 }).then((card) => {
             var rs = JSON.parse(card);
-            self.refreshDataSource(rs.result.items);
+            this.refreshDataSource(rs.result.items);
         });
 
     }
 
     _goPay() {
-        var self = this;
-        PangPangBridge.callAPI("/order/place-order",{cartId:this.props.cardId}).then((card) => {
+        PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId }).then((card) => {
             var rs = JSON.parse(card);
             console.log(rs);
-            AsyncStorage.removeItem("cartId").done((data) => {
-                self.seachCartItems();
-            });
-
-
+            if (rs.success) {
+                AsyncStorage.removeItem("cartId").done((data) => {
+                    this.seachCartItems();
+                });
+            }
         });
     }
     _renderRow(rowData, sectionID, rowID) {
