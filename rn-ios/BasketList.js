@@ -9,7 +9,8 @@ import {
     PanResponder,
     ListView,
     AsyncStorage,
-    NativeModules
+    NativeModules,
+    Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -91,7 +92,7 @@ export default class BasketList extends React.Component {
     }
 
     _goPay() {
-        PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId }).then((card) => {
+        PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId, info: JSON.stringify({ name: "liche" }) }).then((card) => {
             var rs = JSON.parse(card);
             console.log(rs);
             if (rs.success) {
@@ -129,7 +130,14 @@ export default class BasketList extends React.Component {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.count} onPress={() => this._goPay()}>
+                <TouchableOpacity style={styles.count} onPress={() =>this.state.totalCount? Alert.alert(
+                    '提示',
+                    '确定支付？',
+                    [
+                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
+                        { text: 'OK', onPress: () => this._goPay() },
+                    ]
+                ):null}>
                     <Text style={styles.countText}>去支付({this.state.totalCount})</Text>
                     <Text style={styles.totalCountText}>合计：¥ {this.state.totalPrice} </Text>
                 </TouchableOpacity>
