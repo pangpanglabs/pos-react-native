@@ -28,7 +28,7 @@ export default class BasketList extends React.Component {
             dataSource: ds,
             totalCount: 0,
             totalPrice: 0,
-            navigatorTitle:"Cart"
+            navigatorTitle: "Cart"
         };
         this._renderRow = this._renderRow.bind(this);
         this.seachCartItems = this.seachCartItems.bind(this);
@@ -102,12 +102,12 @@ export default class BasketList extends React.Component {
             }
         });
     }
-    _rowPress(){
+    _rowPress() {
         alert(1);
     }
     _renderRow(rowData, sectionID, rowID) {
         return (
-            <TouchableOpacity onLongPress={(id, data) => { this._longPressRow(rowID, rowData) } } onPress={()=>{this._rowPress()}} style={styles.row}
+            <TouchableOpacity onLongPress={(id, data) => { this._longPressRow(rowID, rowData) } } onPress={() => { this._rowPress() } } style={styles.row}
                 >
                 <View style={styles.rowContent}>
                     <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
@@ -117,6 +117,16 @@ export default class BasketList extends React.Component {
                 <View style={styles.line}></View>
             </TouchableOpacity>
         )
+    }
+    _pressPayButton() {
+        this.state.totalCount ? Alert.alert(
+            '提示',
+            '确定支付？',
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
+                { text: 'OK', onPress: () => this._goPay() },
+            ]
+        ) : null;
     }
     render() {
         return (
@@ -129,21 +139,15 @@ export default class BasketList extends React.Component {
                     <View style={styles.navigatorTitle}>
                         <Text style={styles.navigatorTitleText}>{this.state.navigatorTitle}({this.state.totalCount})</Text>
                     </View>
-                    <View style={styles.rightBtn}>
-                    </View>
+                    <TouchableOpacity style={styles.rightBtn} onPress={this._pressPayButton.bind(this)}>
+                        <Text style={styles.payText}>Pay</Text>
+                    </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.count} onPress={() =>this.state.totalCount? Alert.alert(
-                    '提示',
-                    '确定支付？',
-                    [
-                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
-                        { text: 'OK', onPress: () => this._goPay() },
-                    ]
-                ):null}>
+                <View style={styles.count} >
                     <Text style={styles.countText}>TOTAL</Text>
                     <Text style={styles.totalCountText}>¥ {this.state.totalPrice} </Text>
-                </TouchableOpacity>
+                </View>
                 <View style={styles.line}></View>
 
                 <View >
@@ -200,13 +204,17 @@ const styles = StyleSheet.create({
         width: 50,
         justifyContent: 'center',
     },
+    payText: {
+        fontSize: 20,
+        color: 'white',
+    },
     count: {
         // flex:1,
         height: 60,
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom:1,
-        backgroundColor:'white',  
+        marginBottom: 1,
+        backgroundColor: 'white',
     },
     countText: {
         flex: 1,
@@ -214,17 +222,17 @@ const styles = StyleSheet.create({
         // backgroundColor: "transparent",
         // backgroundColor: "red",
         color: 'gray',
-        paddingLeft:20,
+        paddingLeft: 20,
     },
     totalCountText: {
         flex: 1,
         fontSize: 30,
         textAlign: 'right',
-        alignItems:'center',
-        paddingRight:20,
+        alignItems: 'center',
+        paddingRight: 20,
         // backgroundColor:"green",
-        height:40,
-        lineHeight:40,
+        height: 40,
+        lineHeight: 40,
     },
     listView: {
         height: Dimensions.get('window').height - 64 - 60,
