@@ -16,7 +16,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-const navigatorTitle = "CardItemList";
 var PangPangBridge = NativeModules.PangPangBridge;
 export default class BasketList extends React.Component {
 
@@ -29,6 +28,7 @@ export default class BasketList extends React.Component {
             dataSource: ds,
             totalCount: 0,
             totalPrice: 0,
+            navigatorTitle:"Cart"
         };
         this._renderRow = this._renderRow.bind(this);
         this.seachCartItems = this.seachCartItems.bind(this);
@@ -102,9 +102,12 @@ export default class BasketList extends React.Component {
             }
         });
     }
+    _rowPress(){
+        alert(1);
+    }
     _renderRow(rowData, sectionID, rowID) {
         return (
-            <TouchableOpacity onLongPress={(id, data) => { this._longPressRow(rowID, rowData) } } style={styles.row}
+            <TouchableOpacity onLongPress={(id, data) => { this._longPressRow(rowID, rowData) } } onPress={()=>{this._rowPress()}} style={styles.row}
                 >
                 <View style={styles.rowContent}>
                     <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
@@ -124,7 +127,7 @@ export default class BasketList extends React.Component {
 
                     </TouchableOpacity>
                     <View style={styles.navigatorTitle}>
-                        <Text style={styles.navigatorTitleText}>{navigatorTitle}</Text>
+                        <Text style={styles.navigatorTitleText}>{this.state.navigatorTitle}({this.state.totalCount})</Text>
                     </View>
                     <View style={styles.rightBtn}>
                     </View>
@@ -138,8 +141,8 @@ export default class BasketList extends React.Component {
                         { text: 'OK', onPress: () => this._goPay() },
                     ]
                 ):null}>
-                    <Text style={styles.countText}>去支付({this.state.totalCount})</Text>
-                    <Text style={styles.totalCountText}>合计：¥ {this.state.totalPrice} </Text>
+                    <Text style={styles.countText}>TOTAL</Text>
+                    <Text style={styles.totalCountText}>¥ {this.state.totalPrice} </Text>
                 </TouchableOpacity>
                 <View style={styles.line}></View>
 
@@ -198,30 +201,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     count: {
+        // flex:1,
         height: 60,
-        // backgroundColor: "aliceblue",
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom:1,
+        backgroundColor:'white',  
     },
     countText: {
-        flex: 1.5,
-        fontSize: 16,
-        marginLeft: 20,
-        backgroundColor: "orange",
-        color: 'white',
-        textAlign: 'center',
-        alignSelf: 'center',
-        lineHeight: 40,
-        height: 40,
-
+        flex: 1,
+        fontSize: 20,
+        // backgroundColor: "transparent",
+        // backgroundColor: "red",
+        color: 'gray',
+        paddingLeft:20,
     },
     totalCountText: {
-        flex: 5,
-        fontSize: 16,
-        // backgroundColor:"green",
+        flex: 1,
+        fontSize: 30,
         textAlign: 'right',
-        paddingRight: 20,
-        color: 'orange'
+        alignItems:'center',
+        paddingRight:20,
+        // backgroundColor:"green",
+        height:40,
+        lineHeight:40,
     },
     listView: {
         height: Dimensions.get('window').height - 64 - 60,
