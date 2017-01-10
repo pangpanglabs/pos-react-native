@@ -34,11 +34,10 @@ class Setting extends Component {
     componentDidMount() {
     }
     settings() {
-        var self = this;
         PangPangBridge.callAPI("/context/settings", null).then((data) => {
             var rs = JSON.parse(data);
             console.log(rs.result);
-            self.setState({settingData:rs.result});
+            this.setState({settingData:rs.result});
             
         });
     }

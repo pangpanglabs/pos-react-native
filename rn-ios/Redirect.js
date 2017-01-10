@@ -32,17 +32,13 @@ export default class Redirect extends React.Component {
     }
     
     componentDidMount() {
-        var self = this;
         const { navigator } = this.props;
         AsyncStorage.getItem("token").then((data) => {
             if (data) {
-                self.navigatorReplace('CatalogList',CatalogList);
-                // self.navigatorReplace('Login',Login);
+                this.navigatorReplace('CatalogList',CatalogList);
                 
             } else {
-                // self.navigatorReplace('CatalogList',CatalogList);
-                
-                self.navigatorReplace('Login',Login);
+                this.navigatorReplace('Login',Login);
             }
         });
     }

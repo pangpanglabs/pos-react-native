@@ -28,18 +28,16 @@ export default class Login extends Component {
   }
   componentDidMount() {
     this.setState({ name: "xiuxiu" });
-    var self = this;
     AsyncStorage.getItem("token").then((data) => {
       console.log(data);
     })
   }
   login() {
 
-    let self = this;
     const { navigator } = this.props;
     let userName = this.state.userName;
     let password = this.state.password;
-    self.setState({ showLoading: true });
+    this.setState({ showLoading: true });
 
     PangPangBridge.callAPI("/account/login",{tenant:"LABS",username:userName,password:password}).then(
       (data) => {
@@ -58,7 +56,7 @@ export default class Login extends Component {
           console.log(rs);
           alert('login faild')
         }
-        self.setState({ showLoading: false });
+        this.setState({ showLoading: false });
 
       }
     );

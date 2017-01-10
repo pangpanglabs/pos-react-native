@@ -54,13 +54,12 @@ export default class CatalogList extends React.Component {
         this.initCard();
     }
     refreshDataSource() {
-        var self = this;
         PangPangBridge.callAPI("/cart/get-cart", { cartId: this.state.cardId }).then((card) => {
             var rs = JSON.parse(card);
             // console.log(rs.result.items);
             if (!rs.result.items || rs.result.items.length === 0) {
-                self.setState({ totalPrice: 0 });
-                self.setState({ totalCount: 0 });
+                this.setState({ totalPrice: 0 });
+                this.setState({ totalCount: 0 });
                 return;
             }
 
@@ -69,29 +68,28 @@ export default class CatalogList extends React.Component {
                 totalCount = totalCount + parseInt(rs.result.items[index].quantity);
             }
 
-            self.setState({ totalPrice: rs.result.total });
-            self.setState({ totalCount: totalCount });
+            this.setState({ totalPrice: rs.result.total });
+            this.setState({ totalCount: totalCount });
         });
     }
     initCard() {
-        var self = this;
         AsyncStorage.getItem("cartId").then((data) => {
             // console.log(data);
             if (data) {
-                self.setState({ cardId: parseInt(data) });
+                this.setState({ cardId: parseInt(data) });
                 // global.cardId = parseInt(data);
                 PangPangBridge.callAPI("/cart/get-cart", { cartId: data }).then((card) => {
                     var rs = JSON.parse(card);
                     // console.log(rs.result);
-                    self.refreshDataSource();
+                    this.refreshDataSource();
                 });
             } else {
                 PangPangBridge.callAPI("/cart/create-cart", null).then((data) => {
                     var rs = JSON.parse(data);
                     console.log(rs.result);
-                    self.setState({ cardId: parseInt(rs.result.id) });
+                    this.setState({ cardId: parseInt(rs.result.id) });
                     AsyncStorage.setItem("cartId", rs.result.id.toString()).then(() => {
-                        self.refreshDataSource();
+                        this.refreshDataSource();
                         console.log("setItem cartId success:" + rs.result.id);
                     });
                 });
@@ -108,7 +106,6 @@ export default class CatalogList extends React.Component {
     }
     
     searchProducts() {
-        var self = this;
         var key = this.state.searchKey;
 
         PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
@@ -116,17 +113,17 @@ export default class CatalogList extends React.Component {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
                 if (rs.success) {
-                    self.setState({ catalogData: [...self.state.catalogData, ...rs.result.items] });
-                    self.setState({
-                        dataSource: self.state.dataSource.cloneWithRows(self.state.catalogData),
+                    this.setState({ catalogData: [...this.state.catalogData, ...rs.result.items] });
+                    this.setState({
+                        dataSource: this.state.dataSource.cloneWithRows(this.state.catalogData),
                     });
                     if (pageSize * pageNum > rs.result.totalCount) {
-                        self.setState({ foot: 1 });
+                        this.setState({ foot: 1 });
                     } else {
-                        self.setState({ foot: 0 });
+                        this.setState({ foot: 0 });
                     }
                 } else {
-                    self.setState({ foot: 1 });
+                    this.setState({ foot: 1 });
                     console.log(rs.error.message);
                 }
 
@@ -134,7 +131,6 @@ export default class CatalogList extends React.Component {
         );
     }
     _pressTopButton() {
-        var self = this;
         const { navigator } = this.props;
         if (navigator) {
             navigator.push({
@@ -155,13 +151,12 @@ export default class CatalogList extends React.Component {
     }
 
     async _pressRow(rowID) {
-        var self = this;
         var rowData = this.state.catalogData[rowID];
         console.log(this.state.cardId + " " + rowData.skuId);
         await PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: rowData.skuId, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
-            self.refreshDataSource();
+            this.refreshDataSource();
         });
 
     }
