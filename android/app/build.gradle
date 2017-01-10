@@ -67,7 +67,9 @@ import com.android.build.OutputFile
 
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-
+project.ext.vectoricons = [
+        iconFontNames: [ 'FontAwesome.ttf', 'Ionicons.ttf' ] // Name of the font files you want to copy
+]
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
