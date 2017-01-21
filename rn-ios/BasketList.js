@@ -88,11 +88,6 @@ export default class BasketList extends React.Component {
         }
     }
     _longPressRow(rowID, rowData) {
-        // var target = this.state.basketData.concat([]);
-        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: rowData.skuId, quantity: 1 }).then((card) => {
-            var rs = JSON.parse(card);
-            this.refreshDataSource(rs.result.items);
-        });
 
     }
 
@@ -116,7 +111,7 @@ export default class BasketList extends React.Component {
     }
     _renderRow(rowData, sectionID, rowID) {
         return (
-            <TouchableOpacity onLongPress={(id, data) => { this._longPressRow(rowID, rowData) } } onPress={(id, data) => { this._rowPress(rowID, rowData) } } style={styles.row}
+            <TouchableOpacity onPress={(id, data) => { this._rowPress(rowID, rowData) } } style={styles.row}
                 >
                 <View style={styles.rowContent}>
                     <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>

@@ -11,6 +11,7 @@ import {
     Button,
     TextInput,
     TouchableHighlight,
+    Switch,
     NativeModules
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -23,6 +24,11 @@ class Setting extends Component {
         super(props);
         this.state={
             settingData:null,
+            allowAlipay:false,
+            allowCash:false,
+            allowWxpay:false,
+            allowOffline:false,
+            
         }
         this.settings = this.settings.bind(this);
     }
@@ -65,20 +71,35 @@ class Setting extends Component {
                         </View>
                         <View style={styles.groupContent}>
                             <View style={styles.groupitem}>
-                                <Text>alloAlipay</Text>
+                                <Text>allowAlipay</Text>
                                 <Text>{this.state.settingData? this.state.settingData.payment.alloAlipay.toString():""}</Text>
+                                <Switch style={{}}
+                                    value={this.state.allowCash}
+                                    onValueChange={(value)=>{this.setState({allowAlipay:value})}}
+                                    disabled={true}
+                                />
                             </View>
 
                             <View style={styles.groupLine}></View>
                             <View style={styles.groupitem}>
-                                <Text>alloCash</Text>
+                                <Text>allowCash</Text>
                                 <Text>{this.state.settingData? this.state.settingData.payment.alloCash.toString():""} </Text>
+                                <Switch style={{}}
+                                    value={this.state.allowCash}
+                                    onValueChange={(value)=>{this.setState({allowCash:value})}}
+                                    disabled={true}
+                                />
                             </View>
 
                             <View style={styles.groupLine}></View>
                             <View style={styles.groupitem}>
-                                <Text>alloWxpay</Text>
+                                <Text>allowWxpay</Text>
                                 <Text>{this.state.settingData? this.state.settingData.payment.alloWxpay.toString():""} </Text>
+                                <Switch style={{}}
+                                    value={this.state.allowCash}
+                                    onValueChange={(value)=>{this.setState({allowWxpay:value})}}
+                                    disabled={true}
+                                />
                             </View>
                         </View>
                     </View>
@@ -115,6 +136,11 @@ class Setting extends Component {
                             <View style={styles.groupitem}>
                                 <Text>allowOffline</Text>
                                 <Text>{this.state.settingData? this.state.settingData.system.allowOffline.toString():""}</Text>
+                                <Switch style={{}}
+                                    value={this.state.allowCash}
+                                    onValueChange={(value)=>{this.setState({allowOffline:value})}}
+                                    disabled={true}
+                                />
                             </View>
 
                             <View style={styles.groupLine}></View>
@@ -195,7 +221,7 @@ const styles = StyleSheet.create({
     },
     groupitem: {
         flexDirection:'row',
-        height: 30,
+        height: 40,
         justifyContent: 'space-between',
         alignItems: 'center',
         marginLeft: 5,
