@@ -6,6 +6,7 @@ import {
     View,
     Text,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     PanResponder,
     ListView,
     AsyncStorage,
@@ -13,10 +14,9 @@ import {
     Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-const navigatorTitle = "CardItemList";
 var PangPangBridge = NativeModules.PangPangBridge;
 export default class BasketList extends React.Component {
 
@@ -29,6 +29,10 @@ export default class BasketList extends React.Component {
             dataSource: ds,
             totalCount: 0,
             totalPrice: 0,
+            navigatorTitle: "Cart",
+            showModalCss: {},
+            selectedProduct: null,
+            // selectedOriginalProduct: null,
         };
         this._renderRow = this._renderRow.bind(this);
         this.seachCartItems = this.seachCartItems.bind(this);
@@ -37,6 +41,7 @@ export default class BasketList extends React.Component {
     }
     componentDidMount() {
         this.seachCartItems();
+        // this._openModal();
     }
     refreshDataSource(items) {
         this.setState({ cardItems: items ? items : [] });
@@ -102,9 +107,16 @@ export default class BasketList extends React.Component {
             }
         });
     }
+    _rowPress(rowID, rowData) {
+        this._openModal();
+        this.setState({ selectedProduct: rowData });
+        let copy = this.deepCopy(rowData);
+        this.setState({ selectedOriginalProduct: copy });
+        // console.log(rowData);
+    }
     _renderRow(rowData, sectionID, rowID) {
         return (
-            <TouchableOpacity onLongPress={(id, data) => { this._longPressRow(rowID, rowData) } } style={styles.row}
+            <TouchableOpacity onLongPress={(id, data) => { this._longPressRow(rowID, rowData) } } onPress={(id, data) => { this._rowPress(rowID, rowData) } } style={styles.row}
                 >
                 <View style={styles.rowContent}>
                     <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
@@ -115,7 +127,57 @@ export default class BasketList extends React.Component {
             </TouchableOpacity>
         )
     }
+    _pressPayButton() {
+        this.state.totalCount ? Alert.alert(
+            '提示',
+            '确定支付？',
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
+                { text: 'OK', onPress: () => this._goPay() },
+            ]
+        ) : null;
+    }
+    _modalConfirmBtn() {
+        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: this.state.selectedProduct.skuId, quantity: this.state.selectedOriginalProduct.quantity-this.state.selectedProduct.quantity }).then((card) => {
+            var rs = JSON.parse(card);
+            this.refreshDataSource(rs.result.items);
+            this.setState({ showModalCss: {} });
+            
+        });
+        // this._closeModal();
+    }
+    _closeModal() {
+        this.setState({ showModalCss: {} });
+        this.seachCartItems();
+        
+    }
+    _openModal() {
+        this.setState({ showModalCss: { position: 'absolute' } });
+    }
+    _addQty() {
+        let qty = this.state.selectedProduct.quantity;
+        let add = parseInt(qty) + 1;
+        let product = this.state.selectedProduct;
+        product.quantity = add;
+        this.setState({ selectedProduct: product })
+    }
+    _minusQty() {
+        let qty = this.state.selectedProduct.quantity;
+        if (qty === 0) return;
+        let add = parseInt(qty) - 1;
+        let product = this.state.selectedProduct;
+        product.quantity = add;
+        this.setState({ selectedProduct: product })
+    }
+    deepCopy(source) {
+        var result = {};
+        for (var key in source) {
+            result[key] = typeof source[key] ==='object'? deepCoyp(source[key]): source[key];
+        }
+        return result;
+    }
     render() {
+
         return (
             <View style={{ backgroundColor: 'white', }}>
                 <View style={styles.navigatorBar} >
@@ -124,23 +186,17 @@ export default class BasketList extends React.Component {
 
                     </TouchableOpacity>
                     <View style={styles.navigatorTitle}>
-                        <Text style={styles.navigatorTitleText}>{navigatorTitle}</Text>
+                        <Text style={styles.navigatorTitleText}>{this.state.navigatorTitle}({this.state.totalCount})</Text>
                     </View>
-                    <View style={styles.rightBtn}>
-                    </View>
+                    <TouchableOpacity style={styles.rightBtn} onPress={this._pressPayButton.bind(this)}>
+                        <Text style={styles.payText}>Pay</Text>
+                    </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.count} onPress={() =>this.state.totalCount? Alert.alert(
-                    '提示',
-                    '确定支付？',
-                    [
-                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
-                        { text: 'OK', onPress: () => this._goPay() },
-                    ]
-                ):null}>
-                    <Text style={styles.countText}>去支付({this.state.totalCount})</Text>
-                    <Text style={styles.totalCountText}>合计：¥ {this.state.totalPrice} </Text>
-                </TouchableOpacity>
+                <View style={styles.count} >
+                    <Text style={styles.countText}>TOTAL</Text>
+                    <Text style={styles.totalCountText}>¥ {this.state.totalPrice} </Text>
+                </View>
                 <View style={styles.line}></View>
 
                 <View >
@@ -150,12 +206,88 @@ export default class BasketList extends React.Component {
                         enableEmptySections={true}
                         />
                 </View>
+                <View style={[styles.modalContainer, this.state.showModalCss]} >
+                    <TouchableWithoutFeedback onPress={() => { this._closeModal() } }>
+                        <View style={styles.modalBackGround}>
+                        </View>
+                    </TouchableWithoutFeedback>
+                    <View style={styles.modalContent}>
+                        <View style={styles.modalContentTop}>
+                            <TouchableOpacity onPress={() => { this._closeModal() } }><Ionicons style={styles.modalContentTopImg} name="md-close"></Ionicons></TouchableOpacity>
+                            <Text>{this.state.selectedProduct ? this.state.selectedProduct.skuCode : ""}</Text>
+                            <TouchableOpacity onPress={() => { this._modalConfirmBtn() } }><Ionicons style={styles.modalContentTopImg} name="md-checkmark"></Ionicons></TouchableOpacity>
+                        </View>
+                        <View style={{ alignItems: 'center', marginBottom: 10 }}>
+                            <Text>{this.state.selectedOriginalProduct ? this.state.selectedOriginalProduct.quantity : 0}</Text>
+                        </View>
+                        <View style={styles.line}></View>
+
+                        <View style={{ alignItems: 'center', marginTop: 10, }}>
+                            <Text style={{ fontSize: 10, color: 'gray' }}>QUANTITY</Text>
+                        </View>
+                        <View style={styles.qtyContent}>
+                            <TouchableOpacity onPress={() => { this._minusQty() } }><Ionicons style={styles.modalContentQtyImg} name="md-remove"></Ionicons></TouchableOpacity>
+                            <Text style={{ fontSize: 16 }}>{this.state.selectedProduct ? this.state.selectedProduct.quantity : ""}</Text>
+                            <TouchableOpacity onPress={() => { this._addQty() } }><Ionicons style={styles.modalContentQtyImg} name="md-add"></Ionicons></TouchableOpacity>
+                        </View>
+
+                    </View>
+                </View>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    modalContainer: {
+        // position: 'absolute',
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+    },
+    modalBackGround: {
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+        backgroundColor: 'black',
+        opacity: 0.3,
+    },
+    modalContent: {
+        position: 'absolute',
+        width: Dimensions.get('window').width,
+        height: 350,
+        marginTop: Dimensions.get('window').height - 350,
+        backgroundColor: 'white',
+    },
+    modalContentTop: {
+        width: Dimensions.get('window').width,
+        height: 40,
+        // backgroundColor: 'red',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    modalContentTopImg: {
+        fontSize: 30,
+        color: '#3e9ce9',
+        // backgroundColor:'white',
+        marginLeft: 10,
+        marginRight: 10,
+    },
+    qtyContent: {
+        // backgroundColor: "yellow",
+        height: 60,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+        marginTop: 10,
+    },
+    modalContentQtyImg: {
+        fontSize: 35,
+        color: '#3e9ce9',
+        // backgroundColor:'white',
+        marginLeft: 50,
+        marginRight: 50,
+    },
     navigatorBar: {
         backgroundColor: "#3e9ce9",
         height: 64,
@@ -197,31 +329,35 @@ const styles = StyleSheet.create({
         width: 50,
         justifyContent: 'center',
     },
+    payText: {
+        fontSize: 20,
+        color: 'white',
+    },
     count: {
+        // flex:1,
         height: 60,
-        // backgroundColor: "aliceblue",
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 1,
+        backgroundColor: 'white',
     },
     countText: {
-        flex: 1.5,
-        fontSize: 16,
-        marginLeft: 20,
-        backgroundColor: "orange",
-        color: 'white',
-        textAlign: 'center',
-        alignSelf: 'center',
-        lineHeight: 40,
-        height: 40,
-
+        flex: 1,
+        fontSize: 20,
+        // backgroundColor: "transparent",
+        // backgroundColor: "red",
+        color: 'gray',
+        paddingLeft: 20,
     },
     totalCountText: {
-        flex: 5,
-        fontSize: 16,
-        // backgroundColor:"green",
+        flex: 1,
+        fontSize: 30,
         textAlign: 'right',
+        alignItems: 'center',
         paddingRight: 20,
-        color: 'orange'
+        // backgroundColor:"green",
+        height: 40,
+        lineHeight: 40,
     },
     listView: {
         height: Dimensions.get('window').height - 64 - 60,

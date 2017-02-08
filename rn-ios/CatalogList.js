@@ -104,7 +104,7 @@ export default class CatalogList extends React.Component {
             this.searchProducts();
         }, 300);
     }
-    
+
     searchProducts() {
         var key = this.state.searchKey;
 
@@ -229,7 +229,7 @@ export default class CatalogList extends React.Component {
                         clearButtonMode="always"
                         />
                     <TouchableOpacity style={styles.rightBtn} onPress={this._pressSearchButton.bind(this)}>
-                        <Icon name="search" style={styles.backBtnImg} ></Icon>
+                        <Icon name="search" style={styles.searchBtnImg} ></Icon>
                     </TouchableOpacity>
                 </View>
 
@@ -285,14 +285,14 @@ const styles = StyleSheet.create({
     },
     inputSearchText: {
         marginTop: 29,
-        width: Dimensions.get('window').width-100,
+        width: Dimensions.get('window').width - 100,
         backgroundColor: 'white',
         height: 25,
         paddingLeft: 10,
         color: 'black',
         fontSize: 15,
-        borderRadius:12,
-        opacity:0.5,
+        borderRadius: 12,
+        opacity: 0.5,
     },
     rightBtn: {
         //  backgroundColor:'green',
@@ -301,14 +301,19 @@ const styles = StyleSheet.create({
         width: 50,
         justifyContent: 'center',
     },
+    searchBtnImg: {
+        fontSize: 25,
+        textAlign: 'center',
+        color: 'white',
+    },
     count: {
         height: 60,
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom:5,
-        backgroundColor:'white',        
+        marginBottom: 5,
+        backgroundColor: 'white',
     },
-    cartBtnImg:{
+    cartBtnImg: {
         fontSize: 40,
         textAlign: 'center',
         color: '#3e9ce9',
@@ -319,12 +324,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
         backgroundColor: "transparent",
         // backgroundColor: "red",
-        width:30,
+        width: 30,
         color: 'white',
         textAlign: 'center',
-        position:'absolute',
-        left:28,
-        top:19,
+        position: 'absolute',
+        left: 28,
+        top: 19,
     },
     totalCountContent: {
         flex: 1,
@@ -334,24 +339,24 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         // color: 'orange'
     },
-    totalCountText:{
+    totalCountText: {
         fontSize: 30,
         textAlign: 'center',
-        alignItems:'center',
+        alignItems: 'center',
         // backgroundColor:"red",
-        height:40,
-        lineHeight:40,
+        height: 40,
+        lineHeight: 40,
     },
-    angleRight:{
+    angleRight: {
         fontSize: 30,
         // backgroundColor:"black",
         color: '#b9b9b9',
-        marginRight:20,
-        
+        marginRight: 20,
+
     },
     listView: {
         height: Dimensions.get('window').height - 64 - 60,
-        backgroundColor:'white',
+        backgroundColor: 'white',
     },
     row: {
         // backgroundColor:"red",
