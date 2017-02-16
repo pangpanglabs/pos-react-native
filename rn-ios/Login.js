@@ -19,18 +19,12 @@ export default class Login extends Component {
   constructor() {
     super();
     this.state = {
-      name: "liche1",
-      token: "",
       userName: "salesman",
       password: "1234",
       showLoading: false
     }
   }
   componentDidMount() {
-    this.setState({ name: "xiuxiu" });
-    AsyncStorage.getItem("token").then((data) => {
-      console.log(data);
-    })
   }
   login() {
 
@@ -51,7 +45,7 @@ export default class Login extends Component {
                 component: CatalogList,
               })
             }
-          })
+          });
         } else {
           console.log(rs);
           alert('login faild')

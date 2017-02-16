@@ -18,29 +18,30 @@ class Loading extends React.Component {
         )
     }
 }
-export default class Redirect extends React.Component {
+export default class Validate extends React.Component {
     constructor() {
         super();
         this.state = {
-            redirectPageState: "loading",
         }
     }
     
-    componentWillMount() {
+    async componentWillMount() {
         const { navigator } = this.props;
         global.myNavigator = navigator;
+        let token = "";
+        await AsyncStorage.getItem("token").then((data) => {
+            token = data;
+        });
+
+        if (token){
+            this.navigatorReplace('CatalogList',CatalogList);
+        }else{
+            this.navigatorReplace('Login',Login);
+        }
+        
     }
     
     componentDidMount() {
-        const { navigator } = this.props;
-        AsyncStorage.getItem("token").then((data) => {
-            if (data) {
-                this.navigatorReplace('CatalogList',CatalogList);
-                
-            } else {
-                this.navigatorReplace('Login',Login);
-            }
-        });
     }
     navigatorReplace(name, component) {
         const { navigator } = this.props;
