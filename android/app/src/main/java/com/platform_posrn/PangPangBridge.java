@@ -67,10 +67,10 @@ public class PangPangBridge extends ReactContextBaseJavaModule {
             }
 
              params = params.substring(0,params.length()-1);
-             url = "pp://" + path + "?" + params;
+             url = "pp:///v1" + path + "?" + params;
          }
         else{
-             url = "pp://" + path;
+             url = "pp:///v1" + path;
          }
 
         try{
