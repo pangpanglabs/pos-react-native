@@ -27,25 +27,16 @@ export default class Login extends Component {
   componentDidMount() {
   }
   login() {
-
-    const { navigator } = this.props;
     let userName = this.state.userName;
     let password = this.state.password;
     this.setState({ showLoading: true });
 
-    PangPangBridge.callAPI("/account/login",{tenant:"LABS",username:userName,password:password}).then(
+    PangPangBridge.callAPI("/account/login", { tenant: "LABS", username: userName, password: password }).then(
       (data) => {
         var rs = JSON.parse(data);
         // console.log(rs);
         if (rs.success) {
-          AsyncStorage.setItem("token", rs.result.token).then((aa) => {
-            if (navigator) {
-              navigator.replace({
-                name: 'CatalogList',
-                component: CatalogList,
-              })
-            }
-          });
+          this.setToken2Storage(rs.result.token);
         } else {
           console.log(rs);
           alert('login faild')
@@ -54,6 +45,17 @@ export default class Login extends Component {
 
       }
     );
+  }
+  async setToken2Storage(token) {
+    const { navigator } = this.props;
+    await AsyncStorage.setItem("token", token);
+
+    if (navigator) {
+        navigator.replace({
+          name: 'CatalogList',
+          component: CatalogList,
+        })
+      }
   }
 
 
@@ -74,14 +76,14 @@ export default class Login extends Component {
           style={styles.inputText}
           onChangeText={(text) => this.setState({ userName: text })}
           value={this.state.userName}
-          />
+        />
         <View style={styles.inputTextLine} />
         <TextInput
           style={styles.inputText}
           onChangeText={(text) => this.setState({ password: text })}
           value={this.state.password}
           secureTextEntry={true}
-          />
+        />
         <View style={styles.inputTextLine} />
 
         <TouchableHighlight style={styles.loginButton} underlayColor={'#7fc0ff'} onPress={() => this.login()}>
