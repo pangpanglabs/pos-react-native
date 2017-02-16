@@ -25,7 +25,7 @@ class Setting extends Component {
         this.state={
             settingData:null,
             allowAlipay:false,
-            allowCash:false,
+            allowCash:true,
             allowWxpay:false,
             allowOffline:false,
             
@@ -44,12 +44,35 @@ class Setting extends Component {
             var rs = JSON.parse(data);
             console.log(rs.result);
             this.setState({settingData:rs.result});
-            
+            this.setState({allowAlipay:Boolean(rs.result.payment.allowAlipay)});
+            this.setState({allowCash:Boolean(rs.result.payment.allowCash)});
+            this.setState({allowWxpay:Boolean(rs.result.payment.allowWxpay)});
+            this.setState({allowOffline:Boolean(rs.result.payment.allowOffline)});
         });
     }
     _pressMenuButton() {
         const {updateMenuState} = this.props;
         updateMenuState(true);
+    }
+    _switchOnchange(value,type){
+        // console.log(value);
+        // console.log(type);
+        switch (type){
+            case "alipay":
+                this.setState({allowAlipay:value});
+            break;
+            case "cash":
+                this.setState({allowCash:value});
+            break;
+            case "wxpay":
+                this.setState({allowWxpay:value});
+            break;
+            case "offline":
+                this.setState({allowOffline:value});
+            break;
+            default:
+            break;
+        }
     }
     render() {
         return (
@@ -73,10 +96,10 @@ class Setting extends Component {
                             <View style={styles.groupitem}>
                                 <Text>allowAlipay</Text>
                                 <Text>{this.state.settingData? this.state.settingData.payment.alloAlipay.toString():""}</Text>
-                                <Switch style={{}}
-                                    value={this.state.allowCash}
-                                    onValueChange={(value)=>{this.setState({allowAlipay:value})}}
-                                    disabled={true}
+                                <Switch 
+                                    value={this.state.allowAlipay}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"alipay")}}
+                                    
                                 />
                             </View>
 
@@ -84,10 +107,10 @@ class Setting extends Component {
                             <View style={styles.groupitem}>
                                 <Text>allowCash</Text>
                                 <Text>{this.state.settingData? this.state.settingData.payment.alloCash.toString():""} </Text>
-                                <Switch style={{}}
+                                <Switch 
                                     value={this.state.allowCash}
-                                    onValueChange={(value)=>{this.setState({allowCash:value})}}
-                                    disabled={true}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"cash")}}
+                                    
                                 />
                             </View>
 
@@ -95,10 +118,10 @@ class Setting extends Component {
                             <View style={styles.groupitem}>
                                 <Text>allowWxpay</Text>
                                 <Text>{this.state.settingData? this.state.settingData.payment.alloWxpay.toString():""} </Text>
-                                <Switch style={{}}
-                                    value={this.state.allowCash}
-                                    onValueChange={(value)=>{this.setState({allowWxpay:value})}}
-                                    disabled={true}
+                                <Switch 
+                                    value={this.state.allowWxpay}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"wxpay")}}
+                                    
                                 />
                             </View>
                         </View>
@@ -136,10 +159,9 @@ class Setting extends Component {
                             <View style={styles.groupitem}>
                                 <Text>allowOffline</Text>
                                 <Text>{this.state.settingData? this.state.settingData.system.allowOffline.toString():""}</Text>
-                                <Switch style={{}}
-                                    value={this.state.allowCash}
-                                    onValueChange={(value)=>{this.setState({allowOffline:value})}}
-                                    disabled={true}
+                                <Switch 
+                                    value={this.state.allowOffline}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"offline")}}
                                 />
                             </View>
 
