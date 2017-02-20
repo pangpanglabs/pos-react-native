@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import CatalogList from './CatalogList';
 import Login from './Login';
+import SpotSet from './SpotSet';
 class Loading extends React.Component {
     render() {
         return (
@@ -25,20 +26,26 @@ export default class Redirect extends React.Component {
             redirectPageState: "loading",
         }
     }
-    
+
     componentWillMount() {
         const { navigator } = this.props;
         global.myNavigator = navigator;
     }
-    
+
     componentDidMount() {
         const { navigator } = this.props;
         AsyncStorage.getItem("token").then((data) => {
             if (data) {
-                this.navigatorReplace('CatalogList',CatalogList);
-                
+                AsyncStorage.getItem("spot").then((dataSpot) => {
+                    console.log(dataSpot)
+                    if (dataSpot) {
+                        this.navigatorReplace('CatalogList', CatalogList);
+                    } else {
+                        this.navigatorReplace('SpotSet', SpotSet);
+                    }
+                });
             } else {
-                this.navigatorReplace('Login',Login);
+                this.navigatorReplace('Login', Login);
             }
         });
     }

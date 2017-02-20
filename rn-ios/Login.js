@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
 import CatalogList from './CatalogList';
+import SpotSet from './SpotSet';
 import {
   Dimensions,
   StyleSheet,
@@ -9,7 +10,8 @@ import {
   Button,
   TextInput,
   TouchableHighlight,
-  NativeModules
+  NativeModules,
+  Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // <Icon name="rocket" size={30} color="#3e9ce9"></Icon>
@@ -39,18 +41,29 @@ export default class Login extends Component {
     let password = this.state.password;
     this.setState({ showLoading: true });
 
-    PangPangBridge.callAPI("/account/login",{tenant:"LABS",username:userName,password:password}).then(
+    PangPangBridge.callAPI("/account/login", { tenant: "LABS", username: userName, password: password }).then(
       (data) => {
         var rs = JSON.parse(data);
         // console.log(rs);
         if (rs.success) {
           AsyncStorage.setItem("token", rs.result.token).then((aa) => {
-            if (navigator) {
-              navigator.replace({
-                name: 'CatalogList',
-                component: CatalogList,
-              })
-            }
+            AsyncStorage.getItem("spot").then((dataSpot) => {
+              if (dataSpot) {
+                if (navigator) {
+                  navigator.replace({
+                    name: 'CatalogList',
+                    component: CatalogList,
+                  })
+                }
+              } else {
+                if (navigator) {
+                  navigator.replace({
+                    name: 'SpotSet',
+                    component: SpotSet,
+                  })
+                }
+              }
+            });
           })
         } else {
           console.log(rs);
@@ -80,6 +93,7 @@ export default class Login extends Component {
           style={styles.inputText}
           onChangeText={(text) => this.setState({ userName: text })}
           value={this.state.userName}
+          underlineColorAndroid={'transparent'}
           />
         <View style={styles.inputTextLine} />
         <TextInput
@@ -87,6 +101,7 @@ export default class Login extends Component {
           onChangeText={(text) => this.setState({ password: text })}
           value={this.state.password}
           secureTextEntry={true}
+          underlineColorAndroid={'transparent'}
           />
         <View style={styles.inputTextLine} />
 
@@ -98,43 +113,87 @@ export default class Login extends Component {
     );
   }
 }
+let styles;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    // justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingTop: 150,
-  },
+if (Platform.OS === 'ios') {
+  styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: 'column',
+      // justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      paddingTop: 150,
+    },
 
-  inputText: {
-    height: 40,
-    paddingLeft: 10,
-    color: 'gray',
-    fontSize: 20,
+    inputText: {
+      height: 40,
+      paddingLeft: 10,
+      color: 'gray',
+      fontSize: 20,
 
-  },
-  inputTextLine: {
-    width: Dimensions.get('window').width - 10,
-    borderWidth: 0.5,
-    borderColor: 'gray',
-    marginBottom: 10,
+    },
+    inputTextLine: {
+      width: Dimensions.get('window').width - 10,
+      borderWidth: 0.5,
+      borderColor: 'gray',
+      marginBottom: 10,
 
-  },
-  loginButton: {
-    marginTop: 20,
-    width: Dimensions.get('window').width - 10,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: "#3e9ce9",
-    borderRadius: 5,
-  },
-  btnText: {
-    fontSize: 18,
-    color: 'white',
-  }
-});
+    },
+    loginButton: {
+      marginTop: 20,
+      width: Dimensions.get('window').width - 10,
+      height: 45,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'center',
+      backgroundColor: "#3e9ce9",
+      borderRadius: 5,
+    },
+    btnText: {
+      fontSize: 18,
+      color: 'white',
+    }
+  });
+}
+else if (Platform.OS === 'android') {
+  styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: 'column',
+      // justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      paddingTop: 150,
+    },
+
+    inputText: {
+      height: 40,
+      color: 'gray',
+      fontSize: 20,
+      width: 200,
+      textAlign: 'center',
+    },
+    inputTextLine: {
+      width: Dimensions.get('window').width - 10,
+      borderWidth: 0.5,
+      borderColor: 'gray',
+      marginBottom: 10,
+
+    },
+    loginButton: {
+      marginTop: 20,
+      width: Dimensions.get('window').width - 10,
+      height: 45,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'center',
+      backgroundColor: "#3e9ce9",
+      borderRadius: 5,
+    },
+    btnText: {
+      fontSize: 18,
+      color: 'white',
+    }
+  });
+}

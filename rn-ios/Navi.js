@@ -49,6 +49,12 @@ export default class Navi extends React.Component {
                             component: CatalogList,
                         });
                         break;
+                    case "login":
+                        global.myNavigator.replace({
+                            name: 'Login',
+                            component: Login,
+                        });
+                        break;
                     default:
                         break;
                 }

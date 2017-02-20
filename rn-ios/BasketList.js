@@ -11,7 +11,8 @@ import {
     ListView,
     AsyncStorage,
     NativeModules,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -138,18 +139,18 @@ export default class BasketList extends React.Component {
         ) : null;
     }
     _modalConfirmBtn() {
-        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: this.state.selectedProduct.skuId, quantity: this.state.selectedOriginalProduct.quantity-this.state.selectedProduct.quantity }).then((card) => {
+        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: this.state.selectedProduct.skuId, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
             var rs = JSON.parse(card);
             this.refreshDataSource(rs.result.items);
             this.setState({ showModalCss: {} });
-            
+
         });
         // this._closeModal();
     }
     _closeModal() {
         this.setState({ showModalCss: {} });
         this.seachCartItems();
-        
+
     }
     _openModal() {
         this.setState({ showModalCss: { position: 'absolute' } });
@@ -172,7 +173,7 @@ export default class BasketList extends React.Component {
     deepCopy(source) {
         var result = {};
         for (var key in source) {
-            result[key] = typeof source[key] ==='object'? deepCoyp(source[key]): source[key];
+            result[key] = typeof source[key] === 'object' ? deepCoyp(source[key]) : source[key];
         }
         return result;
     }
@@ -238,160 +239,323 @@ export default class BasketList extends React.Component {
     }
 }
 
-const styles = StyleSheet.create({
-    modalContainer: {
-        // position: 'absolute',
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
-    },
-    modalBackGround: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
-        backgroundColor: 'black',
-        opacity: 0.3,
-    },
-    modalContent: {
-        position: 'absolute',
-        width: Dimensions.get('window').width,
-        height: 350,
-        marginTop: Dimensions.get('window').height - 350,
-        backgroundColor: 'white',
-    },
-    modalContentTop: {
-        width: Dimensions.get('window').width,
-        height: 40,
-        // backgroundColor: 'red',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    modalContentTopImg: {
-        fontSize: 30,
-        color: '#3e9ce9',
-        // backgroundColor:'white',
-        marginLeft: 10,
-        marginRight: 10,
-    },
-    qtyContent: {
-        // backgroundColor: "yellow",
-        height: 60,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        marginTop: 10,
-    },
-    modalContentQtyImg: {
-        fontSize: 35,
-        color: '#3e9ce9',
-        // backgroundColor:'white',
-        marginLeft: 50,
-        marginRight: 50,
-    },
-    navigatorBar: {
-        backgroundColor: "#3e9ce9",
-        height: 64,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    backBtn: {
-        // backgroundColor:'green',
-        marginTop: 20,
-        height: 40,
-        width: 50,
-        // alignSelf:'center',
-        // flexDirection: 'row',
-        // alignItems: 'center',
-        justifyContent: 'center',
-    },
-    backBtnText: {
-        fontSize: 35,
-        textAlign: 'center',
-        color: 'white',
-    },
-    navigatorTitle: {
-        // backgroundColor:'red',
-        marginTop: 20,
-        height: 40,
-        width: 150,
-        justifyContent: 'center',
-    },
-    navigatorTitleText: {
-        fontSize: 20,
-        color: 'white',
-        textAlign: 'center',
-    },
-    rightBtn: {
-        // backgroundColor:'green',
-        marginTop: 20,
-        height: 40,
-        width: 50,
-        justifyContent: 'center',
-    },
-    payText: {
-        fontSize: 20,
-        color: 'white',
-    },
-    count: {
-        // flex:1,
-        height: 60,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 1,
-        backgroundColor: 'white',
-    },
-    countText: {
-        flex: 1,
-        fontSize: 20,
-        // backgroundColor: "transparent",
-        // backgroundColor: "red",
-        color: 'gray',
-        paddingLeft: 20,
-    },
-    totalCountText: {
-        flex: 1,
-        fontSize: 30,
-        textAlign: 'right',
-        alignItems: 'center',
-        paddingRight: 20,
-        // backgroundColor:"green",
-        height: 40,
-        lineHeight: 40,
-    },
-    listView: {
-        height: Dimensions.get('window').height - 64 - 60,
-    },
-    row: {
-        // backgroundColor:"red",
-        height: 80,
-    },
-    rowContent: {
-        flex: 1,
-        height: 79,
-        flexDirection: 'row',
-        alignItems: 'center',
-        // justifyContent:'space-between',
-    },
-    rowContentCode: {
-        flex: 5,
-        // backgroundColor:'red',
-        paddingLeft: 20,
-        fontSize: 16,
-    },
-    rowContentPrice: {
-        flex: 2,
-        // backgroundColor:'green',
-        paddingRight: 20,
-        fontSize: 16,
-        textAlign: 'right',
-    },
-    line: {
-        backgroundColor: "gray",
-        height: 1,
-        width: Dimensions.get('window').width - 20,
-        alignSelf: 'center',
-        opacity: 0.4,
+let styles;
 
-    }
-});
+if (Platform.OS === 'ios') {
+    styles = StyleSheet.create({
+        modalContainer: {
+            // position: 'absolute',
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+        },
+        modalBackGround: {
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+            backgroundColor: 'black',
+            opacity: 0.3,
+        },
+        modalContent: {
+            position: 'absolute',
+            width: Dimensions.get('window').width,
+            height: 350,
+            marginTop: Dimensions.get('window').height - 350,
+            backgroundColor: 'white',
+        },
+        modalContentTop: {
+            width: Dimensions.get('window').width,
+            height: 40,
+            // backgroundColor: 'red',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        },
+        modalContentTopImg: {
+            fontSize: 30,
+            color: '#3e9ce9',
+            // backgroundColor:'white',
+            marginLeft: 10,
+            marginRight: 10,
+        },
+        qtyContent: {
+            // backgroundColor: "yellow",
+            height: 60,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+            marginTop: 10,
+        },
+        modalContentQtyImg: {
+            fontSize: 35,
+            color: '#3e9ce9',
+            // backgroundColor:'white',
+            marginLeft: 50,
+            marginRight: 50,
+        },
+        navigatorBar: {
+            backgroundColor: "#3e9ce9",
+            height: 64,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        },
+        backBtn: {
+            // backgroundColor:'green',
+            marginTop: 20,
+            height: 40,
+            width: 50,
+            // alignSelf:'center',
+            // flexDirection: 'row',
+            // alignItems: 'center',
+            justifyContent: 'center',
+        },
+        backBtnText: {
+            fontSize: 35,
+            textAlign: 'center',
+            color: 'white',
+        },
+        navigatorTitle: {
+            // backgroundColor:'red',
+            marginTop: 20,
+            height: 40,
+            width: 150,
+            justifyContent: 'center',
+        },
+        navigatorTitleText: {
+            fontSize: 20,
+            color: 'white',
+            textAlign: 'center',
+        },
+        rightBtn: {
+            // backgroundColor:'green',
+            marginTop: 20,
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+        },
+        payText: {
+            fontSize: 20,
+            color: 'white',
+        },
+        count: {
+            // flex:1,
+            height: 60,
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 1,
+            backgroundColor: 'white',
+        },
+        countText: {
+            flex: 1,
+            fontSize: 20,
+            // backgroundColor: "transparent",
+            // backgroundColor: "red",
+            color: 'gray',
+            paddingLeft: 20,
+        },
+        totalCountText: {
+            flex: 1,
+            fontSize: 30,
+            textAlign: 'right',
+            alignItems: 'center',
+            paddingRight: 20,
+            // backgroundColor:"green",
+            height: 40,
+            lineHeight: 40,
+        },
+        listView: {
+            height: Dimensions.get('window').height - 64 - 60,
+        },
+        row: {
+            // backgroundColor:"red",
+            height: 80,
+        },
+        rowContent: {
+            flex: 1,
+            height: 79,
+            flexDirection: 'row',
+            alignItems: 'center',
+            // justifyContent:'space-between',
+        },
+        rowContentCode: {
+            flex: 5,
+            // backgroundColor:'red',
+            paddingLeft: 20,
+            fontSize: 16,
+        },
+        rowContentPrice: {
+            flex: 2,
+            // backgroundColor:'green',
+            paddingRight: 20,
+            fontSize: 16,
+            textAlign: 'right',
+        },
+        line: {
+            backgroundColor: "gray",
+            height: 1,
+            width: Dimensions.get('window').width - 20,
+            alignSelf: 'center',
+            opacity: 0.4,
+
+        }
+    });
+}
+else if (Platform.OS === 'android') {
+    styles = StyleSheet.create({
+        modalContainer: {
+            // position: 'absolute',
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+        },
+        modalBackGround: {
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+            backgroundColor: 'black',
+            opacity: 0.3,
+        },
+        modalContent: {
+            position: 'absolute',
+            width: Dimensions.get('window').width,
+            height: 350,
+            marginTop: Dimensions.get('window').height - 350,
+            backgroundColor: 'white',
+        },
+        modalContentTop: {
+            width: Dimensions.get('window').width,
+            height: 40,
+            // backgroundColor: 'red',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        },
+        modalContentTopImg: {
+            fontSize: 30,
+            color: '#3e9ce9',
+            // backgroundColor:'white',
+            marginLeft: 10,
+            marginRight: 10,
+        },
+        qtyContent: {
+            // backgroundColor: "yellow",
+            height: 60,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+            marginTop: 10,
+        },
+        modalContentQtyImg: {
+            fontSize: 35,
+            color: '#3e9ce9',
+            // backgroundColor:'white',
+            marginLeft: 50,
+            marginRight: 50,
+        },
+        navigatorBar: {
+            backgroundColor: "#3e9ce9",
+            height: 44,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        },
+        backBtn: {
+            // backgroundColor:'green',
+            marginTop: 0,
+            height: 40,
+            width: 50,
+            // alignSelf:'center',
+            // flexDirection: 'row',
+            // alignItems: 'center',
+            justifyContent: 'center',
+        },
+        backBtnText: {
+            fontSize: 35,
+            textAlign: 'center',
+            color: 'white',
+        },
+        navigatorTitle: {
+            // backgroundColor:'red',
+            marginTop: 0,
+            height: 40,
+            width: 150,
+            justifyContent: 'center',
+        },
+        navigatorTitleText: {
+            fontSize: 20,
+            color: 'white',
+            textAlign: 'center',
+        },
+        rightBtn: {
+            // backgroundColor:'green',
+            marginTop: 0,
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+        },
+        payText: {
+            fontSize: 20,
+            color: 'white',
+        },
+        count: {
+            // flex:1,
+            height: 60,
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 1,
+            backgroundColor: 'white',
+        },
+        countText: {
+            flex: 1,
+            fontSize: 20,
+            // backgroundColor: "transparent",
+            // backgroundColor: "red",
+            color: 'gray',
+            paddingLeft: 20,
+        },
+        totalCountText: {
+            flex: 1,
+            fontSize: 30,
+            textAlign: 'right',
+            alignItems: 'center',
+            paddingRight: 20,
+            // backgroundColor:"green",
+            height: 40,
+            lineHeight: 40,
+        },
+        listView: {
+            height: Dimensions.get('window').height - 64 - 60,
+        },
+        row: {
+            // backgroundColor:"red",
+            height: 80,
+        },
+        rowContent: {
+            flex: 1,
+            height: 79,
+            flexDirection: 'row',
+            alignItems: 'center',
+            // justifyContent:'space-between',
+        },
+        rowContentCode: {
+            flex: 5,
+            // backgroundColor:'red',
+            paddingLeft: 20,
+            fontSize: 16,
+        },
+        rowContentPrice: {
+            flex: 2,
+            // backgroundColor:'green',
+            paddingRight: 20,
+            fontSize: 16,
+            textAlign: 'right',
+        },
+        line: {
+            backgroundColor: "gray",
+            height: 1,
+            width: Dimensions.get('window').width - 20,
+            alignSelf: 'center',
+            opacity: 0.4,
+
+        }
+    });
+}

@@ -8,17 +8,18 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  AsyncStorage
 } from 'react-native';
 import { signalObj } from './Signals';
 
 export default class MenuContainer extends Component {
-  constructor(){
+  constructor() {
     super();
-    this.state={
+    this.state = {
       isOpen: false,
       selectedItem: '',
-      openMenuOffset:Dimensions.get('window').width*3/4,
+      openMenuOffset: Dimensions.get('window').width * 3 / 4,
     }
   }
   toggle() {
@@ -29,26 +30,36 @@ export default class MenuContainer extends Component {
   updateMenuState(isOpen) {
     this.setState({ isOpen, });
   }
-
   onMenuItemSelected = (item) => {
     // console.log(item)
-    this.setState({
-      isOpen: false,
-      selectedItem: item,
-    });
-    signalObj.dispatch("naviReplace",item);
+    if (item === 'logout') {
+      AsyncStorage.multiRemove(['token', 'spot']).then(() => {
+        this.setState({
+          isOpen: false,
+          selectedItem: item,
+        });
+        signalObj.dispatch("naviReplace", 'login');
+      })
+    }
+    else {
+      this.setState({
+        isOpen: false,
+        selectedItem: item,
+      });
+      signalObj.dispatch("naviReplace", item);
+    }
   }
   render() {
-    const menu = <LeftMenu onItemSelected={this.onMenuItemSelected}/>;
+    const menu = <LeftMenu onItemSelected={this.onMenuItemSelected} />;
 
     return (
-      <SideMenu 
+      <SideMenu
         menu={menu}
         isOpen={this.state.isOpen}
         openMenuOffset={this.state.openMenuOffset}
         onChange={(isOpen) => this.updateMenuState(isOpen)}
-      >
-        <Navi {...this.state} updateMenuState={(isOpen) => this.updateMenuState(isOpen)}  />
+        >
+        <Navi {...this.state} updateMenuState={(isOpen) => this.updateMenuState(isOpen)} />
       </SideMenu>
     );
   }

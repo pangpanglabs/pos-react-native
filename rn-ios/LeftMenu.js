@@ -13,6 +13,7 @@ let tempMenuData = [
     { menuName: "cart", menuCode: "catalogList" },    
     { menuName: "user", menuCode: "user" },
     { menuName: "settings", menuCode: "settings" },
+    { menuName: "logout", menuCode: "logout" },
 ];
 
 
@@ -46,6 +47,9 @@ export default class LeftMenu extends Component {
         }
         if (rowData.menuCode === "settings") {
             iconContent = <Icon name="cog" style={styles.backBtnImg} ></Icon>
+        }
+        if (rowData.menuCode === "logout") {
+            iconContent = <Icon name="sign-out" style={styles.backBtnImg} ></Icon>
         }
         return (
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) } } >
