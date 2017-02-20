@@ -4,10 +4,14 @@ import {
     StyleSheet,
     View,
     Text,
-    Navigator
+    Navigator,
+    NativeModules
 } from 'react-native';
 import CatalogList from './CatalogList';
 import Login from './Login';
+
+let PangPangBridge = NativeModules.PangPangBridge;
+
 class Loading extends React.Component {
     render() {
         return (
@@ -24,23 +28,36 @@ export default class Validate extends React.Component {
         this.state = {
         }
     }
-    
+
     async componentWillMount() {
         const { navigator } = this.props;
         global.myNavigator = navigator;
         let token = "";
+        let autoLoginSucccess = false;
         await AsyncStorage.getItem("token").then((data) => {
             token = data;
         });
 
-        if (token){
-            this.navigatorReplace('CatalogList',CatalogList);
-        }else{
-            this.navigatorReplace('Login',Login);
+        await PangPangBridge.callAPI("/account/autologin", null).then((card) => {
+            var rs = JSON.parse(card);
+            // console.log(rs.success);
+            autoLoginSucccess = rs.success;
+        });
+
+        if (token && autoLoginSucccess) {
+            AsyncStorage.getItem("spot").then((data) => {
+                if(data){
+                    this.navigatorReplace('CatalogList', CatalogList);
+                }else{
+                    alert("go select spot page");
+                }
+            });
+        } else {
+            this.navigatorReplace('Login', Login);
         }
-        
+
     }
-    
+
     componentDidMount() {
     }
     navigatorReplace(name, component) {
