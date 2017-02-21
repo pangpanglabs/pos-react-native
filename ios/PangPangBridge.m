@@ -37,9 +37,9 @@ RCT_EXPORT_METHOD(callAPI:(NSString *)path params:(NSDictionary *)paramsDic
       params =[params stringByAppendingString:temp];
     }
     params = [params substringToIndex:[params length] - 1];
-    url = [NSString stringWithFormat:@"pp:///v1%@?%@",path,params];
+    url = [NSString stringWithFormat:@"pp://%@?%@",path,params];
   }else{
-    url = [NSString stringWithFormat:@"pp:///v1%@",path];
+    url = [NSString stringWithFormat:@"pp://%@",path];
   }
   
   //  @"pp:///account/login?username=admin&password=123qwe"
