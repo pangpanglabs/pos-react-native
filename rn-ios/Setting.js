@@ -11,6 +11,7 @@ import {
     Button,
     TextInput,
     TouchableHighlight,
+    Switch,
     NativeModules,
     Platform
 } from 'react-native';
@@ -22,8 +23,12 @@ const navigatorTitle = "Setting";
 class Setting extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            settingData: null,
+        this.state={
+            settingData:null,
+            allowAlipay:false,
+            allowCash:true,
+            allowWxpay:false,
+            allowOffline:false,
         }
         this.settings = this.settings.bind(this);
     }
@@ -38,13 +43,36 @@ class Setting extends Component {
         PangPangBridge.callAPI("/context/settings", null).then((data) => {
             var rs = JSON.parse(data);
             console.log(rs.result);
-            this.setState({ settingData: rs.result });
-
+            this.setState({settingData:rs.result});
+            this.setState({allowAlipay:Boolean(rs.result.payment.allowAlipay)});
+            this.setState({allowCash:Boolean(rs.result.payment.allowCash)});
+            this.setState({allowWxpay:Boolean(rs.result.payment.allowWxpay)});
+            this.setState({allowOffline:Boolean(rs.result.payment.allowOffline)});
         });
     }
     _pressMenuButton() {
         const {updateMenuState} = this.props;
         updateMenuState(true);
+    }
+    _switchOnchange(value,type){
+        // console.log(value);
+        // console.log(type);
+        switch (type){
+            case "alipay":
+                this.setState({allowAlipay:value});
+            break;
+            case "cash":
+                this.setState({allowCash:value});
+            break;
+            case "wxpay":
+                this.setState({allowWxpay:value});
+            break;
+            case "offline":
+                this.setState({allowOffline:value});
+            break;
+            default:
+            break;
+        }
     }
     render() {
         return (
@@ -66,20 +94,35 @@ class Setting extends Component {
                         </View>
                         <View style={styles.groupContent}>
                             <View style={styles.groupitem}>
-                                <Text>alloAlipay</Text>
-                                <Text>{this.state.settingData ? this.state.settingData.payment.alloAlipay.toString() : ""}</Text>
+                                <Text>allowAlipay</Text>
+                                <Text>{this.state.settingData? this.state.settingData.payment.alloAlipay.toString():""}</Text>
+                                <Switch 
+                                    value={this.state.allowAlipay}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"alipay")}}
+                                    
+                                />
                             </View>
 
                             <View style={styles.groupLine}></View>
                             <View style={styles.groupitem}>
-                                <Text>alloCash</Text>
-                                <Text>{this.state.settingData ? this.state.settingData.payment.alloCash.toString() : ""} </Text>
+                                <Text>allowCash</Text>
+                                <Text>{this.state.settingData? this.state.settingData.payment.alloCash.toString():""} </Text>
+                                <Switch 
+                                    value={this.state.allowCash}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"cash")}}
+                                    
+                                />
                             </View>
 
                             <View style={styles.groupLine}></View>
                             <View style={styles.groupitem}>
-                                <Text>alloWxpay</Text>
-                                <Text>{this.state.settingData ? this.state.settingData.payment.alloWxpay.toString() : ""} </Text>
+                                <Text>allowWxpay</Text>
+                                <Text>{this.state.settingData? this.state.settingData.payment.alloWxpay.toString():""} </Text>
+                                <Switch 
+                                    value={this.state.allowWxpay}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"wxpay")}}
+                                    
+                                />
                             </View>
                         </View>
                     </View>
@@ -115,7 +158,11 @@ class Setting extends Component {
                         <View style={styles.groupContent}>
                             <View style={styles.groupitem}>
                                 <Text>allowOffline</Text>
-                                <Text>{this.state.settingData ? this.state.settingData.system.allowOffline.toString() : ""}</Text>
+                                <Text>{this.state.settingData? this.state.settingData.system.allowOffline.toString():""}</Text>
+                                <Switch 
+                                    value={this.state.allowOffline}
+                                    onValueChange={(value)=>{this._switchOnchange(value,"offline")}}
+                                />
                             </View>
 
                             <View style={styles.groupLine}></View>
@@ -278,6 +325,5 @@ else if (Platform.OS === 'android') {
         },
     });
 }
-
 export default Setting;
 

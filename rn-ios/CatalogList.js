@@ -57,7 +57,7 @@ export default class CatalogList extends React.Component {
     refreshDataSource() {
         PangPangBridge.callAPI("/cart/get-cart", { cartId: this.state.cardId }).then((card) => {
             var rs = JSON.parse(card);
-            // console.log(rs.result.items);
+            // console.log(rs.result);
             if (!rs.result.items || rs.result.items.length === 0) {
                 this.setState({ totalPrice: 0 });
                 this.setState({ totalCount: 0 });
@@ -69,7 +69,7 @@ export default class CatalogList extends React.Component {
                 totalCount = totalCount + parseInt(rs.result.items[index].quantity);
             }
 
-            this.setState({ totalPrice: rs.result.total });
+            this.setState({ totalPrice: rs.result.listPrice });
             this.setState({ totalCount: totalCount });
         });
     }
@@ -166,7 +166,7 @@ export default class CatalogList extends React.Component {
         return (
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) } } style={styles.row}>
                 <View style={styles.rowContent}>
-                    <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
+                    <Text style={styles.rowContentCode}>{rowData.code}</Text>
                     <Text>{rowData.skuId}</Text>
                     <Text style={styles.rowContentPrice}>¥{rowData.price}</Text>
                 </View>

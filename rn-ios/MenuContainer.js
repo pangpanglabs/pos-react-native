@@ -36,9 +36,9 @@ export default class MenuContainer extends Component {
       AsyncStorage.multiRemove(['token', 'spot']).then(() => {
         this.setState({
           isOpen: false,
-          selectedItem: item,
+          // selectedItem: item,
         });
-        signalObj.dispatch("naviReplace", 'login');
+        signalObj.dispatch("naviReplace", 'validate');
       })
     }
     else {

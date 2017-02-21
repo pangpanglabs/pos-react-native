@@ -4,11 +4,14 @@ import {
     StyleSheet,
     View,
     Text,
-    Navigator
+    Navigator,
+    NativeModules
 } from 'react-native';
 import CatalogList from './CatalogList';
 import Login from './Login';
 import SpotSet from './SpotSet';
+
+let PangPangBridge = NativeModules.PangPangBridge;
 class Loading extends React.Component {
     render() {
         return (
@@ -19,36 +22,44 @@ class Loading extends React.Component {
         )
     }
 }
-export default class Redirect extends React.Component {
+export default class Validate extends React.Component {
     constructor() {
         super();
         this.state = {
-            redirectPageState: "loading",
         }
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         const { navigator } = this.props;
         global.myNavigator = navigator;
+        let token = "";
+        let autoLoginSucccess = false;
+        await AsyncStorage.getItem("token").then((data) => {
+            token = data;
+        });
+
+        await PangPangBridge.callAPI("/account/autologin", null).then((card) => {
+            var rs = JSON.parse(card);
+            // console.log(rs.success);
+            autoLoginSucccess = rs.success;
+        });
+
+        if (token && autoLoginSucccess) {
+            AsyncStorage.getItem("spot").then((data) => {
+                console.log('spot -> ',data)
+
+                if (data) {
+                    this.navigatorReplace('CatalogList', CatalogList);
+                } else {
+                    this.navigatorReplace('SpotSet', SpotSet);
+                }
+            });
+        } else {
+            this.navigatorReplace('Login', Login);
+        }
+
     }
 
-    componentDidMount() {
-        const { navigator } = this.props;
-        AsyncStorage.getItem("token").then((data) => {
-            if (data) {
-                AsyncStorage.getItem("spot").then((dataSpot) => {
-                    console.log(dataSpot)
-                    if (dataSpot) {
-                        this.navigatorReplace('CatalogList', CatalogList);
-                    } else {
-                        this.navigatorReplace('SpotSet', SpotSet);
-                    }
-                });
-            } else {
-                this.navigatorReplace('Login', Login);
-            }
-        });
-    }
     navigatorReplace(name, component) {
         const { navigator } = this.props;
         if (navigator) {

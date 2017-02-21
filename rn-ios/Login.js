@@ -21,22 +21,14 @@ export default class Login extends Component {
   constructor() {
     super();
     this.state = {
-      name: "liche1",
-      token: "",
       userName: "salesman",
       password: "1234",
       showLoading: false
     }
   }
   componentDidMount() {
-    this.setState({ name: "xiuxiu" });
-    AsyncStorage.getItem("token").then((data) => {
-      console.log(data);
-    })
   }
   login() {
-
-    const { navigator } = this.props;
     let userName = this.state.userName;
     let password = this.state.password;
     this.setState({ showLoading: true });
@@ -46,25 +38,7 @@ export default class Login extends Component {
         var rs = JSON.parse(data);
         // console.log(rs);
         if (rs.success) {
-          AsyncStorage.setItem("token", rs.result.token).then((aa) => {
-            AsyncStorage.getItem("spot").then((dataSpot) => {
-              if (dataSpot) {
-                if (navigator) {
-                  navigator.replace({
-                    name: 'CatalogList',
-                    component: CatalogList,
-                  })
-                }
-              } else {
-                if (navigator) {
-                  navigator.replace({
-                    name: 'SpotSet',
-                    component: SpotSet,
-                  })
-                }
-              }
-            });
-          })
+          this.setToken2Storage(rs.result.token);
         } else {
           console.log(rs);
           alert('login faild')
@@ -73,6 +47,17 @@ export default class Login extends Component {
 
       }
     );
+  }
+  async setToken2Storage(token) {
+    const { navigator } = this.props;
+    await AsyncStorage.setItem("token", token);
+
+    if (navigator) {
+      navigator.replace({
+        name: 'SpotSet',
+        component: SpotSet,
+      })
+    }
   }
 
 

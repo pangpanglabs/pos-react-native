@@ -1,5 +1,5 @@
 import React from 'react';
-import Redirect from './Redirect';
+import Validate from './Validate';
 import Login from './Login';
 import Setting from './Setting';
 import CatalogList from './CatalogList';
@@ -49,10 +49,10 @@ export default class Navi extends React.Component {
                             component: CatalogList,
                         });
                         break;
-                    case "login":
+                    case "validate":
                         global.myNavigator.replace({
-                            name: 'Login',
-                            component: Login,
+                            name: 'Validate',
+                            component: Validate,
                         });
                         break;
                     default:
@@ -63,8 +63,8 @@ export default class Navi extends React.Component {
         });
     }
     render() {
-        let defaultName = 'Redirect';
-        let defaultComponent = Redirect;
+        let defaultName = 'Validate';
+        let defaultComponent = Validate;
         return (
             <View style={{ flex: 1 }}>
                 <StatusBar
