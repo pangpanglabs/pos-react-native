@@ -115,7 +115,7 @@ export default class BasketList extends React.Component {
             <TouchableOpacity onPress={(id, data) => { this._rowPress(rowID, rowData) } } style={styles.row}
                 >
                 <View style={styles.rowContent}>
-                    <Text style={styles.rowContentCode}>{rowData.code}</Text>
+                    <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
                     <Text>x{rowData.quantity}</Text>
                     <Text style={styles.rowContentPrice}>¥{rowData.listPrice}</Text>
                 </View>
