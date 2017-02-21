@@ -166,9 +166,9 @@ export default class CatalogList extends React.Component {
         return (
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) } } style={styles.row}>
                 <View style={styles.rowContent}>
-                    <Text style={styles.rowContentCode}>{rowData.code}</Text>
+                    <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
                     <Text>{rowData.skuId}</Text>
-                    <Text style={styles.rowContentPrice}>¥{rowData.price}</Text>
+                    <Text style={styles.rowContentPrice}>¥{rowData.listPrice}</Text>
                 </View>
                 <View style={styles.line}></View>
             </TouchableOpacity>

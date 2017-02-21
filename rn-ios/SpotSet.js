@@ -54,16 +54,19 @@ class SpotSet extends Component {
         });
 
         if (spotsResult.success) {
-            await AsyncStorage.setItem("spot", spotsResult.result.token);
+            await AsyncStorage.setItem("spot", spotsResult.result.currentSpotId.toString());
 
-            await PangPangBridge.callAPI("/catalog/download", null);
+            PangPangBridge.callAPI("/catalog/download", null).then((data) => {
+                console.log(JSON.parse(data))
+                alert("download complete");
 
-            if (navigator) {
-                navigator.replace({
-                    name: 'CatalogList',
-                    component: CatalogList,
-                })
-            }
+                if (navigator) {
+                    navigator.replace({
+                        name: 'CatalogList',
+                        component: CatalogList,
+                    })
+                }
+            });
         } else {
             console.log(spotsResult.error);
             alert('set spot faild')
@@ -71,7 +74,7 @@ class SpotSet extends Component {
     }
     _renderRow(rowData, sectionID, rowID) {
         return (
-            <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
+            <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) }}>
                 <View style={styles.groupitem}>
                     <Text style={styles.itemText}>{rowData.name}</Text>
                 </View>
@@ -92,7 +95,7 @@ class SpotSet extends Component {
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
-                        />
+                    />
                 </View>
             </View>
         );
