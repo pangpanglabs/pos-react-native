@@ -10,7 +10,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 let tempMenuData = [
-    { menuName: "cart", menuCode: "catalogList" },    
+    { menuName: "spotset", menuCode: "spotset" },
+    { menuName: "cart", menuCode: "catalogList" },
     { menuName: "user", menuCode: "user" },
     { menuName: "settings", menuCode: "settings" },
     { menuName: "logout", menuCode: "logout" },
@@ -38,7 +39,7 @@ export default class LeftMenu extends Component {
 
     }
     _renderRow(rowData, sectionID, rowID) {
-         let iconContent;
+        let iconContent;
         if (rowData.menuCode === "user") {
             iconContent = <Icon name="user-o" style={styles.backBtnImg} ></Icon>
         }
@@ -50,6 +51,9 @@ export default class LeftMenu extends Component {
         }
         if (rowData.menuCode === "logout") {
             iconContent = <Icon name="sign-out" style={styles.backBtnImg} ></Icon>
+        }
+        if (rowData.menuCode === "spotset") {
+            iconContent = <Icon name="bank" style={styles.backBtnImg} ></Icon>
         }
         return (
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) } } >
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
         // justifyContent:'space-between',
     },
     backBtnImg: {
-        marginLeft:20,
+        marginLeft: 20,
         fontSize: 20,
         textAlign: 'center',
         color: 'white',
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
         // backgroundColor: 'blue',
         paddingLeft: 10,
         fontSize: 16,
-        color:'white',
+        color: 'white',
     },
     line: {
         backgroundColor: "gray",
@@ -116,5 +120,5 @@ const styles = StyleSheet.create({
         opacity: 0.2,
 
     },
-    
+
 });

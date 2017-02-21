@@ -252,7 +252,7 @@ export default class CatalogList extends React.Component {
                         enableEmptySections={true}
                         renderFooter={this._renderFooter.bind(this)}
                         onEndReached={this._endReached.bind(this)}
-                        onEndReachedThreshold={0}
+                        onEndReachedThreshold={20}
                         />
                 </View>
 
@@ -493,7 +493,7 @@ else if (Platform.OS === 'android') {
 
         },
         listView: {
-            height: Dimensions.get('window').height - 64 - 60,
+            height: Dimensions.get('window').height - 44 - 60,
             backgroundColor: 'white',
         },
         row: {

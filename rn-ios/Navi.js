@@ -3,6 +3,7 @@ import Validate from './Validate';
 import Login from './Login';
 import Setting from './Setting';
 import CatalogList from './CatalogList';
+import SpotSet from './SpotSet.js';
 import {
     View,
     Text,
@@ -53,6 +54,12 @@ export default class Navi extends React.Component {
                         global.myNavigator.replace({
                             name: 'Validate',
                             component: Validate,
+                        });
+                        break;
+                    case "spotset":
+                        global.myNavigator.replace({
+                            name: 'SpotSet',
+                            component: SpotSet,
                         });
                         break;
                     default:
