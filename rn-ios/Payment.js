@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CatalogList from './CatalogList.js'
 import {
     ScrollView,
     TouchableOpacity,
@@ -25,7 +26,7 @@ class Payment extends Component {
             totalCount: 0,
             totalPrice: 0,
             dataSource: ds,
-            currentPayId: 0
+            currentPayId: 1
         };
 
         this._renderRow = this._renderRow.bind(this);
@@ -83,6 +84,32 @@ class Payment extends Component {
                 </TouchableOpacity>);
         }
     }
+    async _pressConfirmButton() {
+        let setinfoResult = null;
+        await PangPangBridge.callAPI("/cart/set-info", { cartId: this.props.cardId, paymentType: this.state.currentPayId == 1 ? 'alipay' : 'wxpay' }).then((data) => {
+            setinfoResult = JSON.parse(data);
+        });
+
+        if (setinfoResult.success) {
+            let rs = null;
+            await PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId }).then((card) => {
+                rs = JSON.parse(card);
+                console.log(rs);
+            });
+
+            if (rs.success) {
+                AsyncStorage.removeItem("cartId").done((data) => {
+                    const { navigator } = this.props;
+                    if (navigator) {
+                        navigator.replace({
+                            name: 'CatalogList',
+                            component: CatalogList
+                        })
+                    }
+                });
+            }
+        }
+    }
     _pressBackButton() {
         const { navigator } = this.props;
         if (navigator) {
@@ -117,7 +144,7 @@ class Payment extends Component {
                         />
                 </View>
                 <View style={styles.confirmBtnContent}>
-                    <TouchableOpacity activeOpacity={0.7} style={styles.confirmBtn}>
+                    <TouchableOpacity activeOpacity={0.7} style={styles.confirmBtn} onPress={this._pressConfirmButton.bind(this)}>
                         <Text style={styles.confirmBtnText}>{"Pay Confirm ￥" + this.state.totalPrice.toString()}</Text>
                     </TouchableOpacity>
                 </View>
