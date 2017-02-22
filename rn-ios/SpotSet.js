@@ -25,6 +25,7 @@ class SpotSet extends Component {
 
         this.state = {
             dataSource: ds.cloneWithRows([]),
+            currentSpotId: 0
         };
         this._renderRow = this._renderRow.bind(this);
     }
@@ -32,16 +33,20 @@ class SpotSet extends Component {
 
     }
     componentDidMount() {
+        this._getContextUser();
+    }
+    _getContextUser() {
         PangPangBridge.callAPI("/context/user", null).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs.result.spots);
             if (rs.success) {
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(rs.result.spots),
+                    currentSpotId: rs.result.currentSpotId
                 });
             } else {
                 console.log(rs);
-                alert('set spot faild')
+                alert('get user faild')
             }
         });
     }
@@ -55,47 +60,66 @@ class SpotSet extends Component {
 
         if (spotsResult.success) {
             await AsyncStorage.setItem("spot", spotsResult.result.currentSpotId.toString());
-
-            PangPangBridge.callAPI("/catalog/download", null).then((data) => {
-                console.log(JSON.parse(data))
-                alert("download complete");
-
-                if (navigator) {
-                    navigator.replace({
-                        name: 'CatalogList',
-                        component: CatalogList,
-                    })
-                }
-            });
+            this._getContextUser();
         } else {
             console.log(spotsResult.error);
             alert('set spot faild')
         }
     }
     _renderRow(rowData, sectionID, rowID) {
-        return (
-            <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) }}>
-                <View style={styles.groupitem}>
-                    <Text style={styles.itemText}>{rowData.name}</Text>
-                </View>
-            </TouchableOpacity>);
+        if (this.state.currentSpotId === rowData.id) {
+            return (
+                <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
+                    <View style={styles.groupitem}>
+                        <Text style={styles.itemText}>{rowData.name}    <Icon name="check-circle-o" style={styles.checkIcon} ></Icon></Text>
+                    </View>
+                </TouchableOpacity>);
+        }
+        else {
+            return (
+                <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
+                    <View style={styles.groupitem}>
+                        <Text style={styles.itemText}>{rowData.name}</Text>
+                    </View>
+                </TouchableOpacity>);
+        }
+    }
+    _pressMenuButton() {
+        const {updateMenuState} = this.props;
+        updateMenuState(true);
+    }
+    _pressSyncButton() {
+        PangPangBridge.callAPI("/catalog/download", null).then((data) => {
+            console.log(JSON.parse(data))
+
+            // if (navigator) {
+            //     navigator.replace({
+            //         name: 'CatalogList',
+            //         component: CatalogList,
+            //     })
+            // }
+        });
     }
     render() {
-
-
         return (
             <View style={{ backgroundColor: '#f0f0f0', height: Dimensions.get('window').height }}>
                 <View style={styles.navigatorBar} >
+                    <TouchableOpacity onPress={this._pressMenuButton.bind(this)} style={styles.backBtn}>
+                        <Icon name="bars" style={styles.backBtnImg} ></Icon>
+                    </TouchableOpacity>
                     <View style={styles.navigatorTitle}>
                         <Text style={styles.navigatorTitleText}>{navigatorTitle}</Text>
                     </View>
+                    <TouchableOpacity style={styles.rightBtn} onPress={this._pressSyncButton.bind(this)}>
+                        <Icon name="refresh" style={styles.rightBtnImg} ></Icon>
+                    </TouchableOpacity>
                 </View>
                 <View >
                     <ListView style={styles.listView}
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
-                    />
+                        />
                 </View>
             </View>
         );
@@ -123,6 +147,7 @@ if (Platform.OS === 'ios') {
             // backgroundColor:'red',
             marginTop: 20,
             height: 40,
+            width: 150,
             justifyContent: 'center',
             flex: 1,
         },
@@ -168,6 +193,29 @@ if (Platform.OS === 'ios') {
             fontWeight: 'bold',
             width: Dimensions.get('window').width,
             textAlign: 'center'
+        },
+        checkIcon: {
+            marginLeft: 120,
+            fontSize: 20,
+            textAlign: 'center',
+            color: '#3e9ce9',
+        },
+        backBtnImg: {
+            fontSize: 25,
+            textAlign: 'center',
+            color: 'white',
+        },
+        rightBtn: {
+            //  backgroundColor:'green',
+            marginTop: 20,
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+        },
+        rightBtnImg: {
+            fontSize: 25,
+            textAlign: 'center',
+            color: 'white',
         },
     });
 }
@@ -190,8 +238,8 @@ else if (Platform.OS === 'android') {
             // backgroundColor:'red',
             marginTop: 0,
             height: 40,
+            width: 150,
             justifyContent: 'center',
-            flex: 1,
         },
         navigatorTitleText: {
             fontSize: 20,
@@ -223,9 +271,9 @@ else if (Platform.OS === 'android') {
             opacity: 0.4,
         },
         groupitem: {
+            flex: 1,
             flexDirection: 'row',
             height: 60,
-            justifyContent: 'space-between',
             alignItems: 'center',
             marginLeft: 5,
             width: Dimensions.get('window').width,
@@ -235,6 +283,28 @@ else if (Platform.OS === 'android') {
             fontWeight: 'bold',
             width: Dimensions.get('window').width,
             textAlign: 'center'
+        },
+        checkIcon: {
+            marginLeft: 120,
+            fontSize: 20,
+            textAlign: 'center',
+            color: '#3e9ce9',
+        },
+        backBtnImg: {
+            fontSize: 25,
+            textAlign: 'center',
+            color: 'white',
+        },
+        rightBtn: {
+            //  backgroundColor:'green',
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+        },
+        rightBtnImg: {
+            fontSize: 25,
+            textAlign: 'center',
+            color: 'white',
         },
     });
 }

@@ -493,7 +493,7 @@ else if (Platform.OS === 'android') {
 
         },
         listView: {
-            height: Dimensions.get('window').height - 64 - 60,
+            height: Dimensions.get('window').height - 44 - 60,
             backgroundColor: 'white',
         },
         row: {
