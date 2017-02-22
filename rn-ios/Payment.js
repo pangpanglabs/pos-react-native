@@ -15,19 +15,58 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+var PangPangBridge = NativeModules.PangPangBridge;
 const navigatorTitle = "Payment";
 class Payment extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            totalCount: 0,
+            totalPrice: 0,
+        };
+    }
+
+    componentDidMount() {
+        PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
+            var rs = JSON.parse(card);
+            if (!rs.result.items) return;
+            var totalCount = 0;
+            for (var index = 0; index < rs.result.items.length; index++) {
+                totalCount = totalCount + parseInt(rs.result.items[index].quantity);
+            }
+            // console.log(rs.result.total);
+            this.setState({ totalPrice: rs.result.listPrice });
+            this.setState({ totalCount: totalCount });
+        });
+    }
+
+    _pressBackButton() {
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.pop();
+        }
+    }
     render() {
 
         return (
             <View style={{ backgroundColor: '#f0f0f0', height: Dimensions.get('window').height }}>
                 <View style={styles.navigatorBar} >
+                    <TouchableOpacity onPress={this._pressBackButton.bind(this)} style={styles.backBtn}>
+                        <Icon style={styles.backBtnText} name="angle-left"></Icon>
+                    </TouchableOpacity>
                     <View style={styles.navigatorTitle}>
                         <Text style={styles.navigatorTitleText}>{navigatorTitle}</Text>
                     </View>
+                    <TouchableOpacity style={styles.rightBtn}>
+                    </TouchableOpacity>
                 </View>
-                <View >
-                    
+                <View style={styles.count}>
+                    <Icon name="shopping-cart" style={styles.cartBtnImg} ></Icon>
+                    <View style={styles.totalCountContent}>
+                        <Text style={styles.totalCountText}>¥{this.state.totalPrice} </Text>
+                    </View>
+                    <Icon name="angle-right" style={styles.angleRight} ></Icon>
                 </View>
             </View>
         );
@@ -102,6 +141,51 @@ if (Platform.OS === 'ios') {
             width: Dimensions.get('window').width,
             textAlign: 'center'
         },
+        backBtnText: {
+            fontSize: 35,
+            textAlign: 'center',
+            color: 'white',
+        },
+        rightBtn: {
+            marginTop: 20,
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+        },
+        count: {
+            height: 60,
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 5,
+            backgroundColor: 'white',
+        },
+        countText: {
+            flex: 1,
+            fontSize: 12,
+            backgroundColor: "transparent",
+            width: 30,
+            color: 'white',
+            textAlign: 'center',
+            position: 'absolute',
+            left: 28,
+            top: 19,
+        },
+        totalCountContent: {
+            flex: 1,
+            // backgroundColor:"green",
+            marginRight: 10,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            // color: 'orange'
+        },
+        totalCountText: {
+            fontSize: 30,
+            textAlign: 'center',
+            alignItems: 'center',
+            // backgroundColor:"red",
+            height: 40,
+            lineHeight: 40,
+        },
     });
 }
 else if (Platform.OS === 'android') {
@@ -169,7 +253,52 @@ else if (Platform.OS === 'android') {
             width: Dimensions.get('window').width,
             textAlign: 'center'
         },
+        backBtnText: {
+            fontSize: 35,
+            textAlign: 'center',
+            color: 'white',
+        },
+        rightBtn: {
+            marginTop: 20,
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+        },
+        count: {
+            height: 60,
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 5,
+            backgroundColor: 'white',
+        },
+        countText: {
+            flex: 1,
+            fontSize: 12,
+            backgroundColor: "transparent",
+            width: 30,
+            color: 'white',
+            textAlign: 'center',
+            position: 'absolute',
+            left: 28,
+            top: 19,
+        },
+        totalCountContent: {
+            flex: 1,
+            // backgroundColor:"green",
+            marginRight: 10,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            // color: 'orange'
+        },
+        totalCountText: {
+            fontSize: 30,
+            textAlign: 'center',
+            alignItems: 'center',
+            // backgroundColor:"red",
+            height: 40,
+            lineHeight: 40,
+        },
     });
 }
 
-export default componentName;
+export default Payment;

@@ -1,4 +1,5 @@
 import React from 'react';
+import Payment from './Payment.js'
 import {
     Dimensions,
     StyleSheet,
@@ -124,14 +125,25 @@ export default class BasketList extends React.Component {
         )
     }
     _pressPayButton() {
-        this.state.totalCount ? Alert.alert(
-            '提示',
-            '确定支付？',
-            [
-                { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
-                { text: 'OK', onPress: () => this._goPay() },
-            ]
-        ) : null;
+        // this.state.totalCount ? Alert.alert(
+        //     '提示',
+        //     '确定支付？',
+        //     [
+        //         { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
+        //         { text: 'OK', onPress: () => this._goPay() },
+        //     ]
+        // ) : null;
+
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'Payment',
+                component: Payment,
+                params: {
+                    cardId: this.props.cardId
+                }
+            })
+        }
     }
     _modalConfirmBtn() {
         PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: this.state.selectedProduct.skuId, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
