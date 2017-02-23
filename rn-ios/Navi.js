@@ -98,7 +98,6 @@ export default class Navi extends React.Component {
                     barStyle="light-content"
                 />
                 <Navigator
-                    style={styles.navigator}
                     initialRoute={{ name: defaultName, component: defaultComponent }}
                     configureScene={this.configureScene}
                     renderScene={this.renderScene}
@@ -109,13 +108,6 @@ export default class Navi extends React.Component {
         );
     }
 }
-const styles = StyleSheet.create({
-    navigator: {
-        flex: 1,
-        // backgroundColor:"#3e9ce9",
-        // height:44,
-    }
-});
 
 
 

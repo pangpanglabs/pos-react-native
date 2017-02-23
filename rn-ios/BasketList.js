@@ -19,33 +19,28 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-var PangPangBridge = NativeModules.PangPangBridge;
+let PangPangBridge = NativeModules.PangPangBridge;
+let ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 export default class BasketList extends React.Component {
-
-    constructor(props) {
-        super(props);
-        var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
-        this.state = {
-            cardItems: [],
-            dataSource: ds,
-            totalCount: 0,
-            totalPrice: 0,
-            navigatorTitle: "Cart",
-            showModalCss: {},
-            selectedProduct: null,
-            // selectedOriginalProduct: null,
-        };
-        this._renderRow = this._renderRow.bind(this);
-        this.seachCartItems = this.seachCartItems.bind(this);
-        this.refreshDataSource = this.refreshDataSource.bind(this);
-
+    state = {
+        cardItems: [],
+        dataSource: ds,
+        totalCount: 0,
+        totalPrice: 0,
+        navigatorTitle: "Cart",
+        showModalCss: {},
+        selectedProduct: null,
+        // selectedOriginalProduct: null,
+    }
+    static propTypes = {
+        navigator: React.PropTypes.any.isRequired,
+        cardId: React.PropTypes.any.isRequired,
     }
     componentDidMount() {
         this.seachCartItems();
         // this._openModal();
     }
-    refreshDataSource(items) {
+    refreshDataSource = (items) => {
         this.setState({ cardItems: items ? items : [] });
         this.computeTatol();
         this.setState({
@@ -53,7 +48,7 @@ export default class BasketList extends React.Component {
         });
 
     }
-    computeTatol() {
+    computeTatol = () => {
         // console.log(this.state.cardItems.length);
         if (!this.state.cardItems || this.state.cardItems.length === 0) {
             this.setState({ totalPrice: 0 });
@@ -73,7 +68,7 @@ export default class BasketList extends React.Component {
 
         });
     }
-    seachCartItems() {
+    seachCartItems = () => {
         if (this.props.cardId) {
             PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
                 var rs = JSON.parse(card);
@@ -82,18 +77,18 @@ export default class BasketList extends React.Component {
             });
         }
     }
-    _pressBackButton() {
+    _pressBackButton = () => {
         const { navigator } = this.props;
         if (navigator) {
             navigator.pop();
             DeviceEventEmitter.emit('changeTotal');
         }
     }
-    _longPressRow(rowID, rowData) {
+    _longPressRow = (rowID, rowData) => {
 
     }
 
-    _goPay() {
+    _goPay = () => {
         PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId, info: JSON.stringify({ name: "liche" }) }).then((card) => {
             var rs = JSON.parse(card);
             console.log(rs);
@@ -104,17 +99,17 @@ export default class BasketList extends React.Component {
             }
         });
     }
-    _rowPress(rowID, rowData) {
+    _rowPress = (rowID, rowData) => {
         this._openModal();
         this.setState({ selectedProduct: rowData });
         let copy = this.deepCopy(rowData);
         this.setState({ selectedOriginalProduct: copy });
         // console.log(rowData);
     }
-    _renderRow(rowData, sectionID, rowID) {
+    _renderRow = (rowData, sectionID, rowID) => {
         return (
-            <TouchableOpacity onPress={(id, data) => { this._rowPress(rowID, rowData) } } style={styles.row}
-                >
+            <TouchableOpacity onPress={(id, data) => { this._rowPress(rowID, rowData) }} style={styles.row}
+            >
                 <View style={styles.rowContent}>
                     <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
                     <Text>x{rowData.quantity}</Text>
@@ -124,7 +119,7 @@ export default class BasketList extends React.Component {
             </TouchableOpacity>
         )
     }
-    _pressPayButton() {
+    _pressPayButton = () => {
         // this.state.totalCount ? Alert.alert(
         //     '提示',
         //     '确定支付？',
@@ -145,7 +140,7 @@ export default class BasketList extends React.Component {
             })
         }
     }
-    _modalConfirmBtn() {
+    _modalConfirmBtn = () => {
         PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: this.state.selectedProduct.skuId, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
             var rs = JSON.parse(card);
             this.refreshDataSource(rs.result.items);
@@ -154,22 +149,22 @@ export default class BasketList extends React.Component {
         });
         // this._closeModal();
     }
-    _closeModal() {
+    _closeModal = () => {
         this.setState({ showModalCss: {} });
         this.seachCartItems();
 
     }
-    _openModal() {
+    _openModal = () => {
         this.setState({ showModalCss: { position: 'absolute' } });
     }
-    _addQty() {
+    _addQty = () => {
         let qty = this.state.selectedProduct.quantity;
         let add = parseInt(qty) + 1;
         let product = this.state.selectedProduct;
         product.quantity = add;
         this.setState({ selectedProduct: product })
     }
-    _minusQty() {
+    _minusQty = () => {
         let qty = this.state.selectedProduct.quantity;
         if (qty === 0) return;
         let add = parseInt(qty) - 1;
@@ -177,7 +172,7 @@ export default class BasketList extends React.Component {
         product.quantity = add;
         this.setState({ selectedProduct: product })
     }
-    deepCopy(source) {
+    deepCopy = (source) => {
         var result = {};
         for (var key in source) {
             result[key] = typeof source[key] === 'object' ? deepCoyp(source[key]) : source[key];
@@ -189,14 +184,14 @@ export default class BasketList extends React.Component {
         return (
             <View style={{ backgroundColor: 'white', }}>
                 <View style={styles.navigatorBar} >
-                    <TouchableOpacity onPress={this._pressBackButton.bind(this)} style={styles.backBtn}>
+                    <TouchableOpacity onPress={this._pressBackButton} style={styles.backBtn}>
                         <Icon style={styles.backBtnText} name="angle-left"></Icon>
 
                     </TouchableOpacity>
                     <View style={styles.navigatorTitle}>
                         <Text style={styles.navigatorTitleText}>{this.state.navigatorTitle}({this.state.totalCount})</Text>
                     </View>
-                    <TouchableOpacity style={styles.rightBtn} onPress={this._pressPayButton.bind(this)}>
+                    <TouchableOpacity style={styles.rightBtn} onPress={this._pressPayButton}>
                         <Text style={styles.payText}>Pay</Text>
                     </TouchableOpacity>
                 </View>
@@ -212,18 +207,18 @@ export default class BasketList extends React.Component {
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
-                        />
+                    />
                 </View>
                 <View style={[styles.modalContainer, this.state.showModalCss]} >
-                    <TouchableWithoutFeedback onPress={() => { this._closeModal() } }>
+                    <TouchableWithoutFeedback onPress={this._closeModal}>
                         <View style={styles.modalBackGround}>
                         </View>
                     </TouchableWithoutFeedback>
                     <View style={styles.modalContent}>
                         <View style={styles.modalContentTop}>
-                            <TouchableOpacity onPress={() => { this._closeModal() } }><Ionicons style={styles.modalContentTopImg} name="md-close"></Ionicons></TouchableOpacity>
+                            <TouchableOpacity onPress={this._closeModal}><Ionicons style={styles.modalContentTopImg} name="md-close"></Ionicons></TouchableOpacity>
                             <Text>{this.state.selectedProduct ? this.state.selectedProduct.skuCode : ""}</Text>
-                            <TouchableOpacity onPress={() => { this._modalConfirmBtn() } }><Ionicons style={styles.modalContentTopImg} name="md-checkmark"></Ionicons></TouchableOpacity>
+                            <TouchableOpacity onPress={this._modalConfirmBtn}><Ionicons style={styles.modalContentTopImg} name="md-checkmark"></Ionicons></TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center', marginBottom: 10 }}>
                             <Text>{this.state.selectedOriginalProduct ? this.state.selectedOriginalProduct.quantity : 0}</Text>
@@ -234,9 +229,9 @@ export default class BasketList extends React.Component {
                             <Text style={{ fontSize: 10, color: 'gray' }}>QUANTITY</Text>
                         </View>
                         <View style={styles.qtyContent}>
-                            <TouchableOpacity onPress={() => { this._minusQty() } }><Ionicons style={styles.modalContentQtyImg} name="md-remove"></Ionicons></TouchableOpacity>
+                            <TouchableOpacity onPress={this._minusQty}><Ionicons style={styles.modalContentQtyImg} name="md-remove"></Ionicons></TouchableOpacity>
                             <Text style={{ fontSize: 16 }}>{this.state.selectedProduct ? this.state.selectedProduct.quantity : ""}</Text>
-                            <TouchableOpacity onPress={() => { this._addQty() } }><Ionicons style={styles.modalContentQtyImg} name="md-add"></Ionicons></TouchableOpacity>
+                            <TouchableOpacity onPress={this._addQty}><Ionicons style={styles.modalContentQtyImg} name="md-add"></Ionicons></TouchableOpacity>
                         </View>
 
                     </View>

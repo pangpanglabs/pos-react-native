@@ -29,10 +29,12 @@ class Payment extends Component {
         dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
         currentPayId: 1
     }
+    
     static propTypes = {
         navigator: React.PropTypes.any.isRequired,
         cardId: React.PropTypes.any.isRequired,
     }
+    
     // static defaultProps = {
     //     model: {
     //         id: 0
