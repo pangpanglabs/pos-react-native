@@ -43,21 +43,23 @@ export default class CatalogList extends React.Component {
     };
 
     componentWillMount() {
-        setTimeout(() => {
-            this.initCard();
-            this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
-            this.searchProducts();
-        }, 300);
+        this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
     }
     componentWillUnmount() {
         this.subscription.remove();
+    }
+    async componentDidMount() {
+        // setTimeout(() => {
+           await this.initCard();
+           await this.searchProducts();
+        // }, 300);
     }
 
     changeTotal = (data) => {
         // console.log('changeTotal');
         this.initCard();
     }
-    refreshDataSource = () => {
+    refreshCartData = () => {
         PangPangBridge.callAPI("/cart/get-cart", { cartId: this.state.cardId }).then((card) => {
             var rs = JSON.parse(card);
             // console.log(rs.result);
@@ -85,7 +87,7 @@ export default class CatalogList extends React.Component {
                 PangPangBridge.callAPI("/cart/get-cart", { cartId: data }).then((card) => {
                     var rs = JSON.parse(card);
                     // console.log(rs.result);
-                    this.refreshDataSource();
+                    this.refreshCartData();
                 });
             } else {
                 PangPangBridge.callAPI("/cart/create-cart", null).then((data) => {
@@ -93,7 +95,7 @@ export default class CatalogList extends React.Component {
                     console.log(rs.result);
                     this.setState({ cardId: parseInt(rs.result.id) });
                     AsyncStorage.setItem("cartId", rs.result.id.toString()).then(() => {
-                        this.refreshDataSource();
+                        this.refreshCartData();
                         console.log("setItem cartId success:" + rs.result.id);
                     });
                 });
@@ -148,13 +150,13 @@ export default class CatalogList extends React.Component {
         // return dataBlob;
     }
 
-    _pressRow = async (rowID) => {
+    _pressRow = (rowID) => {
         var rowData = this.state.catalogData[rowID];
         console.log(this.state.cardId + " " + rowData.skuId);
-        await PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: rowData.skuId, quantity: 1 }).then((data) => {
+        PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: rowData.skuId, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
-            this.refreshDataSource();
+            this.refreshCartData();
         });
 
     }
@@ -205,7 +207,7 @@ export default class CatalogList extends React.Component {
         if (this.state.foot != 0) {
             return;
         }
-        
+
         this.setState({
             foot: 2,
         });

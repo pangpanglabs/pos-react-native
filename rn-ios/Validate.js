@@ -46,7 +46,7 @@ export default class Validate extends React.Component {
 
         if (token && autoLoginSucccess) {
             AsyncStorage.getItem("spot").then((data) => {
-                console.log('spot -> ',data)
+                // console.log('spot -> ',data)
 
                 if (data) {
                     this.navigatorReplace('CatalogList', CatalogList);
