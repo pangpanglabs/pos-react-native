@@ -49,10 +49,12 @@ export default class CatalogList extends React.Component {
         this.subscription.remove();
     }
     async componentDidMount() {
-        // setTimeout(() => {
-           await this.initCard();
-           await this.searchProducts();
-        // }, 300);
+        await setTimeout(() => {
+            this.initCard();
+        }, 300);
+        await setTimeout(() => {
+            this.searchProducts();
+        }, 300);
     }
 
     changeTotal = (data) => {
