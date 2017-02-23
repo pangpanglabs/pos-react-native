@@ -26,7 +26,7 @@ const pageSize = 10;
 let ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 export default class CatalogList extends React.Component {
-    
+
     state = {
         searchKey: "",
         catalogData: [],
@@ -41,7 +41,7 @@ export default class CatalogList extends React.Component {
         updateMenuState: React.PropTypes.func.isRequired,
         navigator: React.PropTypes.any.isRequired,
     };
-    
+
     componentWillMount() {
         setTimeout(() => {
             this.initCard();
@@ -101,12 +101,10 @@ export default class CatalogList extends React.Component {
         });
     }
 
-    
-
-    searchProducts = () => {
+    searchProducts = async () => {
         var key = this.state.searchKey;
-
-        PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
+        DeviceEventEmitter.emit('showLoading');
+        await PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
@@ -127,6 +125,8 @@ export default class CatalogList extends React.Component {
 
             }
         );
+        DeviceEventEmitter.emit('dismissLoading');
+
     }
     _pressTopButton = () => {
         const { navigator } = this.props;
@@ -179,7 +179,7 @@ export default class CatalogList extends React.Component {
         pageNum = 0;
         this.setState({ catalogData: [] });
 
-        this.searchProducts(this.state.searchKey);
+        this.searchProducts();
     }
     _renderFooter = () => {
         if (this.state.foot === 1) {//加载完毕  
@@ -198,9 +198,15 @@ export default class CatalogList extends React.Component {
     }
     _endReached = () => {
         console.log("_endReached");
+        console.log(this.state.catalogData.length);
+        if (this.state.catalogData.length === 0) {
+            alert('no data');
+            return;
+        }
         if (this.state.foot != 0) {
             return;
         }
+        
         this.setState({
             foot: 2,
         });

@@ -68,13 +68,17 @@ export default class BasketList extends React.Component {
 
         });
     }
-    seachCartItems = () => {
+    seachCartItems = async () => {
         if (this.props.cardId) {
-            PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
+            
+            DeviceEventEmitter.emit('showLoading');
+            await PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
                 var rs = JSON.parse(card);
                 // console.log(rs.result.items)
                 this.refreshDataSource(rs.result.items);
             });
+            DeviceEventEmitter.emit('dismissLoading');
+
         }
     }
     _pressBackButton = () => {
