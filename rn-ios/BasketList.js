@@ -8,7 +8,6 @@ import {
     Text,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    PanResponder,
     ListView,
     AsyncStorage,
     NativeModules,

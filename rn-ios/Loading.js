@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    TouchableOpacity,
+    DeviceEventEmitter,
     Dimensions,
     StyleSheet,
     Text,
@@ -15,10 +15,26 @@ class Loading extends React.Component {
         isShow: false,
     }
     static propTypes = {
-        isShow:React.PropTypes.bool.isRequired,
+        // isShow:React.PropTypes.bool.isRequired,
+    }
+    showLoading = () => {
+        this.setState({ isShow: true });
+    }
+
+    dismissLoading = () => {
+        this.setState({ isShow: false });
+    }
+
+    componentWillMount() {
+        this.subscription = DeviceEventEmitter.addListener('showLoading', this.showLoading);
+        this.subscription = DeviceEventEmitter.addListener('dismissLoading', this.dismissLoading);
+    }
+
+    componentWillUnmount() {
+        this.subscription.remove();
     }
     render() {
-        if (this.props.isShow) {
+        if (this.state.isShow) {
             return (
                 <View style={styles.loadingContainer}>
                     <View style={styles.loadingContent}>

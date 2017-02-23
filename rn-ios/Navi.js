@@ -5,7 +5,6 @@ import Setting from './Setting';
 import CatalogList from './CatalogList';
 import SpotSet from './SpotSet.js';
 import {
-    DeviceEventEmitter,
     View,
     Text,
     StatusBar,
@@ -28,23 +27,6 @@ export default class Navi extends React.Component {
         return (
             <Component  {...route.params}   {...this.props} navigator={navigator} />
         );
-    }
-
-    showLoading = () => {
-        this.setState({ isShow: true });
-    }
-
-    dismissLoading = () => {
-        this.setState({ isShow: false });
-    }
-
-    componentWillMount() {
-        this.subscription = DeviceEventEmitter.addListener('showLoading', this.showLoading);
-        this.subscription = DeviceEventEmitter.addListener('dismissLoading', this.dismissLoading);
-    }
-
-    componentWillUnmount() {
-        this.subscription.remove();
     }
 
     componentDidMount() {
@@ -102,7 +84,7 @@ export default class Navi extends React.Component {
                     configureScene={this.configureScene}
                     renderScene={this.renderScene}
                 />
-                <LoadingComponent isShow={this.state.isShow} />
+                <LoadingComponent  />
 
             </View>
         );
