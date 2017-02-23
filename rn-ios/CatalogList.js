@@ -198,9 +198,8 @@ export default class CatalogList extends React.Component {
     }
     _endReached = () => {
         console.log("_endReached");
-        console.log(this.state.catalogData.length);
+        // console.log(this.state.catalogData.length);
         if (this.state.catalogData.length === 0) {
-            alert('no data');
             return;
         }
         if (this.state.foot != 0) {
