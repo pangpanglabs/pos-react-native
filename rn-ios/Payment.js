@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CatalogList from './CatalogList.js'
 import {
     DeviceEventEmitter,
     ScrollView,
@@ -20,10 +21,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 var PangPangBridge = NativeModules.PangPangBridge;
 const navigatorTitle = "Payment";
 
+
 class Payment extends Component {
     state = {
         totalCount: 0,
         totalPrice: 0,
+        dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
+        currentPayId: 1
     }
     static propTypes = {
         navigator: React.PropTypes.any.isRequired,
@@ -50,10 +54,74 @@ class Payment extends Component {
             this.setState({ totalCount: totalCount });
             DeviceEventEmitter.emit('dismissLoading');
         });
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(
+                [{
+                    id: 1,
+                    payType: 'alipay',
+                },
+                {
+                    id: 2,
+                    payType: 'wechatpay',
+                },]
+            ),
+        });
+    }
+    _pressPayType = (payId) => {
+        this.setState({
+            currentPayId: payId
+        });
+    }
+    _renderRow = (rowData, sectionID, rowID) => {
+        if (this.state.currentPayId === rowData.id) {
+            return (
+                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) }}>
+                    <View style={styles.groupitem}>
+                        <Text style={styles.itemText}>{rowData.payType}    <Icon name="check-circle-o" style={styles.checkIcon} ></Icon></Text>
+                    </View>
+                    <View style={styles.line}></View>
+                </TouchableOpacity>);
+        }
+        else {
+            return (
+                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) }}>
+                    <View style={styles.groupitem}>
+                        <Text style={styles.itemText}>{rowData.payType}</Text>
+                    </View>
+
+                    <View style={styles.line}></View>
+                </TouchableOpacity>);
+        }
     }
 
+    _pressConfirmButton = async () => {
+        let setinfoResult = null;
+        await PangPangBridge.callAPI("/cart/set-info", { cartId: this.props.cardId, paymentType: this.state.currentPayId == 1 ? 'alipay' : 'wxpay' }).then((data) => {
+            setinfoResult = JSON.parse(data);
+        });
+        if (setinfoResult.success) {
+            let rs = null;
+            await PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId }).then((card) => {
+                rs = JSON.parse(card);
+                console.log(rs);
+            });
+
+            if (rs.success) {
+                AsyncStorage.removeItem("cartId").done((data) => {
+                    const { navigator } = this.props;
+                    if (navigator) {
+                        navigator.replace({
+                            name: 'CatalogList',
+                            component: CatalogList
+                        })
+                    }
+                });
+            }
+        }
+
+    }
     _pressBackButton = () => {
-        const { navigator } = this.props;
+        const {navigator} = this.props;
         if (navigator) {
             navigator.pop();
         }
@@ -63,7 +131,7 @@ class Payment extends Component {
         return (
             <View style={{ backgroundColor: '#f0f0f0', height: Dimensions.get('window').height }}>
                 <View style={styles.navigatorBar} >
-                    <TouchableOpacity onPress={this._pressBackButton.bind(this)} style={styles.backBtn}>
+                    <TouchableOpacity onPress={this._pressBackButton} style={styles.backBtn}>
                         <Icon style={styles.backBtnText} name="angle-left"></Icon>
                     </TouchableOpacity>
                     <View style={styles.navigatorTitle}>
@@ -73,18 +141,27 @@ class Payment extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.count}>
-                    <Icon name="shopping-cart" style={styles.cartBtnImg} ></Icon>
-                    <View style={styles.totalCountContent}>
+                    <View style={styles.countContent}>
+                        <Icon name="money" style={styles.cashImg} ></Icon>
                         <Text style={styles.totalCountText}>¥{this.state.totalPrice} </Text>
                     </View>
-                    <Icon name="angle-right" style={styles.angleRight} ></Icon>
+                </View>
+                <View >
+                    <ListView style={styles.listView}
+                        dataSource={this.state.dataSource}
+                        renderRow={this._renderRow}
+                        enableEmptySections={true}
+                    />
+                </View>
+                <View style={styles.confirmBtnContent}>
+                    <TouchableOpacity activeOpacity={0.7} style={styles.confirmBtn} onPress={this._pressConfirmButton}>
+                        <Text style={styles.confirmBtnText}>{"Pay Confirm ￥" + this.state.totalPrice.toString()}</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
     }
 }
-
-
 
 let styles;
 
@@ -148,7 +225,7 @@ if (Platform.OS === 'ios') {
             width: Dimensions.get('window').width,
         },
         itemText: {
-            fontSize: 20,
+            fontSize: 16,
             fontWeight: 'bold',
             width: Dimensions.get('window').width,
             textAlign: 'center'
@@ -165,39 +242,75 @@ if (Platform.OS === 'ios') {
             justifyContent: 'center',
         },
         count: {
-            height: 60,
+            height: 80,
+            marginBottom: 15,
+            backgroundColor: 'white',
             flexDirection: 'row',
             alignItems: 'center',
-            marginBottom: 5,
-            backgroundColor: 'white',
+            justifyContent: 'center',
         },
-        countText: {
-            flex: 1,
-            fontSize: 12,
-            backgroundColor: "transparent",
-            width: 30,
-            color: 'white',
-            textAlign: 'center',
-            position: 'absolute',
-            left: 28,
-            top: 19,
-        },
-        totalCountContent: {
-            flex: 1,
-            // backgroundColor:"green",
-            marginRight: 10,
+        countContent: {
             flexDirection: 'row',
-            justifyContent: 'flex-end',
-            // color: 'orange'
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            width: Dimensions.get('window').width * 0.8,
         },
         totalCountText: {
             fontSize: 30,
             textAlign: 'center',
             alignItems: 'center',
-            // backgroundColor:"red",
             height: 40,
             lineHeight: 40,
         },
+        cashImg: {
+            fontSize: 40,
+            textAlign: 'center',
+            color: '#3e9ce9',
+        },
+        listView: {
+            backgroundColor: 'white',
+            marginBottom: 30,
+        },
+        row: {
+            height: 80,
+        },
+        rowContent: {
+            flex: 1,
+            height: 79,
+            flexDirection: 'row',
+            alignItems: 'center',
+            // justifyContent:'space-between',
+        },
+        line: {
+            backgroundColor: "gray",
+            height: 0.5,
+            width: Dimensions.get('window').width - 20,
+            alignSelf: 'center',
+            opacity: 0.4,
+
+        },
+        checkIcon: {
+            marginLeft: 120,
+            fontSize: 20,
+            textAlign: 'center',
+            color: '#3e9ce9',
+        },
+        confirmBtnContent: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+        },
+        confirmBtn: {
+            backgroundColor: "#3e9ce9",
+            height: 44,
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: Dimensions.get('window').width * 0.9,
+            borderRadius: 10,
+        },
+        confirmBtnText: {
+            color: 'white',
+            fontSize: 24,
+        }
     });
 }
 else if (Platform.OS === 'android') {
@@ -260,7 +373,7 @@ else if (Platform.OS === 'android') {
             width: Dimensions.get('window').width,
         },
         itemText: {
-            fontSize: 20,
+            fontSize: 16,
             fontWeight: 'bold',
             width: Dimensions.get('window').width,
             textAlign: 'center'
@@ -277,39 +390,75 @@ else if (Platform.OS === 'android') {
             justifyContent: 'center',
         },
         count: {
-            height: 60,
+            height: 80,
+            marginBottom: 15,
+            backgroundColor: 'white',
             flexDirection: 'row',
             alignItems: 'center',
-            marginBottom: 5,
-            backgroundColor: 'white',
+            justifyContent: 'center',
         },
-        countText: {
-            flex: 1,
-            fontSize: 12,
-            backgroundColor: "transparent",
-            width: 30,
-            color: 'white',
-            textAlign: 'center',
-            position: 'absolute',
-            left: 28,
-            top: 19,
-        },
-        totalCountContent: {
-            flex: 1,
-            // backgroundColor:"green",
-            marginRight: 10,
+        countContent: {
             flexDirection: 'row',
-            justifyContent: 'flex-end',
-            // color: 'orange'
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            width: Dimensions.get('window').width * 0.8,
         },
         totalCountText: {
             fontSize: 30,
             textAlign: 'center',
             alignItems: 'center',
-            // backgroundColor:"red",
             height: 40,
             lineHeight: 40,
         },
+        cashImg: {
+            fontSize: 40,
+            textAlign: 'center',
+            color: '#3e9ce9',
+        },
+        listView: {
+            backgroundColor: 'white',
+            marginBottom: 30,
+        },
+        row: {
+            height: 80,
+        },
+        rowContent: {
+            flex: 1,
+            height: 79,
+            flexDirection: 'row',
+            alignItems: 'center',
+            // justifyContent:'space-between',
+        },
+        line: {
+            backgroundColor: "gray",
+            height: 0.5,
+            width: Dimensions.get('window').width - 20,
+            alignSelf: 'center',
+            opacity: 0.4,
+
+        },
+        checkIcon: {
+            marginLeft: 120,
+            fontSize: 20,
+            textAlign: 'center',
+            color: '#3e9ce9',
+        },
+        confirmBtnContent: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+        },
+        confirmBtn: {
+            backgroundColor: "#3e9ce9",
+            height: 44,
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: Dimensions.get('window').width * 0.9,
+            borderRadius: 10,
+        },
+        confirmBtnText: {
+            color: 'white',
+            fontSize: 24,
+        }
     });
 }
 
