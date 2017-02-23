@@ -97,8 +97,14 @@ class Payment extends Component {
 
     _pressConfirmButton = async () => {
         let setinfoResult = null;
-        await PangPangBridge.callAPI("/cart/set-info", { cartId: this.props.cardId, paymentType: this.state.currentPayId == 1 ? 'alipay' : 'wxpay' }).then((data) => {
+        let param ={
+            "cartId": this.props.cardId,
+            "payment[alipay]":"testpayment",
+            "receipt[name]":"testReceipt",
+        }
+        await PangPangBridge.callAPI("/cart/set-info", param).then((data) => {
             setinfoResult = JSON.parse(data);
+            // console.log(setinfoResult.result.info);
         });
         if (setinfoResult.success) {
             let rs = null;
