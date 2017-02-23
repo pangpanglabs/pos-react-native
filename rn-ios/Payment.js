@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    DeviceEventEmitter,
     ScrollView,
     TouchableOpacity,
     Dimensions,
@@ -13,21 +14,30 @@ import {
     Platform
 } from 'react-native';
 
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
 const navigatorTitle = "Payment";
-class Payment extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            totalCount: 0,
-            totalPrice: 0,
-        };
+class Payment extends Component {
+    state = {
+        totalCount: 0,
+        totalPrice: 0,
     }
+    static propTypes = {
+        navigator: React.PropTypes.any.isRequired,
+        cardId: React.PropTypes.any.isRequired,
+    }
+    // static defaultProps = {
+    //     model: {
+    //         id: 0
+    //     },
+    //     title: 'Your Name'
+    // }
 
     componentDidMount() {
+        DeviceEventEmitter.emit('showLoading');
         PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
             var rs = JSON.parse(card);
             if (!rs.result.items) return;
@@ -38,17 +48,18 @@ class Payment extends Component {
             // console.log(rs.result.total);
             this.setState({ totalPrice: rs.result.listPrice });
             this.setState({ totalCount: totalCount });
+            DeviceEventEmitter.emit('dismissLoading');
         });
     }
 
-    _pressBackButton() {
+    _pressBackButton = () => {
         const { navigator } = this.props;
         if (navigator) {
             navigator.pop();
         }
     }
-    render() {
 
+    render() {
         return (
             <View style={{ backgroundColor: '#f0f0f0', height: Dimensions.get('window').height }}>
                 <View style={styles.navigatorBar} >
@@ -72,6 +83,7 @@ class Payment extends Component {
         );
     }
 }
+
 
 
 let styles;

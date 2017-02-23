@@ -5,6 +5,7 @@ import Setting from './Setting';
 import CatalogList from './CatalogList';
 import SpotSet from './SpotSet.js';
 import {
+    DeviceEventEmitter,
     View,
     Text,
     StatusBar,
@@ -12,22 +13,40 @@ import {
     Navigator
 } from 'react-native';
 import { signalObj } from './Signals';
+import LoadingComponent from './Loading';
 
 export default class Navi extends React.Component {
-    constructor(props) {
-        super(props);
-        this.renderScene = this.renderScene.bind(this);
+    state = {
+        isShow: false,
     }
-    configureScene() {
+    configureScene = () => {
         return Navigator.SceneConfigs.HorizontalSwipeJump;
     }
 
-    renderScene(route, navigator) {
+    renderScene = (route, navigator) => {
         let Component = route.component;
         return (
-            <Component {...route.params}  {...this.props} navigator={navigator} />
+            <Component  {...route.params}   {...this.props} navigator={navigator} />
         );
     }
+
+    showLoading = () => {
+        this.setState({ isShow: true });
+    }
+
+    dismissLoading = () => {
+        this.setState({ isShow: false });
+    }
+
+    componentWillMount() {
+        this.subscription = DeviceEventEmitter.addListener('showLoading', this.showLoading);
+        this.subscription = DeviceEventEmitter.addListener('dismissLoading', this.dismissLoading);
+    }
+
+    componentWillUnmount() {
+        this.subscription.remove();
+    }
+
     componentDidMount() {
         // Event
         signalObj.removeAll();
@@ -77,13 +96,15 @@ export default class Navi extends React.Component {
                 <StatusBar
                     backgroundColor="#3e9ce9"
                     barStyle="light-content"
-                    />
+                />
                 <Navigator
                     style={styles.navigator}
                     initialRoute={{ name: defaultName, component: defaultComponent }}
                     configureScene={this.configureScene}
                     renderScene={this.renderScene}
-                    />
+                />
+                <LoadingComponent isShow={this.state.isShow} />
+
             </View>
         );
     }
