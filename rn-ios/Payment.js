@@ -16,6 +16,8 @@ import {
 
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import QRCodeScreen from './QRCodeScreen';
+
 
 var PangPangBridge = NativeModules.PangPangBridge;
 const navigatorTitle = "Payment";
@@ -23,6 +25,7 @@ const navigatorTitle = "Payment";
 
 class Payment extends Component {
     state = {
+        custNo: '',
         totalCount: 0,
         totalPrice: 0,
         dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
@@ -33,7 +36,7 @@ class Payment extends Component {
         navigator: React.PropTypes.any.isRequired,
         cardId: React.PropTypes.any.isRequired,
     }
-    
+
     // static defaultProps = {
     //     model: {
     //         id: 0
@@ -97,10 +100,10 @@ class Payment extends Component {
 
     _pressConfirmButton = async () => {
         let setinfoResult = null;
-        let param ={
+        let param = {
             "cartId": this.props.cardId,
-            "payment[alipay]":"testpayment",
-            "receipt[name]":"testReceipt",
+            "payment[alipay]": "testpayment",
+            "receipt[name]": "testReceipt",
         }
         await PangPangBridge.callAPI("/cart/set-info", param).then((data) => {
             setinfoResult = JSON.parse(data);
@@ -133,6 +136,28 @@ class Payment extends Component {
             navigator.pop();
         }
     }
+    _scanCustNo = () => {
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                component: QRCodeScreen,
+                title: 'QRCode',
+                params: {
+                    cancelButtonVisible: true,
+                    cancelButtonTitle: "cancel",
+                    onSucess: this._scanCustNoSucess,
+                    onCancel: this._scanCustNoCancel,
+                },
+            })
+        }
+    }
+    _scanCustNoSucess = (result) => {
+        // alert(result);
+        this.setState({ custNo: result });
+    }
+    _scanCustNoCancel = () => {
+        // alert('cancel');
+    }
 
     render() {
         return (
@@ -146,6 +171,20 @@ class Payment extends Component {
                     </View>
                     <TouchableOpacity style={styles.rightBtn}>
                     </TouchableOpacity>
+                </View>
+                <View style={styles.cust}>
+                    <View style={styles.custContent}>
+                        {(() => {
+                            if (this.state.custNo) {
+                                return (<Text style={styles.custText}>{this.state.custNo}</Text>)
+                            } else {
+                                return (<Text style={styles.custHintText}>scan custNo </Text>)
+                            }
+                        })()}
+                        <TouchableOpacity onPress={this._scanCustNo}>
+                            <Icon name="qrcode" style={styles.cashImg} ></Icon>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.count}>
                     <View style={styles.countContent}>
@@ -188,7 +227,6 @@ if (Platform.OS === 'ios') {
             justifyContent: 'center',
         },
         navigatorTitle: {
-            // backgroundColor:'red',
             marginTop: 20,
             height: 40,
             justifyContent: 'center',
@@ -249,7 +287,7 @@ if (Platform.OS === 'ios') {
             justifyContent: 'center',
         },
         count: {
-            height: 80,
+            height: 60,
             marginBottom: 15,
             backgroundColor: 'white',
             flexDirection: 'row',
@@ -273,6 +311,36 @@ if (Platform.OS === 'ios') {
             fontSize: 40,
             textAlign: 'center',
             color: '#3e9ce9',
+        },
+        cust: {
+            height: 60,
+            marginBottom: 15,
+            backgroundColor: 'white',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        custContent: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: Dimensions.get('window').width * 0.8,
+            // backgroundColor: 'red',
+        },
+        custText: {
+            fontSize: 30,
+            textAlign: 'center',
+            alignItems: 'center',
+            height: 40,
+            lineHeight: 40,
+        },
+        custHintText:{
+            fontSize: 20,
+            textAlign: 'center',
+            alignItems: 'center',
+            height: 40,
+            lineHeight: 40,
+            color:'gray',
         },
         listView: {
             backgroundColor: 'white',
