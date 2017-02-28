@@ -18,11 +18,12 @@
 
 #import "SplashScreen.h"
 
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [SplashScreen show]; 
+
   //启动基本SDK
   [[PgyManager sharedPgyManager] startManagerWithAppId:@"6915c225020b6dd7ea231522740480e3"];
   //启动更新检查SDK
@@ -60,6 +61,8 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  [SplashScreen show];
   return YES;
 }
 
