@@ -13,6 +13,7 @@ import {
   Platform,
   BackAndroid,
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen'
 import { signalObj } from './Signals';
 
 export default class MenuContainer extends Component {
@@ -33,6 +34,9 @@ export default class MenuContainer extends Component {
     if (Platform.OS === 'android') {
       BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
     }
+  }
+  componentDidMount() {
+    SplashScreen.hide();
   }
   onBackAndroid = () => {
     const nav = global.myNavigator;
