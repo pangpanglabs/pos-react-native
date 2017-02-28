@@ -154,8 +154,8 @@ export default class CatalogList extends React.Component {
 
     _pressRow = (rowID) => {
         var rowData = this.state.catalogData[rowID];
-        console.log(this.state.cardId + " " + rowData.skuId);
-        PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: rowData.skuId, quantity: 1 }).then((data) => {
+        // console.log(this.state.cardId + " " + rowData.uid);
+        PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, uid: rowData.uid, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
             this.refreshCartData();

@@ -13,10 +13,20 @@
 #import "RCTRootView.h"
 #import <Pos/Pos.h>
 
+#import <PgySDK/PgyManager.h>
+#import <PgyUpdate/PgyUpdateManager.h>
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  //启动基本SDK
+  [[PgyManager sharedPgyManager] startManagerWithAppId:@"6915c225020b6dd7ea231522740480e3"];
+  //启动更新检查SDK
+  [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:@"6915c225020b6dd7ea231522740480e3"];
+  
+  [[PgyUpdateManager sharedPgyManager] checkUpdate];
+  
   
   NSString* path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,
                                                         NSUserDomainMask,

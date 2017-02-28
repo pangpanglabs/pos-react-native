@@ -144,7 +144,7 @@ export default class BasketList extends React.Component {
         }
     }
     _modalConfirmBtn = () => {
-        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: this.state.selectedProduct.skuId, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
+        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, uid: this.state.selectedProduct.uid, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
             var rs = JSON.parse(card);
             this.refreshDataSource(rs.result.items);
             this.setState({ showModalCss: {} });
