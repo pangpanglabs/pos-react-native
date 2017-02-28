@@ -25,6 +25,14 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		A66302AF3D834DE99A82F8D1 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2E2FC331F24B6FB25D7D12 /* libRCTCamera.a */; };
+		C1027A1E1E6504CF0012CF70 /* PgySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A1D1E6504CF0012CF70 /* PgySDK.framework */; };
+		C1027A341E6504D40012CF70 /* PgyUpdate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A331E6504D40012CF70 /* PgyUpdate.framework */; };
+		C1027A361E6504ED0012CF70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A351E6504ED0012CF70 /* CoreTelephony.framework */; };
+		C1027A381E6504F60012CF70 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A371E6504F60012CF70 /* OpenGLES.framework */; };
+		C1027A3A1E6504FD0012CF70 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A391E6504FD0012CF70 /* CoreMotion.framework */; };
+		C1027A3C1E6505040012CF70 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3B1E6505040012CF70 /* AudioToolbox.framework */; };
+		C1027A3E1E65050A0012CF70 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3D1E65050A0012CF70 /* AVFoundation.framework */; };
+		C1027A401E6505100012CF70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */; };
 		C10F7AA01E04066F00711137 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C10F7A971E04066F00711137 /* FontAwesome.ttf */; };
 		C16B7BF91E077C5200D3229D /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C16B7BF81E077C5200D3229D /* Ionicons.ttf */; };
 		C16B7C141E11F6CE00D3229D /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = C16B7C131E11F6CE00D3229D /* bundle */; };
@@ -206,6 +214,14 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		BF6CAB5DD7C94094B4E48857 /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
+		C1027A1D1E6504CF0012CF70 /* PgySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PgySDK.framework; sourceTree = "<group>"; };
+		C1027A331E6504D40012CF70 /* PgyUpdate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PgyUpdate.framework; sourceTree = "<group>"; };
+		C1027A351E6504ED0012CF70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		C1027A371E6504F60012CF70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		C1027A391E6504FD0012CF70 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		C1027A3B1E6505040012CF70 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		C1027A3D1E65050A0012CF70 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C10F7A971E04066F00711137 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = pangpangPos/FontAwesome.ttf; sourceTree = "<group>"; };
 		C16B7BF81E077C5200D3229D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		C16B7C131E11F6CE00D3229D /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
@@ -232,14 +248,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1027A401E6505100012CF70 /* SystemConfiguration.framework in Frameworks */,
+				C1027A3E1E65050A0012CF70 /* AVFoundation.framework in Frameworks */,
+				C1027A3C1E6505040012CF70 /* AudioToolbox.framework in Frameworks */,
+				C1027A3A1E6504FD0012CF70 /* CoreMotion.framework in Frameworks */,
+				C1027A381E6504F60012CF70 /* OpenGLES.framework in Frameworks */,
+				C1027A361E6504ED0012CF70 /* CoreTelephony.framework in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				C1B70CD41E63F9540030272A /* Pos.framework in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
+				C1027A1E1E6504CF0012CF70 /* PgySDK.framework in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
+				C1027A341E6504D40012CF70 /* PgyUpdate.framework in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
@@ -375,6 +399,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				C1027A331E6504D40012CF70 /* PgyUpdate.framework */,
+				C1027A1D1E6504CF0012CF70 /* PgySDK.framework */,
 				C1B70CD31E63F9540030272A /* Pos.framework */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -427,6 +453,12 @@
 		AC571909827A41A9A6ADFA2C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */,
+				C1027A3D1E65050A0012CF70 /* AVFoundation.framework */,
+				C1027A3B1E6505040012CF70 /* AudioToolbox.framework */,
+				C1027A391E6504FD0012CF70 /* CoreMotion.framework */,
+				C1027A371E6504F60012CF70 /* OpenGLES.framework */,
+				C1027A351E6504ED0012CF70 /* CoreTelephony.framework */,
 				C19609011E1D5817008CB991 /* libsqlite3.tbd */,
 				C1F905831E1D45A10055530F /* libz.tbd */,
 				C1F905741E1D45140055530F /* dylib1.o */,
