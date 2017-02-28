@@ -9,7 +9,9 @@ import {
   StyleSheet,
   Text,
   View,
-  AsyncStorage
+  AsyncStorage,
+  Platform,
+  BackAndroid,
 } from 'react-native';
 import { signalObj } from './Signals';
 
@@ -22,6 +24,25 @@ export default class MenuContainer extends Component {
       openMenuOffset: Dimensions.get('window').width * 3 / 4,
     }
   }
+  componentWillMount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+  onBackAndroid = () => {
+    const nav = global.myNavigator;
+    const routers = nav.getCurrentRoutes();
+    if (routers.length > 1) {
+      nav.pop();
+      return true;
+    }
+    return false;
+  };
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,

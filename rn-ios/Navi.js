@@ -9,7 +9,7 @@ import {
     Text,
     StatusBar,
     StyleSheet,
-    Navigator
+    Navigator,
 } from 'react-native';
 import { signalObj } from './Signals';
 import LoadingComponent from './Loading';
@@ -78,13 +78,13 @@ export default class Navi extends React.Component {
                 <StatusBar
                     backgroundColor="#3e9ce9"
                     barStyle="light-content"
-                />
+                    />
                 <Navigator
                     initialRoute={{ name: defaultName, component: defaultComponent }}
                     configureScene={this.configureScene}
                     renderScene={this.renderScene}
-                />
-                <LoadingComponent  />
+                    />
+                <LoadingComponent />
 
             </View>
         );

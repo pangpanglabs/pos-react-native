@@ -79,7 +79,7 @@ class Payment extends Component {
     _renderRow = (rowData, sectionID, rowID) => {
         if (this.state.currentPayId === rowData.id) {
             return (
-                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) }}>
+                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) } }>
                     <View style={styles.groupitem}>
                         <Text style={styles.itemText}>{rowData.payType}    <Icon name="check-circle-o" style={styles.checkIcon} ></Icon></Text>
                     </View>
@@ -88,7 +88,7 @@ class Payment extends Component {
         }
         else {
             return (
-                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) }}>
+                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) } }>
                     <View style={styles.groupitem}>
                         <Text style={styles.itemText}>{rowData.payType}</Text>
                     </View>
@@ -197,7 +197,7 @@ class Payment extends Component {
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
-                    />
+                        />
                 </View>
                 <View style={styles.confirmBtnContent}>
                     <TouchableOpacity activeOpacity={0.7} style={styles.confirmBtn} onPress={this._pressConfirmButton}>
@@ -334,13 +334,13 @@ if (Platform.OS === 'ios') {
             height: 40,
             lineHeight: 40,
         },
-        custHintText:{
+        custHintText: {
             fontSize: 20,
             textAlign: 'center',
             alignItems: 'center',
             height: 40,
             lineHeight: 40,
-            color:'gray',
+            color: 'gray',
         },
         listView: {
             backgroundColor: 'white',
@@ -489,6 +489,32 @@ else if (Platform.OS === 'android') {
             fontSize: 40,
             textAlign: 'center',
             color: '#3e9ce9',
+        },
+        cust: {
+            height: 60,
+            marginBottom: 15,
+            backgroundColor: 'white',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        custContent: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: Dimensions.get('window').width * 0.8,
+            //backgroundColor: 'red',
+        },
+        custText: {
+            fontSize: 30,
+            textAlign: 'center',
+            alignItems: 'center',
+        },
+        custHintText: {
+            fontSize: 20,
+            textAlign: 'center',
+            alignItems: 'center',
+            color: 'gray',
         },
         listView: {
             backgroundColor: 'white',
