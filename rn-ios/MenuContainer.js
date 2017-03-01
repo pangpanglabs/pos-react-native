@@ -46,14 +46,14 @@ export default class MenuContainer extends Component {
       return true;
     }
     return false;
-  };
-  toggle() {
+  }
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
   }
-  updateMenuState(isOpen) {
-    this.setState({ isOpen, });
+  menuStateOnChange = (isOpen) => {
+    this.setState({ isOpen });
   }
   onMenuItemSelected = (item) => {
     // console.log(item)
@@ -82,9 +82,9 @@ export default class MenuContainer extends Component {
         menu={menu}
         isOpen={this.state.isOpen}
         openMenuOffset={this.state.openMenuOffset}
-        onChange={(isOpen) => this.updateMenuState(isOpen)}
-        >
-        <Navi {...this.state} updateMenuState={(isOpen) => this.updateMenuState(isOpen)} />
+        onChange={this.menuStateOnChange}
+      >
+        <Navi toggle={this.toggle} />
       </SideMenu>
     );
   }

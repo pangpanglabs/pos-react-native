@@ -23,12 +23,12 @@ const navigatorTitle = "Setting";
 class Setting extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            settingData:null,
-            allowAlipay:false,
-            allowCash:true,
-            allowWxpay:false,
-            allowOffline:false,
+        this.state = {
+            settingData: null,
+            allowAlipay: false,
+            allowCash: true,
+            allowWxpay: false,
+            allowOffline: false,
         }
         this.settings = this.settings.bind(this);
     }
@@ -43,35 +43,34 @@ class Setting extends Component {
         PangPangBridge.callAPI("/context/settings", null).then((data) => {
             var rs = JSON.parse(data);
             console.log(rs.result);
-            this.setState({settingData:rs.result});
-            this.setState({allowAlipay:Boolean(rs.result.payment.allowAlipay)});
-            this.setState({allowCash:Boolean(rs.result.payment.allowCash)});
-            this.setState({allowWxpay:Boolean(rs.result.payment.allowWxpay)});
-            this.setState({allowOffline:Boolean(rs.result.payment.allowOffline)});
+            this.setState({ settingData: rs.result });
+            this.setState({ allowAlipay: Boolean(rs.result.payment.allowAlipay) });
+            this.setState({ allowCash: Boolean(rs.result.payment.allowCash) });
+            this.setState({ allowWxpay: Boolean(rs.result.payment.allowWxpay) });
+            this.setState({ allowOffline: Boolean(rs.result.payment.allowOffline) });
         });
     }
     _pressMenuButton() {
-        const {updateMenuState} = this.props;
-        updateMenuState(true);
+        this.props.toggle();
     }
-    _switchOnchange(value,type){
+    _switchOnchange(value, type) {
         // console.log(value);
         // console.log(type);
-        switch (type){
+        switch (type) {
             case "alipay":
-                this.setState({allowAlipay:value});
-            break;
+                this.setState({ allowAlipay: value });
+                break;
             case "cash":
-                this.setState({allowCash:value});
-            break;
+                this.setState({ allowCash: value });
+                break;
             case "wxpay":
-                this.setState({allowWxpay:value});
-            break;
+                this.setState({ allowWxpay: value });
+                break;
             case "offline":
-                this.setState({allowOffline:value});
-            break;
+                this.setState({ allowOffline: value });
+                break;
             default:
-            break;
+                break;
         }
     }
     render() {
@@ -95,33 +94,33 @@ class Setting extends Component {
                         <View style={styles.groupContent}>
                             <View style={styles.groupitem}>
                                 <Text>allowAlipay</Text>
-                                <Text>{this.state.settingData? this.state.settingData.payment.alloAlipay.toString():""}</Text>
-                                <Switch 
+                                <Text>{this.state.settingData ? this.state.settingData.payment.alloAlipay.toString() : ""}</Text>
+                                <Switch
                                     value={this.state.allowAlipay}
-                                    onValueChange={(value)=>{this._switchOnchange(value,"alipay")}}
-                                    
+                                    onValueChange={(value) => { this._switchOnchange(value, "alipay") }}
+
                                 />
                             </View>
 
                             <View style={styles.groupLine}></View>
                             <View style={styles.groupitem}>
                                 <Text>allowCash</Text>
-                                <Text>{this.state.settingData? this.state.settingData.payment.alloCash.toString():""} </Text>
-                                <Switch 
+                                <Text>{this.state.settingData ? this.state.settingData.payment.alloCash.toString() : ""} </Text>
+                                <Switch
                                     value={this.state.allowCash}
-                                    onValueChange={(value)=>{this._switchOnchange(value,"cash")}}
-                                    
+                                    onValueChange={(value) => { this._switchOnchange(value, "cash") }}
+
                                 />
                             </View>
 
                             <View style={styles.groupLine}></View>
                             <View style={styles.groupitem}>
                                 <Text>allowWxpay</Text>
-                                <Text>{this.state.settingData? this.state.settingData.payment.alloWxpay.toString():""} </Text>
-                                <Switch 
+                                <Text>{this.state.settingData ? this.state.settingData.payment.alloWxpay.toString() : ""} </Text>
+                                <Switch
                                     value={this.state.allowWxpay}
-                                    onValueChange={(value)=>{this._switchOnchange(value,"wxpay")}}
-                                    
+                                    onValueChange={(value) => { this._switchOnchange(value, "wxpay") }}
+
                                 />
                             </View>
                         </View>
@@ -158,10 +157,10 @@ class Setting extends Component {
                         <View style={styles.groupContent}>
                             <View style={styles.groupitem}>
                                 <Text>allowOffline</Text>
-                                <Text>{this.state.settingData? this.state.settingData.system.allowOffline.toString():""}</Text>
-                                <Switch 
+                                <Text>{this.state.settingData ? this.state.settingData.system.allowOffline.toString() : ""}</Text>
+                                <Switch
                                     value={this.state.allowOffline}
-                                    onValueChange={(value)=>{this._switchOnchange(value,"offline")}}
+                                    onValueChange={(value) => { this._switchOnchange(value, "offline") }}
                                 />
                             </View>
 

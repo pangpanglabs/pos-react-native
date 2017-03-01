@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,33 +9,30 @@ import {
 } from 'react-native';
 import Camera from 'react-native-camera';
 
-var QRCodeScreen = React.createClass({
-
-  propTypes: {
+export default class QRCodeScreen extends Component {
+  static propTypes = {
     cancelButtonVisible: React.PropTypes.bool,
     cancelButtonTitle: React.PropTypes.string,
     onSucess: React.PropTypes.func,
     onCancel: React.PropTypes.func,
-  },
+  }
 
-  getDefaultProps: function () {
-    return {
-      cancelButtonVisible: false,
-      cancelButtonTitle: 'Cancel',
-    };
-  },
+  static defaultProps = {
+    cancelButtonVisible: false,
+    cancelButtonTitle: 'Cancel'
+  }
 
-  _onPressCancel: function () {
+  _onPressCancel = () => {
     var $this = this;
     requestAnimationFrame(function () {
       $this.props.navigator.pop();
       if ($this.props.onCancel) {
         $this.props.onCancel();
       }
-    });
-  },
+    })
+  }
 
-  _onBarCodeRead: function (result) {
+  _onBarCodeRead = (result) => {
     var $this = this;
 
     if (this.barCodeFlag) {
@@ -45,11 +42,11 @@ var QRCodeScreen = React.createClass({
         Vibration.vibrate();
         $this.props.navigator.pop();
         $this.props.onSucess(result.data);
-      }, 1000);
+      }, 1000)
     }
-  },
+  }
 
-  render: function () {
+  render() {
     var cancelButton = null;
     this.barCodeFlag = true;
 
@@ -64,12 +61,13 @@ var QRCodeScreen = React.createClass({
         </View>
         {cancelButton}
       </Camera>
-    );
-  },
-});
+    )
+  }
+}
 
-var CancelButton = React.createClass({
-  render: function () {
+
+class CancelButton extends Component {
+  render() {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
         <View style={styles.cancelButton}>
@@ -77,8 +75,8 @@ var CancelButton = React.createClass({
         </View>
       </TouchableOpacity>
     );
-  },
-});
+  }
+}
 
 var styles = StyleSheet.create({
 
@@ -117,5 +115,3 @@ var styles = StyleSheet.create({
     color: '#0097CE',
   },
 });
-
-module.exports = QRCodeScreen;

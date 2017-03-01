@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import CatalogList from './CatalogList';
 import {
+    DeviceEventEmitter,
     ScrollView,
     TouchableOpacity,
     Dimensions,
@@ -26,8 +27,10 @@ class SpotSet extends Component {
         this.state = {
             dataSource: ds.cloneWithRows([]),
             currentSpotId: 0
-        };
-        this._renderRow = this._renderRow.bind(this);
+        }
+    }
+    static propTypes = {
+        toggle: PropTypes.func.isRequired,
     }
     componentWillMount() {
 
@@ -66,32 +69,25 @@ class SpotSet extends Component {
             alert('set spot faild')
         }
     }
-    _renderRow(rowData, sectionID, rowID) {
-        if (this.state.currentSpotId === rowData.id) {
-            return (
-                <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
-                    <View style={styles.groupitem}>
-                        <Text style={styles.itemText}>{rowData.name}    <Icon name="check-circle-o" style={styles.checkIcon} ></Icon></Text>
-                    </View>
-                </TouchableOpacity>);
-        }
-        else {
-            return (
-                <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
-                    <View style={styles.groupitem}>
-                        <Text style={styles.itemText}>{rowData.name}</Text>
-                    </View>
-                </TouchableOpacity>);
-        }
+    _renderRow = (rowData, sectionID, rowID) => {
+        return (
+            <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) }}>
+                <View style={styles.groupitem}>
+                    <Text style={styles.itemText}>
+                        {rowData.name}   {this.state.currentSpotId === rowData.id ? <Icon name="check-circle-o" style={styles.checkIcon} /> : null}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
     }
     _pressMenuButton() {
-        const {updateMenuState} = this.props;
-        updateMenuState(true);
+        this.props.toggle();
     }
     _pressSyncButton() {
+        DeviceEventEmitter.emit('showLoading');
         PangPangBridge.callAPI("/catalog/download", null).then((data) => {
             console.log(JSON.parse(data))
-
+            DeviceEventEmitter.emit('dismissLoading');
             // if (navigator) {
             //     navigator.replace({
             //         name: 'CatalogList',
@@ -119,7 +115,7 @@ class SpotSet extends Component {
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
-                        />
+                    />
                 </View>
             </View>
         );
