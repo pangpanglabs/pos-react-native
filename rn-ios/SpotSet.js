@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import CatalogList from './CatalogList';
 import {
+    DeviceEventEmitter,
     ScrollView,
     TouchableOpacity,
     Dimensions,
@@ -83,9 +84,10 @@ class SpotSet extends Component {
         this.props.toggle();
     }
     _pressSyncButton() {
+        DeviceEventEmitter.emit('showLoading');
         PangPangBridge.callAPI("/catalog/download", null).then((data) => {
             console.log(JSON.parse(data))
-
+            DeviceEventEmitter.emit('dismissLoading');
             // if (navigator) {
             //     navigator.replace({
             //         name: 'CatalogList',
