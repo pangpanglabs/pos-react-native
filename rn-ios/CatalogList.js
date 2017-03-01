@@ -38,7 +38,7 @@ export default class CatalogList extends React.Component {
         foot: 0, // 控制foot， 0：隐藏foot  1：已加载完成   2 ：显示加载中
     }
     static propTypes = {
-        updateMenuState: React.PropTypes.func.isRequired,
+        toggle: React.PropTypes.func.isRequired,
         navigator: React.PropTypes.any.isRequired,
     };
 
@@ -176,8 +176,7 @@ export default class CatalogList extends React.Component {
         )
     }
     _pressMenuButton = () => {
-        const {updateMenuState} = this.props;
-        updateMenuState(true);
+        this.props.toggle();
     }
     _pressSearchButton = () => {
         pageNum = 0;

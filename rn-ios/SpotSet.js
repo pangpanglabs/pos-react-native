@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,PropTypes } from 'react';
 import CatalogList from './CatalogList';
 import {
     ScrollView,
@@ -26,8 +26,10 @@ class SpotSet extends Component {
         this.state = {
             dataSource: ds.cloneWithRows([]),
             currentSpotId: 0
-        };
-        this._renderRow = this._renderRow.bind(this);
+        }
+    }
+    static propTypes = {
+        toggle:PropTypes.func.isRequired,
     }
     componentWillMount() {
 
@@ -66,7 +68,7 @@ class SpotSet extends Component {
             alert('set spot faild')
         }
     }
-    _renderRow(rowData, sectionID, rowID) {
+    _renderRow = (rowData, sectionID, rowID) => {
         if (this.state.currentSpotId === rowData.id) {
             return (
                 <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
@@ -85,8 +87,7 @@ class SpotSet extends Component {
         }
     }
     _pressMenuButton() {
-        const {updateMenuState} = this.props;
-        updateMenuState(true);
+        this.props.toggle();
     }
     _pressSyncButton() {
         PangPangBridge.callAPI("/catalog/download", null).then((data) => {
