@@ -1,4 +1,4 @@
-import React, { Component,PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import CatalogList from './CatalogList';
 import {
     ScrollView,
@@ -29,7 +29,7 @@ class SpotSet extends Component {
         }
     }
     static propTypes = {
-        toggle:PropTypes.func.isRequired,
+        toggle: PropTypes.func.isRequired,
     }
     componentWillMount() {
 
@@ -69,22 +69,15 @@ class SpotSet extends Component {
         }
     }
     _renderRow = (rowData, sectionID, rowID) => {
-        if (this.state.currentSpotId === rowData.id) {
-            return (
-                <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
-                    <View style={styles.groupitem}>
-                        <Text style={styles.itemText}>{rowData.name}    <Icon name="check-circle-o" style={styles.checkIcon} ></Icon></Text>
-                    </View>
-                </TouchableOpacity>);
-        }
-        else {
-            return (
-                <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) } }>
-                    <View style={styles.groupitem}>
-                        <Text style={styles.itemText}>{rowData.name}</Text>
-                    </View>
-                </TouchableOpacity>);
-        }
+        return (
+            <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) }}>
+                <View style={styles.groupitem}>
+                    <Text style={styles.itemText}>
+                        {rowData.name}   {this.state.currentSpotId === rowData.id ? <Icon name="check-circle-o" style={styles.checkIcon} /> : null}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
     }
     _pressMenuButton() {
         this.props.toggle();
@@ -120,7 +113,7 @@ class SpotSet extends Component {
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
-                        />
+                    />
                 </View>
             </View>
         );
