@@ -26,8 +26,11 @@ const navigatorTitle = "Payment";
 class Payment extends Component {
     state = {
         custNo: '',
+        couponNo: '',
         totalCount: 0,
-        totalPrice: 0,
+        listPrice: 0,
+        salePrice: 0,
+        discount: 0,
         dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
         currentPayId: 1
     }
@@ -53,9 +56,15 @@ class Payment extends Component {
             for (var index = 0; index < rs.result.items.length; index++) {
                 totalCount = totalCount + parseInt(rs.result.items[index].quantity);
             }
-            // console.log(rs.result.total);
-            this.setState({ totalPrice: rs.result.listPrice });
-            this.setState({ totalCount: totalCount });
+            // console.log(rs.result);
+            this.setState({
+                listPrice: rs.result.listPrice,
+                totalCount: totalCount,
+                custNo: (rs.result.customerInfo.brandCode ? rs.result.customerInfo.brandCode : '') + (rs.result.customerInfo.no ? rs.result.customerInfo.no : ''),
+                couponNo: rs.result.couponNo ? rs.result.couponNo : '',
+                salePrice: rs.result.salePrice,
+                discount: rs.result.discount,
+            });
             DeviceEventEmitter.emit('dismissLoading');
         });
         this.setState({
@@ -77,25 +86,15 @@ class Payment extends Component {
         });
     }
     _renderRow = (rowData, sectionID, rowID) => {
-        if (this.state.currentPayId === rowData.id) {
-            return (
-                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) } }>
-                    <View style={styles.groupitem}>
-                        <Text style={styles.itemText}>{rowData.payType}    <Icon name="check-circle-o" style={styles.checkIcon} ></Icon></Text>
-                    </View>
-                    <View style={styles.line}></View>
-                </TouchableOpacity>);
-        }
-        else {
-            return (
-                <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) } }>
-                    <View style={styles.groupitem}>
-                        <Text style={styles.itemText}>{rowData.payType}</Text>
-                    </View>
-
-                    <View style={styles.line}></View>
-                </TouchableOpacity>);
-        }
+        return (
+            <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) }}>
+                <View style={styles.groupitem}>
+                    <Text style={styles.itemText}>
+                        {rowData.payType}   {this.state.currentPayId === rowData.id ? <Icon name="check-circle-o" style={styles.checkIcon} /> : null}
+                    </Text>
+                </View>
+                <View style={styles.line}></View>
+            </TouchableOpacity>);
     }
 
     _pressConfirmButton = async () => {
@@ -109,11 +108,12 @@ class Payment extends Component {
             setinfoResult = JSON.parse(data);
             // console.log(setinfoResult.result.info);
         });
+
         if (setinfoResult.success) {
             let rs = null;
             await PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId }).then((card) => {
                 rs = JSON.parse(card);
-                console.log(rs);
+                // console.log(rs);
             });
 
             if (rs.success) {
@@ -152,11 +152,61 @@ class Payment extends Component {
         }
     }
     _scanCustNoSucess = (result) => {
-        // alert(result);
-        this.setState({ custNo: result });
+        PangPangBridge.callAPI("/cart/set-customer", { cartId: this.props.cardId, no: result }).then((card) => {
+            rs = JSON.parse(card);
+            this.setState({ custNo: result });
+        });
     }
     _scanCustNoCancel = () => {
+        // console.log(this.props.cardId);
+        PangPangBridge.callAPI("/cart/set-customer", { cartId: this.props.cardId, no: 'RC10000000001' }).then((card) => {
+            rs = JSON.parse(card);
+            this.setState({
+                custNo: "RC10000000001",
+            })
+            // console.log(rs);
+        });
         // alert('cancel');
+    }
+
+    _scanCouponNo = () => {
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                component: QRCodeScreen,
+                title: 'QRCode',
+                params: {
+                    cancelButtonVisible: true,
+                    cancelButtonTitle: "cancel",
+                    onSucess: this._scanCouponSucess,
+                    onCancel: this._scanCouponCancel,
+                },
+            })
+        }
+    }
+    _scanCouponSucess = (result) => {
+        PangPangBridge.callAPI("/cart/set-coupon", { cartId: this.props.cardId, no: result }).then((card) => {
+            rs = JSON.parse(card);
+            this.setState({
+                couponNo: result,
+                salePrice: rs.result.salePrice,
+                listPrice: rs.result.listPrice,
+                discount: rs.result.discount,
+            })
+        });
+    }
+    _scanCouponCancel = () => {
+        // alert('cancel');
+        PangPangBridge.callAPI("/cart/set-coupon", { cartId: this.props.cardId, no: 'WA976CE9199756D5BC' }).then((card) => {
+            rs = JSON.parse(card);
+            this.setState({
+                couponNo: "WA976CE9199756D5BC",
+                salePrice: rs.result.salePrice,
+                listPrice: rs.result.listPrice,
+                discount: rs.result.discount,
+            })
+            // console.log(rs);
+        });
     }
 
     render() {
@@ -186,10 +236,28 @@ class Payment extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <View style={styles.cust}>
+                    <View style={styles.custContent}>
+                        {(() => {
+                            if (this.state.couponNo) {
+                                return (<Text style={styles.custText}>{this.state.couponNo}</Text>)
+                            } else {
+                                return (<Text style={styles.custHintText}>scan couponNo </Text>)
+                            }
+                        })()}
+                        <TouchableOpacity onPress={this._scanCouponNo}>
+                            <Icon name="qrcode" style={styles.cashImg} ></Icon>
+                        </TouchableOpacity>
+                    </View>
+                </View>
                 <View style={styles.count}>
                     <View style={styles.countContent}>
                         <Icon name="money" style={styles.cashImg} ></Icon>
-                        <Text style={styles.totalCountText}>¥{this.state.totalPrice} </Text>
+                        <Text style={styles.totalCountText}>¥{this.state.salePrice} </Text>
+                    </View>
+                    <View style={styles.countSub}>
+                        <Text >原价: ¥{this.state.listPrice}</Text>
+                        <Text >折扣金额: ¥{this.state.discount}</Text>
                     </View>
                 </View>
                 <View >
@@ -197,11 +265,11 @@ class Payment extends Component {
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
-                        />
+                    />
                 </View>
                 <View style={styles.confirmBtnContent}>
                     <TouchableOpacity activeOpacity={0.7} style={styles.confirmBtn} onPress={this._pressConfirmButton}>
-                        <Text style={styles.confirmBtnText}>{"Pay Confirm ￥" + this.state.totalPrice.toString()}</Text>
+                        <Text style={styles.confirmBtnText}>{"Pay Confirm ￥" + this.state.salePrice.toString()}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -287,10 +355,9 @@ if (Platform.OS === 'ios') {
             justifyContent: 'center',
         },
         count: {
-            height: 60,
+            height: 80,
             marginBottom: 15,
             backgroundColor: 'white',
-            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
         },
@@ -312,6 +379,12 @@ if (Platform.OS === 'ios') {
             textAlign: 'center',
             color: '#3e9ce9',
         },
+        countSub: {
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            width: Dimensions.get('window').width * 0.5,
+            // backgroundColor: 'red',
+        },
         cust: {
             height: 60,
             marginBottom: 15,
@@ -328,7 +401,7 @@ if (Platform.OS === 'ios') {
             // backgroundColor: 'red',
         },
         custText: {
-            fontSize: 30,
+            fontSize: 20,
             textAlign: 'center',
             alignItems: 'center',
             height: 40,
@@ -468,7 +541,6 @@ else if (Platform.OS === 'android') {
             height: 80,
             marginBottom: 15,
             backgroundColor: 'white',
-            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
         },

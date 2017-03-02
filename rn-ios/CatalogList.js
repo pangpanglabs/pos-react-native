@@ -157,7 +157,7 @@ export default class CatalogList extends React.Component {
         // console.log(this.state.cardId + " " + rowData.uid);
         PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, uid: rowData.uid, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
-            // console.log(rs);
+            console.log(rs);
             this.refreshCartData();
         });
 
