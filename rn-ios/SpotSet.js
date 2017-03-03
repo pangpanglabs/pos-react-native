@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
 
-const navigatorTitle = "Set Spot";
+const navigatorTitle = "选择卖场";
 class SpotSet extends Component {
     constructor(props) {
         super(props);

@@ -10,11 +10,11 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 let tempMenuData = [
-    { menuName: "spotset", menuCode: "spotset" },
-    { menuName: "cart", menuCode: "catalogList" },
-    { menuName: "user", menuCode: "user" },
-    { menuName: "settings", menuCode: "settings" },
-    { menuName: "logout", menuCode: "logout" },
+    { menuName: "销售", menuCode: "catalogList" },
+    { menuName: "卖场", menuCode: "spotset" },
+    // { menuName: "user", menuCode: "user" },
+    // { menuName: "settings", menuCode: "settings" },
+    { menuName: "注销", menuCode: "logout" },
 ];
 
 
