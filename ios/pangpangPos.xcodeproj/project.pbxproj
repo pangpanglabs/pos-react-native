@@ -41,6 +41,7 @@
 		C1027A3C1E6505040012CF70 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3B1E6505040012CF70 /* AudioToolbox.framework */; };
 		C1027A3E1E65050A0012CF70 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3D1E65050A0012CF70 /* AVFoundation.framework */; };
 		C1027A401E6505100012CF70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */; };
+		C10D0FDE1E692DBC003ADCFD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C10D0FDC1E692DBC003ADCFD /* LaunchScreen.xib */; };
 		C10F7AA01E04066F00711137 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C10F7A971E04066F00711137 /* FontAwesome.ttf */; };
 		C16B7BF91E077C5200D3229D /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C16B7BF81E077C5200D3229D /* Ionicons.ttf */; };
 		C16B7C141E11F6CE00D3229D /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = C16B7C131E11F6CE00D3229D /* bundle */; };
@@ -252,6 +253,7 @@
 		C1027A3B1E6505040012CF70 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C1027A3D1E65050A0012CF70 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		C10D0FDD1E692DBC003ADCFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = pangpangPos/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		C10F7A971E04066F00711137 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = pangpangPos/FontAwesome.ttf; sourceTree = "<group>"; };
 		C16B7BF81E077C5200D3229D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		C16B7C131E11F6CE00D3229D /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
@@ -393,6 +395,7 @@
 		13B07FAE1A68108700A75B9A /* pangpangPos */ = {
 			isa = PBXGroup;
 			children = (
+				C10D0FDC1E692DBC003ADCFD /* LaunchScreen.xib */,
 				C16B7BF81E077C5200D3229D /* Ionicons.ttf */,
 				C10F7A971E04066F00711137 /* FontAwesome.ttf */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -860,6 +863,7 @@
 				7120E29CF5E44E399BC32718 /* Foundation.ttf in Resources */,
 				0F02D51B5E44468E8F6DE4B1 /* Ionicons.ttf in Resources */,
 				4DFA3278425643C8ACC2F320 /* MaterialIcons.ttf in Resources */,
+				C10D0FDE1E692DBC003ADCFD /* LaunchScreen.xib in Resources */,
 				6169C869ED054AD2B6B5EC1C /* Octicons.ttf in Resources */,
 				B2139D47E1C34D5894F0F006 /* SimpleLineIcons.ttf in Resources */,
 				BECBAB94DE3245A0B6902518 /* Zocial.ttf in Resources */,
@@ -915,6 +919,17 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		C10D0FDC1E692DBC003ADCFD /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C10D0FDD1E692DBC003ADCFD /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -969,7 +984,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -996,7 +1010,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;

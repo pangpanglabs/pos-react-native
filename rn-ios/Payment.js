@@ -228,7 +228,7 @@ class Payment extends Component {
                             if (this.state.custNo) {
                                 return (<Text style={styles.custText}>{this.state.custNo}</Text>)
                             } else {
-                                return (<Text style={styles.custHintText}>scan custNo </Text>)
+                                return (<Text style={styles.custHintText}>scan customer number </Text>)
                             }
                         })()}
                         <TouchableOpacity onPress={this._scanCustNo}>
@@ -242,7 +242,7 @@ class Payment extends Component {
                             if (this.state.couponNo) {
                                 return (<Text style={styles.custText}>{this.state.couponNo}</Text>)
                             } else {
-                                return (<Text style={styles.custHintText}>scan couponNo </Text>)
+                                return (<Text style={styles.custHintText}>scan coupon </Text>)
                             }
                         })()}
                         <TouchableOpacity onPress={this._scanCouponNo}>
