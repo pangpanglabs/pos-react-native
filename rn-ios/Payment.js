@@ -562,11 +562,17 @@ else if (Platform.OS === 'android') {
             textAlign: 'center',
             color: '#3e9ce9',
         },
+        countSub: {
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            width: Dimensions.get('window').width * 0.5,
+            // backgroundColor: 'red',
+        },
         cust: {
             height: 60,
             marginBottom: 15,
             backgroundColor: 'white',
-            flexDirection: 'row',
+            // flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
         },
@@ -578,7 +584,7 @@ else if (Platform.OS === 'android') {
             //backgroundColor: 'red',
         },
         custText: {
-            fontSize: 30,
+            fontSize: 20,
             textAlign: 'center',
             alignItems: 'center',
         },
