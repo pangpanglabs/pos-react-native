@@ -60,8 +60,8 @@ class Payment extends Component {
             this.setState({
                 listPrice: rs.result.listPrice,
                 totalCount: totalCount,
-                custNo: (rs.result.customerInfo.brandCode ? rs.result.customerInfo.brandCode : '') + (rs.result.customerInfo.no ? rs.result.customerInfo.no : ''),
-                couponNo: rs.result.couponNo ? rs.result.couponNo : '',
+                custNo: (rs.result.customerInfo && rs.result.customerInfo.brandCode) + (rs.result.customerInfo && rs.result.customerInfo.no),
+                couponNo: rs.result.couponNo && rs.result.couponNo,
                 salePrice: rs.result.salePrice,
                 discount: rs.result.discount,
             });
@@ -131,7 +131,7 @@ class Payment extends Component {
 
     }
     _pressBackButton = () => {
-        const {navigator} = this.props;
+        const { navigator } = this.props;
         if (navigator) {
             navigator.pop();
         }
