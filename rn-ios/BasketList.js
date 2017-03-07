@@ -7,6 +7,7 @@ import {
     View,
     Text,
     TouchableOpacity,
+    TouchableHighlight,
     TouchableWithoutFeedback,
     ListView,
     AsyncStorage,
@@ -16,6 +17,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 
 
 let PangPangBridge = NativeModules.PangPangBridge;
@@ -29,7 +31,7 @@ export default class BasketList extends React.Component {
         navigatorTitle: "Cart",
         showModalCss: {},
         selectedProduct: null,
-        // selectedOriginalProduct: null,
+        selectedOriginalProduct: null,
     }
     static propTypes = {
         navigator: React.PropTypes.any.isRequired,
@@ -69,7 +71,7 @@ export default class BasketList extends React.Component {
     }
     seachCartItems = async () => {
         if (this.props.cardId) {
-            
+
             DeviceEventEmitter.emit('showLoading');
             await PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
                 var rs = JSON.parse(card);
@@ -87,10 +89,6 @@ export default class BasketList extends React.Component {
             DeviceEventEmitter.emit('changeTotal');
         }
     }
-    _longPressRow = (rowID, rowData) => {
-
-    }
-
     _goPay = () => {
         PangPangBridge.callAPI("/order/place-order", { cartId: this.props.cardId, info: JSON.stringify({ name: "liche" }) }).then((card) => {
             var rs = JSON.parse(card);
@@ -107,20 +105,33 @@ export default class BasketList extends React.Component {
         this.setState({ selectedProduct: rowData });
         let copy = this.deepCopy(rowData);
         this.setState({ selectedOriginalProduct: copy });
-        // console.log(rowData);
+        // // console.log(rowData);
     }
     _renderRow = (rowData, sectionID, rowID) => {
         return (
-            <TouchableOpacity onPress={(id, data) => { this._rowPress(rowID, rowData) }} style={styles.row}
+            <TouchableHighlight onPress={(id, data) => { this._rowPress(rowID, rowData) }} style={styles.rowFront}
+                underlayColor={'#fff'}
             >
-                <View style={styles.rowContent}>
-                    <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
-                    <Text>x{rowData.quantity}</Text>
-                    <Text style={styles.rowContentPrice}>¥{rowData.listPrice}</Text>
+                <View>
+                    <View style={styles.rowContent}>
+                        <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
+                        <Text>x{rowData.quantity}</Text>
+                        <Text style={styles.rowContentPrice}>¥{rowData.listPrice}</Text>
+                    </View>
+                    <View style={styles.line}></View>
                 </View>
-                <View style={styles.line}></View>
-            </TouchableOpacity>
+            </TouchableHighlight>
         )
+    }
+    _deleteRow = async (rowData, secId, rowId, rowMap) => {
+        // console.log(rowData);
+        // console.log(rowMap[`${secId}${rowId}`]);
+        rowMap[`${secId}${rowId}`].closeRow();
+        await PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, uid: rowData.uid, quantity:rowData.quantity }).then((card) => {
+            var rs = JSON.parse(card);
+            this.refreshDataSource(rs.result.items);
+        });
+        
     }
     _pressPayButton = () => {
         // this.state.totalCount ? Alert.alert(
@@ -182,6 +193,7 @@ export default class BasketList extends React.Component {
         }
         return result;
     }
+
     render() {
 
         return (
@@ -206,10 +218,19 @@ export default class BasketList extends React.Component {
                 <View style={styles.line}></View>
 
                 <View >
-                    <ListView style={styles.listView}
+                    <SwipeListView style={styles.listView}
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow}
                         enableEmptySections={true}
+                        renderHiddenRow={(data, secId, rowId, rowMap) => (
+                            <View style={styles.rowBack}>
+                                <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={() => this._deleteRow(data,secId, rowId, rowMap)}>
+                                    <Text style={{ color: '#fff' }}>Delete</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                        rightOpenValue={-75}
+                        disableRightSwipe={true}
                     />
                 </View>
                 <View style={[styles.modalContainer, this.state.showModalCss]} >
@@ -402,7 +423,37 @@ if (Platform.OS === 'ios') {
             alignSelf: 'center',
             opacity: 0.4,
 
-        }
+        },
+        rowFront: {
+            alignItems: 'center',
+            backgroundColor: '#fff',
+            justifyContent: 'center',
+            height: 80,
+        },
+        rowBack: {
+            alignItems: 'center',
+            backgroundColor: '#DDD',
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingLeft: 15,
+        },
+        backRightBtn: {
+            alignItems: 'center',
+            bottom: 0,
+            justifyContent: 'center',
+            position: 'absolute',
+            top: 0,
+            width: 75
+        },
+        backRightBtnLeft: {
+            backgroundColor: 'blue',
+            right: 75
+        },
+        backRightBtnRight: {
+            backgroundColor: 'red',
+            right: 0
+        },
     });
 }
 else if (Platform.OS === 'android') {
