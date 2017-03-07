@@ -207,7 +207,7 @@ export default class BasketList extends React.Component {
                 </View>
 
                 <View style={styles.count} >
-                    <Text style={styles.countText}>TOTAL</Text>
+                    <Text style={styles.countText}>Total</Text>
                     <Text style={styles.totalCountText}>¥ {this.state.totalPrice} </Text>
                 </View>
                 <View style={styles.line}></View>
@@ -363,10 +363,11 @@ styles = StyleSheet.create({
     },
     countText: {
         flex: 1,
-        fontSize: 20,
+        fontSize: 25,
         // backgroundColor: "transparent",
         // backgroundColor: "red",
-        color: 'gray',
+        fontWeight:'600',
+        color:'#3e9ce9',
         paddingLeft: 20,
     },
     totalCountText: {
@@ -375,7 +376,8 @@ styles = StyleSheet.create({
         textAlign: 'right',
         alignItems: 'center',
         paddingRight: 20,
-        // backgroundColor:"green",
+        fontWeight:'600',
+        color:'#3e9ce9',
         height: 40,
         lineHeight: 40,
     },

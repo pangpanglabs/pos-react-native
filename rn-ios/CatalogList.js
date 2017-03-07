@@ -352,6 +352,8 @@ styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         // backgroundColor:"red",
+        fontWeight:'600',
+        color:'#3e9ce9',
         height: 40,
         lineHeight: 40,
     },

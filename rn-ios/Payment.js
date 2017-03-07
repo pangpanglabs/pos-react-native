@@ -250,14 +250,9 @@ class Payment extends Component {
                     </View>
                 </View>
                 <View style={styles.count}>
-                    <View style={styles.countContent}>
-                        <Icon name="money" style={styles.cashImg} ></Icon>
-                        <Text style={styles.totalCountText}>¥{this.state.salePrice} </Text>
-                    </View>
-                    <View style={styles.countSub}>
-                        <Text >原价: ¥{this.state.listPrice}</Text>
-                        <Text >折扣金额: ¥{this.state.discount}</Text>
-                    </View>
+                    <Icon name="money" style={styles.cashImg} ></Icon>
+                    <Text style={styles.totalCountText}>¥{this.state.salePrice} </Text>
+                    <Text style={styles.discountText}>(已优惠 {this.state.discount} 元)</Text>
                 </View>
                 <View >
                     <ListView style={styles.listView}
@@ -353,29 +348,29 @@ styles = StyleSheet.create({
         justifyContent: 'center',
     },
     count: {
+        flexDirection: 'row',
         height: 80,
         marginBottom: 15,
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    countContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        width: deviceW * 0.8,
-    },
-    totalCountText: {
-        fontSize: 30,
-        textAlign: 'center',
-        alignItems: 'center',
-        height: 40,
-        lineHeight: 40,
-    },
     cashImg: {
         fontSize: 40,
         textAlign: 'center',
         color: '#3e9ce9',
+    },
+    totalCountText: {
+        fontSize: 30,
+        textAlign: 'center',
+        paddingLeft: 10,
+        paddingRight: 5,
+        fontWeight: '500',
+    },
+    discountText: {
+        fontSize: 18,
+        fontWeight: '500',
+        color:'orange',
     },
     countSub: {
         alignItems: 'flex-end',
