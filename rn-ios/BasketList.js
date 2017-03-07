@@ -10,12 +10,10 @@ import {
     TouchableHighlight,
     TouchableWithoutFeedback,
     ListView,
-    AsyncStorage,
     NativeModules,
-    Alert,
-    Platform
+    Alert
 } from 'react-native';
-import { px2dp, isIOS } from '../util';
+import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
@@ -267,24 +265,24 @@ let styles;
 styles = StyleSheet.create({
     modalContainer: {
         // position: 'absolute',
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        width: deviceW,
+        height: deviceH,
     },
     modalBackGround: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        width: deviceW,
+        height: deviceH,
         backgroundColor: 'black',
         opacity: 0.3,
     },
     modalContent: {
         position: 'absolute',
-        width: Dimensions.get('window').width,
+        width: deviceW,
         height: 350,
-        marginTop: Dimensions.get('window').height - 350,
+        marginTop: deviceH - 350,
         backgroundColor: 'white',
     },
     modalContentTop: {
-        width: Dimensions.get('window').width,
+        width: deviceW,
         height: 40,
         // backgroundColor: 'red',
         flexDirection: 'row',
@@ -382,7 +380,7 @@ styles = StyleSheet.create({
         lineHeight: 40,
     },
     listView: {
-        height: Dimensions.get('window').height - 64 - 60,
+        height: deviceH - 64 - 60,
     },
     row: {
         // backgroundColor:"red",
@@ -411,7 +409,7 @@ styles = StyleSheet.create({
     line: {
         backgroundColor: "gray",
         height: 1,
-        width: Dimensions.get('window').width - 20,
+        width: deviceW - 20,
         alignSelf: 'center',
         opacity: 0.4,
 

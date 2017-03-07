@@ -10,11 +10,10 @@ import {
     Button,
     AsyncStorage,
     NativeModules,
-    ListView,
-    Platform
+    ListView
 } from 'react-native';
 
-
+import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import QRCodeScreen from './QRCodeScreen';
 
@@ -211,7 +210,7 @@ class Payment extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: '#f0f0f0', height: Dimensions.get('window').height }}>
+            <View style={{ backgroundColor: '#f0f0f0', height: deviceH }}>
                 <View style={styles.navigatorBar} >
                     <TouchableOpacity onPress={this._pressBackButton} style={styles.backBtn}>
                         <Icon style={styles.backBtnText} name="angle-left"></Icon>
@@ -279,366 +278,184 @@ class Payment extends Component {
 
 let styles;
 
-if (Platform.OS === 'ios') {
-    styles = StyleSheet.create({
-        navigatorBar: {
-            backgroundColor: "#3e9ce9",
-            height: 64,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        backBtn: {
-            marginTop: 20,
-            height: 40,
-            width: 50,
-            justifyContent: 'center',
-        },
-        navigatorTitle: {
-            marginTop: 20,
-            height: 40,
-            justifyContent: 'center',
-            flex: 1,
-        },
-        navigatorTitleText: {
-            fontSize: 20,
-            color: 'white',
-            textAlign: 'center',
-        },
-        scrollView: {
-            height: Dimensions.get('window').height - 64,
-            // backgroundColor:'yellow',
-        },
-        group: {
-            marginTop: 10,
-            alignItems: 'center',
-        },
-        groupTile: {
-            margin: 5,
-        },
-        groupContent: {
-            backgroundColor: 'white',
-            paddingLeft: 10,
-            paddingRight: 10,
-        },
-        groupLine: {
-            // marginTop: 1,
-            height: 0.5,
-            backgroundColor: 'gray',
-            width: Dimensions.get('window').width - 10,
-            alignSelf: 'center',
-            opacity: 0.4,
-        },
-        groupitem: {
-            flexDirection: 'row',
-            height: 60,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginLeft: 5,
-            width: Dimensions.get('window').width,
-        },
-        itemText: {
-            fontSize: 16,
-            fontWeight: 'bold',
-            width: Dimensions.get('window').width,
-            textAlign: 'center'
-        },
-        backBtnText: {
-            fontSize: 35,
-            textAlign: 'center',
-            color: 'white',
-        },
-        rightBtn: {
-            marginTop: 20,
-            height: 40,
-            width: 50,
-            justifyContent: 'center',
-        },
-        count: {
-            height: 80,
-            marginBottom: 15,
-            backgroundColor: 'white',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        countContent: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            width: Dimensions.get('window').width * 0.8,
-        },
-        totalCountText: {
-            fontSize: 30,
-            textAlign: 'center',
-            alignItems: 'center',
-            height: 40,
-            lineHeight: 40,
-        },
-        cashImg: {
-            fontSize: 40,
-            textAlign: 'center',
-            color: '#3e9ce9',
-        },
-        countSub: {
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            width: Dimensions.get('window').width * 0.5,
-            // backgroundColor: 'red',
-        },
-        cust: {
-            height: 60,
-            marginBottom: 15,
-            backgroundColor: 'white',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        custContent: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: Dimensions.get('window').width * 0.8,
-            // backgroundColor: 'red',
-        },
-        custText: {
-            fontSize: 20,
-            textAlign: 'center',
-            alignItems: 'center',
-            height: 40,
-            lineHeight: 40,
-        },
-        custHintText: {
-            fontSize: 20,
-            textAlign: 'center',
-            alignItems: 'center',
-            height: 40,
-            lineHeight: 40,
-            color: 'gray',
-        },
-        listView: {
-            backgroundColor: 'white',
-            marginBottom: 30,
-        },
-        row: {
-            height: 80,
-        },
-        rowContent: {
-            flex: 1,
-            height: 79,
-            flexDirection: 'row',
-            alignItems: 'center',
-            // justifyContent:'space-between',
-        },
-        line: {
-            backgroundColor: "gray",
-            height: 0.5,
-            width: Dimensions.get('window').width - 20,
-            alignSelf: 'center',
-            opacity: 0.4,
-
-        },
-        checkIcon: {
-            marginLeft: 120,
-            fontSize: 20,
-            textAlign: 'center',
-            color: '#3e9ce9',
-        },
-        confirmBtnContent: {
-            flexDirection: 'row',
-            justifyContent: 'center',
-        },
-        confirmBtn: {
-            backgroundColor: "#3e9ce9",
-            height: 44,
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: Dimensions.get('window').width * 0.9,
-            borderRadius: 10,
-        },
-        confirmBtnText: {
-            color: 'white',
-            fontSize: 24,
-        }
-    });
-}
-else if (Platform.OS === 'android') {
-    styles = StyleSheet.create({
-        navigatorBar: {
-            backgroundColor: "#3e9ce9",
-            height: 44,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        backBtn: {
-            marginTop: 0,
-            height: 40,
-            width: 50,
-            justifyContent: 'center',
-        },
-        navigatorTitle: {
-            // backgroundColor:'red',
-            marginTop: 0,
-            height: 40,
-            justifyContent: 'center',
-            flex: 1,
-        },
-        navigatorTitleText: {
-            fontSize: 20,
-            color: 'white',
-            textAlign: 'center',
-        },
-        scrollView: {
-            height: Dimensions.get('window').height - 64,
-            // backgroundColor:'yellow',
-        },
-        group: {
-            marginTop: 10,
-            alignItems: 'center',
-        },
-        groupTile: {
-            margin: 5,
-        },
-        groupContent: {
-            backgroundColor: 'white',
-            paddingLeft: 10,
-            paddingRight: 10,
-        },
-        groupLine: {
-            // marginTop: 1,
-            height: 0.5,
-            backgroundColor: 'gray',
-            width: Dimensions.get('window').width - 10,
-            alignSelf: 'center',
-            opacity: 0.4,
-        },
-        groupitem: {
-            flexDirection: 'row',
-            height: 60,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginLeft: 5,
-            width: Dimensions.get('window').width,
-        },
-        itemText: {
-            fontSize: 16,
-            fontWeight: 'bold',
-            width: Dimensions.get('window').width,
-            textAlign: 'center'
-        },
-        backBtnText: {
-            fontSize: 35,
-            textAlign: 'center',
-            color: 'white',
-        },
-        rightBtn: {
-            marginTop: 20,
-            height: 40,
-            width: 50,
-            justifyContent: 'center',
-        },
-        count: {
-            height: 80,
-            marginBottom: 15,
-            backgroundColor: 'white',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        countContent: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            width: Dimensions.get('window').width * 0.8,
-        },
-        totalCountText: {
-            fontSize: 30,
-            textAlign: 'center',
-            alignItems: 'center',
-            height: 40,
-            lineHeight: 40,
-        },
-        cashImg: {
-            fontSize: 40,
-            textAlign: 'center',
-            color: '#3e9ce9',
-        },
-        countSub: {
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            width: Dimensions.get('window').width * 0.5,
-            // backgroundColor: 'red',
-        },
-        cust: {
-            height: 60,
-            marginBottom: 15,
-            backgroundColor: 'white',
-            // flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        custContent: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: Dimensions.get('window').width * 0.8,
-            //backgroundColor: 'red',
-        },
-        custText: {
-            fontSize: 20,
-            textAlign: 'center',
-            alignItems: 'center',
-        },
-        custHintText: {
-            fontSize: 20,
-            textAlign: 'center',
-            alignItems: 'center',
-            color: 'gray',
-        },
-        listView: {
-            backgroundColor: 'white',
-            marginBottom: 30,
-        },
-        row: {
-            height: 80,
-        },
-        rowContent: {
-            flex: 1,
-            height: 79,
-            flexDirection: 'row',
-            alignItems: 'center',
-            // justifyContent:'space-between',
-        },
-        line: {
-            backgroundColor: "gray",
-            height: 0.5,
-            width: Dimensions.get('window').width - 20,
-            alignSelf: 'center',
-            opacity: 0.4,
-
-        },
-        checkIcon: {
-            marginLeft: 120,
-            fontSize: 20,
-            textAlign: 'center',
-            color: '#3e9ce9',
-        },
-        confirmBtnContent: {
-            flexDirection: 'row',
-            justifyContent: 'center',
-        },
-        confirmBtn: {
-            backgroundColor: "#3e9ce9",
-            height: 44,
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: Dimensions.get('window').width * 0.9,
-            borderRadius: 10,
-        },
-        confirmBtnText: {
-            color: 'white',
-            fontSize: 24,
-        }
-    });
-}
+styles = StyleSheet.create({
+    navigatorBar: {
+        backgroundColor: "#3e9ce9",
+        height: isIOS ? 64 : 44,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    backBtn: {
+        marginTop: isIOS ? 20 : 0,
+        height: 40,
+        width: 50,
+        justifyContent: 'center',
+    },
+    navigatorTitle: {
+        marginTop: isIOS ? 20 : 0,
+        height: 40,
+        justifyContent: 'center',
+        flex: 1,
+    },
+    navigatorTitleText: {
+        fontSize: 20,
+        color: 'white',
+        textAlign: 'center',
+    },
+    scrollView: {
+        height: deviceH - 64,
+        // backgroundColor:'yellow',
+    },
+    group: {
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    groupTile: {
+        margin: 5,
+    },
+    groupContent: {
+        backgroundColor: 'white',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    groupLine: {
+        // marginTop: 1,
+        height: 0.5,
+        backgroundColor: 'gray',
+        width: deviceW - 10,
+        alignSelf: 'center',
+        opacity: 0.4,
+    },
+    groupitem: {
+        flexDirection: 'row',
+        height: 60,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginLeft: 5,
+        width: deviceW,
+    },
+    itemText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        width: deviceW,
+        textAlign: 'center'
+    },
+    backBtnText: {
+        fontSize: 35,
+        textAlign: 'center',
+        color: 'white',
+    },
+    rightBtn: {
+        marginTop: 20,
+        height: 40,
+        width: 50,
+        justifyContent: 'center',
+    },
+    count: {
+        height: 80,
+        marginBottom: 15,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    countContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        width: deviceW * 0.8,
+    },
+    totalCountText: {
+        fontSize: 30,
+        textAlign: 'center',
+        alignItems: 'center',
+        height: 40,
+        lineHeight: 40,
+    },
+    cashImg: {
+        fontSize: 40,
+        textAlign: 'center',
+        color: '#3e9ce9',
+    },
+    countSub: {
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        width: deviceW * 0.5,
+        // backgroundColor: 'red',
+    },
+    cust: {
+        height: 60,
+        marginBottom: 15,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    custContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: deviceW * 0.8,
+        // backgroundColor: 'red',
+    },
+    custText: {
+        fontSize: 20,
+        textAlign: 'center',
+        alignItems: 'center',
+        height: 40,
+        lineHeight: 40,
+    },
+    custHintText: {
+        fontSize: 20,
+        textAlign: 'center',
+        alignItems: 'center',
+        height: 40,
+        lineHeight: 40,
+        color: 'gray',
+    },
+    listView: {
+        backgroundColor: 'white',
+        marginBottom: 30,
+    },
+    row: {
+        height: 80,
+    },
+    rowContent: {
+        flex: 1,
+        height: 79,
+        flexDirection: 'row',
+        alignItems: 'center',
+        // justifyContent:'space-between',
+    },
+    line: {
+        backgroundColor: "gray",
+        height: 0.5,
+        width: deviceW - 20,
+        alignSelf: 'center',
+        opacity: 0.4,
+    },
+    checkIcon: {
+        marginLeft: 120,
+        fontSize: 20,
+        textAlign: 'center',
+        color: '#3e9ce9',
+    },
+    confirmBtnContent: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    confirmBtn: {
+        backgroundColor: "#3e9ce9",
+        height: 44,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: deviceW * 0.9,
+        borderRadius: 10,
+    },
+    confirmBtnText: {
+        color: 'white',
+        fontSize: 24,
+    }
+});
 
 export default Payment;
