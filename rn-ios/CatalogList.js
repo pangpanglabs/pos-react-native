@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import BasketList from './BasketList';
+import ProductCell from './ProductCell'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
@@ -110,7 +111,7 @@ export default class CatalogList extends React.Component {
         await PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
-                // console.log(rs.result);
+                console.log(rs.result);
                 if (rs.success) {
                     this.setState({ catalogData: [...this.state.catalogData, ...rs.result.items] });
                     this.setState({
@@ -164,14 +165,7 @@ export default class CatalogList extends React.Component {
 
     _renderRow = (rowData, sectionID, rowID) => {
         return (
-            <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) }} style={styles.row}>
-                <View style={styles.rowContent}>
-                    <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
-
-                    <Text style={styles.rowContentPrice}>¥{rowData.listPrice}</Text>
-                </View>
-                <View style={styles.line}></View>
-            </TouchableOpacity>
+            <ProductCell rowData={rowData} onPress={(rowData) => { this._pressRow(rowID) }} ></ProductCell>
         )
     }
     _pressMenuButton = () => {
@@ -352,8 +346,8 @@ styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         // backgroundColor:"red",
-        fontWeight:'600',
-        color:'#3e9ce9',
+        fontWeight: '600',
+        color: '#3e9ce9',
         height: 40,
         lineHeight: 40,
     },
@@ -368,36 +362,4 @@ styles = StyleSheet.create({
         height: deviceH - (isIOS ? 64 : 44) - 60,
         backgroundColor: 'white',
     },
-    row: {
-        // backgroundColor:"red",
-        height: 80,
-    },
-    rowContent: {
-        flex: 1,
-        height: 79,
-        flexDirection: 'row',
-        alignItems: 'center',
-        // justifyContent:'space-between',
-    },
-    rowContentCode: {
-        flex: 5,
-        // backgroundColor:'red',
-        paddingLeft: 20,
-        fontSize: 16,
-    },
-    rowContentPrice: {
-        flex: 2,
-        // backgroundColor:'green',
-        paddingRight: 20,
-        fontSize: 16,
-        textAlign: 'right',
-    },
-    line: {
-        backgroundColor: "gray",
-        height: 0.5,
-        width: deviceW - 20,
-        alignSelf: 'center',
-        opacity: 0.4,
-
-    }
 });
