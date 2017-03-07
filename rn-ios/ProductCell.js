@@ -40,7 +40,7 @@ export default class ProductCell extends Component {
 
                         </View>
                         <View style={styles.rowRightSub}>
-                            <Text style={styles.rowContentCode}>{this.props.rowData.contentCode}</Text>
+                            <Text style={styles.rowContentCode}>9.5折</Text>
                             <Text style={styles.rowContentSalePrice}>¥{this.props.rowData.salePrice}</Text>
                         </View>
 
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         height: 60,
         backgroundColor: '#ccc',
         margin: 10,
-        marginLeft:20,
+        marginLeft: 20,
     },
     rowRightContent: {
         flex: 1,
