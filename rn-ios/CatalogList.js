@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import BasketList from './BasketList';
-import ProductCell from './ProductCell'
+import ProductCell from './ProductCell';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
@@ -94,11 +94,11 @@ export default class CatalogList extends React.Component {
             } else {
                 PangPangBridge.callAPI("/cart/create-cart", null).then((data) => {
                     var rs = JSON.parse(data);
-                    console.log(rs.result);
+                    // console.log(rs.result);
                     this.setState({ cardId: parseInt(rs.result.id) });
                     AsyncStorage.setItem("cartId", rs.result.id.toString()).then(() => {
                         this.refreshCartData();
-                        console.log("setItem cartId success:" + rs.result.id);
+                        // console.log("setItem cartId success:" + rs.result.id);
                     });
                 });
             }
@@ -111,7 +111,7 @@ export default class CatalogList extends React.Component {
         await PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
-                console.log(rs.result);
+                // console.log(rs.result);
                 if (rs.success) {
                     this.setState({ catalogData: [...this.state.catalogData, ...rs.result.items] });
                     this.setState({
@@ -157,7 +157,7 @@ export default class CatalogList extends React.Component {
         // console.log(this.state.cardId + " " + rowData.uid);
         PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, uid: rowData.uid, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
-            console.log(rs);
+            // console.log(rs);
             this.refreshCartData();
         });
 
@@ -165,7 +165,7 @@ export default class CatalogList extends React.Component {
 
     _renderRow = (rowData, sectionID, rowID) => {
         return (
-            <ProductCell rowData={rowData} onPress={(rowData) => { this._pressRow(rowID) }} ></ProductCell>
+            <ProductCell rowData={rowData} onPress={() => { this._pressRow(rowID) }} ></ProductCell>
         )
     }
     _pressMenuButton = () => {
@@ -193,7 +193,7 @@ export default class CatalogList extends React.Component {
         }
     }
     _endReached = () => {
-        console.log("_endReached");
+        // console.log("_endReached");
         // console.log(this.state.catalogData.length);
         if (this.state.catalogData.length === 0) {
             return;

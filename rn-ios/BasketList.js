@@ -13,6 +13,7 @@ import {
     NativeModules,
     Alert
 } from 'react-native';
+import BasketCell from './BasketCell';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -75,7 +76,7 @@ export default class BasketList extends React.Component {
             DeviceEventEmitter.emit('showLoading');
             await PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
                 var rs = JSON.parse(card);
-                // console.log(rs.result.items)
+                console.log(rs.result.items)
                 this.refreshDataSource(rs.result.items);
             });
             DeviceEventEmitter.emit('dismissLoading');
@@ -99,18 +100,7 @@ export default class BasketList extends React.Component {
     }
     _renderRow = (rowData, sectionID, rowID) => {
         return (
-            <TouchableHighlight onPress={(id, data) => { this._rowPress(rowID, rowData) }} style={styles.rowFront}
-                underlayColor={'#fff'}
-            >
-                <View>
-                    <View style={styles.rowContent}>
-                        <Text style={styles.rowContentCode}>{rowData.skuCode}</Text>
-                        <Text>x{rowData.quantity}</Text>
-                        <Text style={styles.rowContentPrice}>¥{rowData.listPrice}</Text>
-                    </View>
-                    <View style={styles.line}></View>
-                </View>
-            </TouchableHighlight>
+            <BasketCell rowData={rowData} onPress={() => this._rowPress(rowID, rowData)} />
         )
     }
     _deleteRowConfirm = (rowData, secId, rowId, rowMap) => {
@@ -156,7 +146,7 @@ export default class BasketList extends React.Component {
             this.setState({ showModalCss: {} });
 
         });
-        // this._closeModal();
+        this._closeModal();
     }
     _closeModal = () => {
         this.setState({ showModalCss: {} });
@@ -366,8 +356,8 @@ styles = StyleSheet.create({
         fontSize: 25,
         // backgroundColor: "transparent",
         // backgroundColor: "red",
-        fontWeight:'600',
-        color:'#3e9ce9',
+        fontWeight: '600',
+        color: '#3e9ce9',
         paddingLeft: 20,
     },
     totalCountText: {
@@ -376,8 +366,8 @@ styles = StyleSheet.create({
         textAlign: 'right',
         alignItems: 'center',
         paddingRight: 20,
-        fontWeight:'600',
-        color:'#3e9ce9',
+        fontWeight: '600',
+        color: '#3e9ce9',
         height: 40,
         lineHeight: 40,
     },
@@ -417,9 +407,10 @@ styles = StyleSheet.create({
 
     },
     rowFront: {
+        flex: 1,
         alignItems: 'center',
         backgroundColor: '#fff',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         height: 80,
     },
     rowBack: {
