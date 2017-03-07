@@ -91,7 +91,7 @@ export default class BasketList extends React.Component {
         }
     }
 
-    _rowPress = (rowID, rowData) => {
+    _rowPress = ( rowData) => {
         this._openModal();
         this.setState({ selectedProduct: rowData });
         let copy = this.deepCopy(rowData);
@@ -100,7 +100,8 @@ export default class BasketList extends React.Component {
     }
     _renderRow = (rowData, sectionID, rowID) => {
         return (
-            <BasketCell rowData={rowData} onPress={() => this._rowPress(rowID, rowData)} />
+            <BasketCell rowData={rowData} onPress={() => this._rowPress(rowData)} />
+                
         )
     }
     _deleteRowConfirm = (rowData, secId, rowId, rowMap) => {

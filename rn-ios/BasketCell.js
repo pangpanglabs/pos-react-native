@@ -31,6 +31,10 @@ export default class BasketCell extends Component {
         onPress: React.PropTypes.func.isRequired,
     }
     render() {
+        console.log(1);
+        // console.log(this.props.rowData.name);
+        // let nameArr = this.props.rowData.name.split(",");
+        // let nameSub = name.length > 1 ? nameArr[0] : this.props.rowData.name;
         return (
             <TouchableHighlight onPress={this.props.onPress} style={styles.rowFront} underlayColor={'#fff'}>
                 <View>
@@ -69,9 +73,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         // justifyContent: 'center',
-        height: 80,
-    },
-    row: {
         height: 80,
     },
     rowContent: {
