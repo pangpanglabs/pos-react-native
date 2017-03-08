@@ -14,8 +14,6 @@ import {
   Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import LinearGradient from 'react-native-linear-gradient';
-// <Icon name="rocket" size={30} color="#3e9ce9"></Icon>
 var PangPangBridge = NativeModules.PangPangBridge;
 
 export default class Login extends Component {
@@ -75,9 +73,6 @@ export default class Login extends Component {
     }
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['rgb(68,158,231)', 'rgb(103,208,241)']} style={styles.backContainer}>
-
-        </LinearGradient>
         <View style={styles.formContainer}>
           <TextInput
             style={styles.inputText}

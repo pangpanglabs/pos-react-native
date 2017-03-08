@@ -8,7 +8,8 @@ import {
     TextInput,
     TouchableOpacity,
     AsyncStorage,
-    NativeModules
+    NativeModules,
+    Keyboard
 } from 'react-native';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import BasketList from './BasketList';
@@ -17,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
 
-const moreText = "加载完毕";    //foot显示的文案  
+const moreText = "没有更多的数据";    //foot显示的文案  
 //页码  
 var pageNum = 0;
 //每页显示数据的条数  
@@ -34,7 +35,6 @@ export default class CatalogList extends React.Component {
         totalPrice: 0,
         totalCount: 0,
         cardId: 0,
-        loaded: false,//控制Request请求是否加载完毕
         foot: 0, // 控制foot， 0：隐藏foot  1：已加载完成   2 ：显示加载中
     }
     static propTypes = {
@@ -112,11 +112,37 @@ export default class CatalogList extends React.Component {
             (data) => {
                 var rs = JSON.parse(data);
                 // console.log(rs.result);
-                if (rs.success) {
-                    this.setState({ catalogData: [...this.state.catalogData, ...rs.result.items] });
+                // console.log(this.state.catalogData);
+                if (rs.success && rs.result.items !== null) {
                     this.setState({
+                        catalogData: [...this.state.catalogData, ...rs.result.items],
+                        dataSource: this.state.dataSource.cloneWithRows(rs.result.items),
+                    });
+
+                    if (pageSize * pageNum > rs.result.totalCount || rs.result.items.length < pageSize) {
+                        this.setState({ foot: 1 });
+                    } else {
+                        this.setState({ foot: 0 });
+                    }
+                } else {
+                    this.setState({ foot: 1, dataSource: this.state.dataSource.cloneWithRows([]) });
+                }
+            }
+        );
+        DeviceEventEmitter.emit('dismissLoading');
+    }
+    searchMoreProducts = async () => {
+        var key = this.state.searchKey;
+        DeviceEventEmitter.emit('showLoading');
+        await PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
+            (data) => {
+                var rs = JSON.parse(data);
+                if (rs.success && rs.result.items !== null) {
+                    this.setState({
+                        catalogData: [...this.state.catalogData, ...rs.result.items],
                         dataSource: this.state.dataSource.cloneWithRows(this.state.catalogData),
                     });
+
                     if (pageSize * pageNum > rs.result.totalCount) {
                         this.setState({ foot: 1 });
                     } else {
@@ -124,14 +150,12 @@ export default class CatalogList extends React.Component {
                     }
                 } else {
                     this.setState({ foot: 1 });
-                    console.log(rs.error.message);
                 }
-
             }
         );
         DeviceEventEmitter.emit('dismissLoading');
-
     }
+
     _pressTopButton = () => {
         const { navigator } = this.props;
         if (navigator) {
@@ -152,29 +176,24 @@ export default class CatalogList extends React.Component {
         // return dataBlob;
     }
 
-    _pressRow = (rowID) => {
-        var rowData = this.state.catalogData[rowID];
-        // console.log(this.state.cardId + " " + rowData.uid);
+    _pressRow = (rowData) => {
         PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, uid: rowData.uid, quantity: 1 }).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
             this.refreshCartData();
         });
-
     }
 
     _renderRow = (rowData, sectionID, rowID) => {
         return (
-            <ProductCell rowData={rowData} onPress={() => { this._pressRow(rowID) }} ></ProductCell>
+            <ProductCell rowData={rowData} onPress={() => { this._pressRow(rowData) }} ></ProductCell>
         )
     }
     _pressMenuButton = () => {
         this.props.toggle();
     }
-    _pressSearchButton = () => {
+    _pressSearchButton = async () => {
         pageNum = 0;
-        this.setState({ catalogData: [] });
-
         this.searchProducts();
     }
     _renderFooter = () => {
@@ -209,7 +228,7 @@ export default class CatalogList extends React.Component {
             () => {
                 pageNum++;
                 // this._fetchListData();
-                this.searchProducts();
+                this.searchMoreProducts();
 
             }, 500);
     }
@@ -227,6 +246,8 @@ export default class CatalogList extends React.Component {
                         placeholder="搜索"
                         clearButtonMode="always"
                         underlineColorAndroid={'transparent'}
+                        returnKeyType='search'
+                        onSubmitEditing={Keyboard.dismiss}
                     />
                     <TouchableOpacity style={styles.rightBtn} onPress={this._pressSearchButton}>
                         <Icon name="search" style={styles.searchBtnImg} ></Icon>
