@@ -80,7 +80,7 @@ class SpotSet extends Component {
         );
     }
     async _pressMenuButton() {
-        if(! await validateLocaStorage()) return;
+        if (! await validateLocaStorage()) return;
         this.props.toggle();
     }
     _pressSyncButton() {
@@ -94,7 +94,7 @@ class SpotSet extends Component {
             //         component: CatalogList,
             //     })
             // }
-            AsyncStorage.setItem("dbDownload","true");
+            AsyncStorage.setItem("dbDownload", "true");
         });
     }
     render() {
@@ -124,96 +124,96 @@ class SpotSet extends Component {
 }
 
 let styles;
-    styles = StyleSheet.create({
-        navigatorBar: {
-            backgroundColor: "#3e9ce9",
-            height: isIOS ? 64 : 44,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        backBtn: {
-            marginTop: isIOS ? 20 : 0,
-            height: 40,
-            width: 50,
-            justifyContent: 'center',
-        },
-        navigatorTitle: {
-            // backgroundColor:'red',
-            marginTop: isIOS ? 20 : 0,
-            height: 40,
-            width: 150,
-            justifyContent: 'center',
-            flex: 1,
-        },
-        navigatorTitleText: {
-            fontSize: 20,
-            color: 'white',
-            textAlign: 'center',
-        },
-        scrollView: {
-            height: deviceH - 64,
-            // backgroundColor:'yellow',
-        },
-        group: {
-            marginTop: 10,
-            alignItems: 'center',
-        },
-        groupTile: {
-            margin: 5,
-        },
-        groupContent: {
-            backgroundColor: 'white',
-            paddingLeft: 10,
-            paddingRight: 10,
-        },
-        groupLine: {
-            // marginTop: 1,
-            height: 0.5,
-            backgroundColor: 'gray',
-            width: deviceW - 10,
-            alignSelf: 'center',
-            opacity: 0.4,
-        },
-        groupitem: {
-            flex: 1,
-            flexDirection: 'row',
-            height: 60,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginLeft: 5,
-            width: deviceW,
-        },
-        itemText: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            width: deviceW,
-            textAlign: 'center'
-        },
-        checkIcon: {
-            marginLeft: 120,
-            fontSize: 20,
-            textAlign: 'center',
-            color: '#3e9ce9',
-        },
-        backBtnImg: {
-            fontSize: 25,
-            textAlign: 'center',
-            color: 'white',
-        },
-        rightBtn: {
-            //  backgroundColor:'green',
-            marginTop: 20,
-            height: 40,
-            width: 50,
-            justifyContent: 'center',
-        },
-        rightBtnImg: {
-            fontSize: 25,
-            textAlign: 'center',
-            color: 'white',
-        },
-    });
+styles = StyleSheet.create({
+    navigatorBar: {
+        backgroundColor: "#3e9ce9",
+        height: isIOS ? 64 : 44,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    backBtn: {
+        marginTop: isIOS ? 20 : 0,
+        height: 40,
+        width: 50,
+        justifyContent: 'center',
+    },
+    navigatorTitle: {
+        // backgroundColor:'red',
+        marginTop: isIOS ? 20 : 0,
+        height: 40,
+        width: 150,
+        justifyContent: 'center',
+        flex: 1,
+    },
+    navigatorTitleText: {
+        fontSize: 20,
+        color: 'white',
+        textAlign: 'center',
+    },
+    scrollView: {
+        height: deviceH - 64,
+        // backgroundColor:'yellow',
+    },
+    group: {
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    groupTile: {
+        margin: 5,
+    },
+    groupContent: {
+        backgroundColor: 'white',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    groupLine: {
+        // marginTop: 1,
+        height: 0.5,
+        backgroundColor: 'gray',
+        width: deviceW - 10,
+        alignSelf: 'center',
+        opacity: 0.4,
+    },
+    groupitem: {
+        flex: 1,
+        flexDirection: 'row',
+        height: 60,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginLeft: 5,
+        width: deviceW,
+    },
+    itemText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: deviceW,
+        textAlign: 'center'
+    },
+    checkIcon: {
+        marginLeft: 120,
+        fontSize: 20,
+        textAlign: 'center',
+        color: '#3e9ce9',
+    },
+    backBtnImg: {
+        fontSize: 25,
+        textAlign: 'center',
+        color: 'white',
+    },
+    rightBtn: {
+        //  backgroundColor:'green',
+        marginTop: 20,
+        height: 40,
+        width: 50,
+        justifyContent: 'center',
+    },
+    rightBtnImg: {
+        fontSize: 25,
+        textAlign: 'center',
+        color: 'white',
+    },
+});
 
 export default SpotSet;
 

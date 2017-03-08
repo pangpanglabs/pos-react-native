@@ -17,16 +17,16 @@ export const validateLocaStorage = async () => {
     let dbDownload = false;
     let isSelectSpot = false;
     await AsyncStorage.getItem("dbDownload").then((data) => {
-        dbDownload = data?true:false;
+        dbDownload = data ? true : false;
     });
     await AsyncStorage.getItem("spot").then((data) => {
-        isSelectSpot = data?true:false;
+        isSelectSpot = data ? true : false;
     });
-    if(!isSelectSpot) {
+    if (!isSelectSpot) {
         alert("请选择卖场");
         return false;
     };
-    if(!dbDownload) {
+    if (!dbDownload) {
         alert("请同步本地数据");
         return false;
     };
