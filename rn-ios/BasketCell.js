@@ -51,7 +51,7 @@ export default class BasketCell extends Component {
                             </View>
                             <View style={styles.rowRightSub}>
                                 <Text style={styles.rowContentSize}>{styleName.trim()}</Text>
-                                <Text style={styles.rowContentQty}>x{1}</Text>
+                                <Text style={styles.rowContentQty}>x{this.props.rowData.quantity}</Text>
                             </View>
                             <View style={styles.rowRightSub}>
                                 <Text style={styles.rowContentCode}>9.5折</Text>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         height: 60,
         backgroundColor: '#ccc',
         margin: 10,
-        marginLeft: 20,
+        marginLeft: 10,
     },
     rowRightContent: {
         flex: 1,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     rowContentListPrice: {
         flex: 4,
         // backgroundColor:'green',
-        paddingRight: 20,
+        paddingRight: 10,
         fontSize: 16,
         textAlign: 'right',
         fontWeight: '600',
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     rowContentSalePrice: {
         flex: 4,
         // backgroundColor:'green',
-        paddingRight: 20,
+        paddingRight: 10,
         fontSize: 16,
         textAlign: 'right',
         color: "red",

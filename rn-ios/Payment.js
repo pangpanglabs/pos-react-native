@@ -87,10 +87,10 @@ class Payment extends Component {
     _renderRow = (rowData, sectionID, rowID) => {
         return (
             <TouchableOpacity onPress={() => { this._pressPayType(rowData.id) }}>
-                <View style={styles.groupitem}>
-                    <Text style={styles.itemText}>
-                        {rowData.payType}   {this.state.currentPayId === rowData.id ? <Icon name="check-circle-o" style={styles.checkIcon} /> : null}
-                    </Text>
+                <View style={styles.listItem}>
+                    <View />
+                    <Text style={styles.itemText}>{rowData.payType}</Text>
+                    <Icon name="check-circle-o" style= {[styles.checkIcon, this.state.currentPayId === rowData.id&&{opacity:1}]}  />
                 </View>
                 <View style={styles.line}></View>
             </TouchableOpacity>);
@@ -249,9 +249,9 @@ class Payment extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.count}>
+                <View style={styles.priceContent}>
                     <Icon name="money" style={styles.cashImg} ></Icon>
-                    <Text style={styles.totalCountText}>¥{this.state.salePrice} </Text>
+                    <Text style={styles.salePriceText}>¥{this.state.salePrice} </Text>
                     <Text style={styles.discountText}>(已优惠 {this.state.discount} 元)</Text>
                 </View>
                 <View >
@@ -298,44 +298,7 @@ styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
-    scrollView: {
-        height: deviceH - 64,
-        // backgroundColor:'yellow',
-    },
-    group: {
-        marginTop: 10,
-        alignItems: 'center',
-    },
-    groupTile: {
-        margin: 5,
-    },
-    groupContent: {
-        backgroundColor: 'white',
-        paddingLeft: 10,
-        paddingRight: 10,
-    },
-    groupLine: {
-        // marginTop: 1,
-        height: 0.5,
-        backgroundColor: 'gray',
-        width: deviceW - 10,
-        alignSelf: 'center',
-        opacity: 0.4,
-    },
-    groupitem: {
-        flexDirection: 'row',
-        height: 60,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginLeft: 5,
-        width: deviceW,
-    },
-    itemText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        width: deviceW,
-        textAlign: 'center'
-    },
+
     backBtnText: {
         fontSize: 35,
         textAlign: 'center',
@@ -346,37 +309,6 @@ styles = StyleSheet.create({
         height: 40,
         width: 50,
         justifyContent: 'center',
-    },
-    count: {
-        flexDirection: 'row',
-        height: 80,
-        marginBottom: 15,
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    cashImg: {
-        fontSize: 40,
-        textAlign: 'center',
-        color: '#3e9ce9',
-    },
-    totalCountText: {
-        fontSize: 30,
-        textAlign: 'center',
-        paddingLeft: 10,
-        paddingRight: 5,
-        fontWeight: '500',
-    },
-    discountText: {
-        fontSize: 18,
-        fontWeight: '500',
-        color:'orange',
-    },
-    countSub: {
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        width: deviceW * 0.5,
-        // backgroundColor: 'red',
     },
     cust: {
         height: 60,
@@ -408,19 +340,56 @@ styles = StyleSheet.create({
         lineHeight: 40,
         color: 'gray',
     },
+    priceContent: {
+        flexDirection: 'row',
+        height: 80,
+        marginBottom: 15,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cashImg: {
+        fontSize: 40,
+        textAlign: 'center',
+        color: '#3e9ce9',
+    },
+    salePriceText: {
+        fontSize: 30,
+        textAlign: 'center',
+        paddingLeft: 10,
+        paddingRight: 5,
+        fontWeight: '500',
+    },
+    discountText: {
+        fontSize: 18,
+        fontWeight: '500',
+        color:'orange',
+    },
     listView: {
         backgroundColor: 'white',
         marginBottom: 30,
     },
-    row: {
-        height: 80,
-    },
-    rowContent: {
-        flex: 1,
-        height: 79,
+    listItem: {
         flexDirection: 'row',
+        height: 60,
+        justifyContent: 'space-around',
         alignItems: 'center',
-        // justifyContent:'space-between',
+        marginLeft: 5,
+        width: deviceW,
+    },
+    itemText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        width:200,
+        textAlign: 'center',
+        // backgroundColor: 'red',
+    },
+    checkIcon: {
+        opacity:0,
+        fontSize: 20,
+        textAlign: 'center',
+        color: '#3e9ce9',
+        // backgroundColor:'red',
     },
     line: {
         backgroundColor: "gray",
@@ -428,12 +397,6 @@ styles = StyleSheet.create({
         width: deviceW - 20,
         alignSelf: 'center',
         opacity: 0.4,
-    },
-    checkIcon: {
-        marginLeft: 120,
-        fontSize: 20,
-        textAlign: 'center',
-        color: '#3e9ce9',
     },
     confirmBtnContent: {
         flexDirection: 'row',
