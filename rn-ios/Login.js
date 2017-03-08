@@ -14,6 +14,7 @@ import {
   Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import LinearGradient from 'react-native-linear-gradient';
 // <Icon name="rocket" size={30} color="#3e9ce9"></Icon>
 var PangPangBridge = NativeModules.PangPangBridge;
 
@@ -74,26 +75,35 @@ export default class Login extends Component {
     }
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.inputText}
-          onChangeText={(text) => this.setState({ userName: text })}
-          value={this.state.userName}
-          underlineColorAndroid={'transparent'}
-          />
-        <View style={styles.inputTextLine} />
-        <TextInput
-          style={styles.inputText}
-          onChangeText={(text) => this.setState({ password: text })}
-          value={this.state.password}
-          secureTextEntry={true}
-          underlineColorAndroid={'transparent'}
-          />
-        <View style={styles.inputTextLine} />
+        <LinearGradient colors={['rgb(68,158,231)', 'rgb(103,208,241)']} style={styles.backContainer}>
 
-        <TouchableHighlight style={styles.loginButton} underlayColor={'#7fc0ff'} onPress={() => this.login()}>
-          {loginButtonContent}
-        </TouchableHighlight>
+        </LinearGradient>
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.inputText}
+            onChangeText={(text) => this.setState({ userName: text })}
+            value={this.state.userName}
+            defaultValue='Username/id'
+            underlineColorAndroid={'transparent'}
+          />
+          <View style={styles.inputTextLine} />
+          <TextInput
+            style={styles.inputText}
+            onChangeText={(text) => this.setState({ password: text })}
+            value={this.state.password}
+            defaultValue='Password'
+            secureTextEntry={true}
+            underlineColorAndroid={'transparent'}
+          />
+          <View style={styles.inputTextLine} />
 
+          <TouchableHighlight style={styles.loginButton} underlayColor={'#7fc0ff'} onPress={() => this.login()}>
+            {loginButtonContent}
+          </TouchableHighlight>
+        </View>
+        <View style={styles.withoutBackContainer}>
+          <Text style={styles.versionText}>Pang Pang Pos V1.0</Text>
+        </View>
       </View>
     );
   }
@@ -146,12 +156,32 @@ else if (Platform.OS === 'android') {
     container: {
       flex: 1,
       flexDirection: 'column',
-      // justifyContent: 'center',
+      backgroundColor: '#fff',
+    },
+    backContainer: {
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height * 0.7,
+    },
+    withoutBackContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      paddingBottom: 20,
+    },
+    versionText: {
+      color: 'rgb(178,178,178)',
+    },
+    formContainer: {
       alignItems: 'center',
       backgroundColor: '#fff',
-      paddingTop: 150,
+      margin: 50,
+      padding: 20,
+      top: Dimensions.get('window').height * 0.38,
+      borderColor: 'rgb(201,216,218)',
+      borderRadius: 5,
+      borderWidth: 2,
+      position: 'absolute',
     },
-
     inputText: {
       height: 40,
       color: 'gray',
@@ -160,7 +190,7 @@ else if (Platform.OS === 'android') {
       textAlign: 'center',
     },
     inputTextLine: {
-      width: Dimensions.get('window').width - 10,
+      width: Dimensions.get('window').width - 130,
       borderWidth: 0.5,
       borderColor: 'gray',
       marginBottom: 10,
@@ -168,7 +198,7 @@ else if (Platform.OS === 'android') {
     },
     loginButton: {
       marginTop: 20,
-      width: Dimensions.get('window').width - 10,
+      width: Dimensions.get('window').width - 130,
       height: 45,
       alignItems: 'center',
       justifyContent: 'center',

@@ -95,7 +95,7 @@ class Payment extends Component {
                 <View style={styles.line}></View>
             </TouchableOpacity>);
     }
-
+      
     _pressConfirmButton = async () => {
         let setinfoResult = null;
         let param = {
