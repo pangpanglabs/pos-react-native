@@ -4,6 +4,7 @@ import Login from './Login';
 import Setting from './Setting';
 import CatalogList from './CatalogList';
 import SpotSet from './SpotSet.js';
+import User from './User.js';
 import {
     View,
     Text,
@@ -19,7 +20,7 @@ export default class Navi extends React.Component {
         isShow: false,
     }
     configureScene = () => {
-        return Navigator.SceneConfigs.HorizontalSwipeJump;
+        return Navigator.SceneConfigs.PushFromRight;
     }
 
     renderScene = (route, navigator) => {
@@ -43,7 +44,10 @@ export default class Navi extends React.Component {
                         });
                         break;
                     case "user":
-                        alert(param);
+                        global.myNavigator.replace({
+                            name: 'User',
+                            component: User,
+                        });
                         break;
                     case "catalogList":
                         global.myNavigator.replace({
