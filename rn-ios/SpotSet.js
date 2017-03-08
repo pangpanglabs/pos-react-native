@@ -72,10 +72,12 @@ class SpotSet extends Component {
         return (
             <TouchableOpacity onPress={() => { this._pressSpot(rowData.id) }}>
                 <View style={styles.groupitem}>
-                    <Text style={styles.itemText}>
-                        {rowData.name}   {this.state.currentSpotId === rowData.id ? <Icon name="check-circle-o" style={styles.checkIcon} /> : null}
+                    <Text style={[styles.itemText, this.state.currentSpotId === rowData.id && { color: '#3e9ce9' }]}>
+                        {rowData.name}
                     </Text>
+                    <Icon name="check-circle-o" style={[styles.checkIcon, this.state.currentSpotId === rowData.id && { opacity: 1 }]} />
                 </View>
+                <View style={styles.line}></View>
             </TouchableOpacity>
         );
     }
@@ -176,25 +178,33 @@ styles = StyleSheet.create({
         opacity: 0.4,
     },
     groupitem: {
-        flex: 1,
         flexDirection: 'row',
         height: 60,
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'center',
         marginLeft: 5,
         width: deviceW,
     },
     itemText: {
-        fontSize: 20,
+        fontSize: 19,
         fontWeight: 'bold',
         width: deviceW,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'gray'
     },
     checkIcon: {
-        marginLeft: 120,
-        fontSize: 20,
+        opacity: 0,
+        fontSize: 25,
+        left: -25,
         textAlign: 'center',
         color: '#3e9ce9',
+    },
+    line: {
+        backgroundColor: "gray",
+        height: 0.5,
+        width: deviceW - 20,
+        alignSelf: 'center',
+        opacity: 0.4,
     },
     backBtnImg: {
         fontSize: 25,
@@ -203,7 +213,7 @@ styles = StyleSheet.create({
     },
     rightBtn: {
         //  backgroundColor:'green',
-        marginTop: 20,
+        marginTop: isIOS ? 20 : 0,
         height: 40,
         width: 50,
         justifyContent: 'center',

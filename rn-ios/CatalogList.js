@@ -286,7 +286,8 @@ styles = StyleSheet.create({
         color: 'white',
     },
     inputSearchText: {
-        marginTop: isIOS ? 29 : 9,
+        padding: 0,
+        marginTop: isIOS ? 29 : 0,
         width: deviceW - 100,
         backgroundColor: 'white',
         height: 25,
@@ -331,7 +332,7 @@ styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute',
         left: 28,
-        top: 19,
+        top: 18,
     },
     totalCountContent: {
         flex: 1,
