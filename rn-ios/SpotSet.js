@@ -12,7 +12,7 @@ import {
     NativeModules,
     ListView
 } from 'react-native';
-import { px2dp, isIOS, deviceW, deviceH } from '../util';
+import { px2dp, isIOS, deviceW, deviceH, validateLocaStorage } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
@@ -79,7 +79,8 @@ class SpotSet extends Component {
             </TouchableOpacity>
         );
     }
-    _pressMenuButton() {
+    async _pressMenuButton() {
+        if(! await validateLocaStorage()) return;
         this.props.toggle();
     }
     _pressSyncButton() {
@@ -93,6 +94,7 @@ class SpotSet extends Component {
             //         component: CatalogList,
             //     })
             // }
+            AsyncStorage.setItem("dbDownload","true");
         });
     }
     render() {
