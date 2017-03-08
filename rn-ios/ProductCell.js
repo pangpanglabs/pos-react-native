@@ -25,13 +25,15 @@ export default class ProductCell extends Component {
         onPress: React.PropTypes.func.isRequired,
     }
     render() {
+        let nameArr = this.props.rowData.name.split(",");
+        let nameSub = nameArr.length > 1 ? nameArr[0] : this.props.rowData.name;
         return (
             <TouchableOpacity onPress={this.props.onPress} style={styles.row}>
                 <View style={styles.rowContent}>
                     <View style={styles.rowIcon}></View>
                     <View style={styles.rowRightContent}>
                         <View style={styles.rowRightSub}>
-                            <Text style={styles.rowContentCode}>{this.props.rowData.name}</Text>
+                            <Text style={styles.rowContentCode}>{nameSub}</Text>
 
                         </View>
                         <View style={styles.rowRightSub}>

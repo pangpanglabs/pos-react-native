@@ -31,24 +31,27 @@ export default class BasketCell extends Component {
         onPress: React.PropTypes.func.isRequired,
     }
     render() {
-        console.log(1);
         // console.log(this.props.rowData.name);
-        // let nameArr = this.props.rowData.name.split(",");
-        // let nameSub = name.length > 1 ? nameArr[0] : this.props.rowData.name;
+        let nameArr = this.props.rowData.name.split(",");
+        let nameSub = nameArr.length > 1 ? nameArr[0] : this.props.rowData.name;
+        let styleName = nameArr[1] + (nameArr[2]);
+        // console.log(styleName);
         return (
             <TouchableHighlight onPress={this.props.onPress} style={styles.rowFront} underlayColor={'#fff'}>
-                <View>
+                <View >
                     <View style={styles.rowContent}>
                         <View style={styles.rowIcon}></View>
                         <View style={styles.rowRightContent}>
                             <View style={styles.rowRightSub}>
-                                <Text style={styles.rowContentCode}>{this.props.rowData.name}</Text>
-
+                                <Text style={styles.rowContentCode}>{nameSub}</Text>
                             </View>
                             <View style={styles.rowRightSub}>
                                 <Text style={styles.rowContentCode}>{this.props.rowData.skuCode}</Text>
                                 <Text style={styles.rowContentListPrice}>¥{this.props.rowData.listPrice}</Text>
-
+                            </View>
+                            <View style={styles.rowRightSub}>
+                                <Text style={styles.rowContentSize}>{styleName.trim()}</Text>
+                                <Text style={styles.rowContentQty}>x{1}</Text>
                             </View>
                             <View style={styles.rowRightSub}>
                                 <Text style={styles.rowContentCode}>9.5折</Text>
@@ -69,11 +72,10 @@ export default class BasketCell extends Component {
 
 const styles = StyleSheet.create({
     rowFront: {
-        flex: 1,
         alignItems: 'center',
         backgroundColor: '#fff',
         // justifyContent: 'center',
-        height: 80,
+        height: 81,
     },
     rowContent: {
         height: 80,
@@ -96,7 +98,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-
     },
     rowContentCode: {
         overflow: 'hidden',
@@ -104,7 +105,21 @@ const styles = StyleSheet.create({
         flex: 8,
         // backgroundColor:'blue',
         // paddingLeft: 10,
-        fontSize: 16,
+        fontSize: 14,
+    },
+    rowContentSize:{
+        overflow: 'hidden',
+        height: 20,
+        flex: 8,
+        fontSize: 14,
+        fontWeight:"600",      
+    },
+    rowContentQty: {
+        overflow: 'hidden',
+        height: 20,
+        flex: 5,
+        fontWeight:"600",
+        fontSize: 14,
     },
     rowContentListPrice: {
         flex: 4,

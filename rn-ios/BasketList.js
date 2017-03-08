@@ -24,7 +24,6 @@ let PangPangBridge = NativeModules.PangPangBridge;
 let ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 export default class BasketList extends React.Component {
     state = {
-        cardItems: [],
         dataSource: ds,
         totalCount: 0,
         totalPrice: 0,
@@ -38,50 +37,44 @@ export default class BasketList extends React.Component {
         cardId: React.PropTypes.any.isRequired,
     }
     componentDidMount() {
-
         this.seachCartItems();
-        // this._openModal();
     }
-    refreshDataSource = (items) => {
-        this.setState({ cardItems: items ? items : [] });
-        this.computeTatol();
+    seachCartItems = () => {
+        if (this.props.cardId) {
+            DeviceEventEmitter.emit('showLoading');
+            PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
+                var rs = JSON.parse(card);
+                // console.log(rs.result)
+                this.refreshDataSource(rs.result);
+                DeviceEventEmitter.emit('dismissLoading');
+            });
+
+        }
+    }
+    refreshDataSource = (result) => {
+        this.computeTatol(result);
         this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(this.state.cardItems),
+            dataSource: this.state.dataSource.cloneWithRows(result.items),
         });
 
     }
-    computeTatol = () => {
+    computeTatol = (result) => {
         // console.log(this.state.cardItems.length);
-        if (!this.state.cardItems || this.state.cardItems.length === 0) {
-            this.setState({ totalPrice: 0 });
-            this.setState({ totalCount: 0 });
+        if (!result.items || result.items.length === 0) {
+            this.setState({ totalPrice: 0, totalCount: 0 });
             return;
         }
-        PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
-            var rs = JSON.parse(card);
-            if (!rs.result.items) return;
-            var totalCount = 0;
-            for (var index = 0; index < rs.result.items.length; index++) {
-                totalCount = totalCount + parseInt(rs.result.items[index].quantity);
-            }
-            // console.log(rs.result.total);
-            this.setState({ totalPrice: rs.result.listPrice });
-            this.setState({ totalCount: totalCount });
 
-        });
-    }
-    seachCartItems = async () => {
-        if (this.props.cardId) {
-
-            DeviceEventEmitter.emit('showLoading');
-            await PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
-                var rs = JSON.parse(card);
-                console.log(rs.result.items)
-                this.refreshDataSource(rs.result.items);
-            });
-            DeviceEventEmitter.emit('dismissLoading');
-
+        var totalCount = 0;
+        for (var index = 0; index < result.items.length; index++) {
+            totalCount = totalCount + parseInt(result.items[index].quantity);
         }
+        // console.log(rs.result.total);
+        this.setState({
+            totalPrice: result.listPrice,
+            totalCount: totalCount
+        });
+
     }
     _pressBackButton = () => {
         const { navigator } = this.props;
@@ -91,17 +84,18 @@ export default class BasketList extends React.Component {
         }
     }
 
-    _rowPress = ( rowData) => {
+    _rowPress = (rowData) => {
         this._openModal();
-        this.setState({ selectedProduct: rowData });
         let copy = this.deepCopy(rowData);
-        this.setState({ selectedOriginalProduct: copy });
+        this.setState({ 
+            selectedProduct: rowData, 
+            selectedOriginalProduct: copy 
+        });
         // // console.log(rowData);
     }
     _renderRow = (rowData, sectionID, rowID) => {
         return (
             <BasketCell rowData={rowData} onPress={() => this._rowPress(rowData)} />
-                
         )
     }
     _deleteRowConfirm = (rowData, secId, rowId, rowMap) => {
@@ -119,7 +113,8 @@ export default class BasketList extends React.Component {
                         rowMap[`${secId}${rowId}`].closeRow();
                         PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, uid: rowData.uid, quantity: rowData.quantity }).then((card) => {
                             var rs = JSON.parse(card);
-                            this.refreshDataSource(rs.result.items);
+                            // console.log(rs);
+                            this.refreshDataSource(rs.result);
                         });
                     }
                 },
@@ -143,7 +138,7 @@ export default class BasketList extends React.Component {
     _modalConfirmBtn = () => {
         PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, uid: this.state.selectedProduct.uid, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
             var rs = JSON.parse(card);
-            this.refreshDataSource(rs.result.items);
+            this.refreshDataSource(rs.result);
             this.setState({ showModalCss: {} });
 
         });
