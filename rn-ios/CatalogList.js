@@ -119,7 +119,7 @@ export default class CatalogList extends React.Component {
                         dataSource: this.state.dataSource.cloneWithRows(rs.result.items),
                     });
 
-                    if (pageSize * pageNum > rs.result.totalCount) {
+                    if (pageSize * pageNum > rs.result.totalCount || rs.result.items.length < pageSize) {
                         this.setState({ foot: 1 });
                     } else {
                         this.setState({ foot: 0 });
