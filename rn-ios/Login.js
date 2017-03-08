@@ -14,6 +14,7 @@ import {
   Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { px2dp, isIOS, deviceW, deviceH } from '../util';
 var PangPangBridge = NativeModules.PangPangBridge;
 
 export default class Login extends Component {
@@ -73,6 +74,10 @@ export default class Login extends Component {
     }
     return (
       <View style={styles.container}>
+        <View style={styles.backContainer}>
+
+        </View>
+
         <View style={styles.formContainer}>
           <TextInput
             style={styles.inputText}
@@ -105,105 +110,63 @@ export default class Login extends Component {
 }
 let styles;
 
-if (Platform.OS === 'ios') {
-  styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'column',
-      // justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#fff',
-      paddingTop: 150,
-    },
+styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+  },
+  backContainer: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height * 0.7,
+    backgroundColor: '#3e9ce9'
+  },
+  withoutBackContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 20,
+  },
+  versionText: {
+    color: 'rgb(178,178,178)',
+  },
+  formContainer: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    margin: 50,
+    padding: 20,
+    top: Dimensions.get('window').height * 0.38,
+    borderColor: 'rgb(201,216,218)',
+    borderRadius: 5,
+    borderWidth: 2,
+    position: 'absolute',
+  },
+  inputText: {
+    height: 40,
+    color: 'gray',
+    fontSize: 20,
+    width: 200,
+    textAlign: 'center',
+  },
+  inputTextLine: {
+    width: Dimensions.get('window').width - 130,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    marginBottom: 10,
 
-    inputText: {
-      height: 40,
-      paddingLeft: 10,
-      color: 'gray',
-      fontSize: 20,
-
-    },
-    inputTextLine: {
-      width: Dimensions.get('window').width - 10,
-      borderWidth: 0.5,
-      borderColor: 'gray',
-      marginBottom: 10,
-
-    },
-    loginButton: {
-      marginTop: 20,
-      width: Dimensions.get('window').width - 10,
-      height: 45,
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'center',
-      backgroundColor: "#3e9ce9",
-      borderRadius: 5,
-    },
-    btnText: {
-      fontSize: 18,
-      color: 'white',
-    }
-  });
-}
-else if (Platform.OS === 'android') {
-  styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'column',
-      backgroundColor: '#fff',
-    },
-    backContainer: {
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height * 0.7,
-    },
-    withoutBackContainer: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      paddingBottom: 20,
-    },
-    versionText: {
-      color: 'rgb(178,178,178)',
-    },
-    formContainer: {
-      alignItems: 'center',
-      backgroundColor: '#fff',
-      margin: 50,
-      padding: 20,
-      top: Dimensions.get('window').height * 0.38,
-      borderColor: 'rgb(201,216,218)',
-      borderRadius: 5,
-      borderWidth: 2,
-      position: 'absolute',
-    },
-    inputText: {
-      height: 40,
-      color: 'gray',
-      fontSize: 20,
-      width: 200,
-      textAlign: 'center',
-    },
-    inputTextLine: {
-      width: Dimensions.get('window').width - 130,
-      borderWidth: 0.5,
-      borderColor: 'gray',
-      marginBottom: 10,
-
-    },
-    loginButton: {
-      marginTop: 20,
-      width: Dimensions.get('window').width - 130,
-      height: 45,
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'center',
-      backgroundColor: "#3e9ce9",
-      borderRadius: 5,
-    },
-    btnText: {
-      fontSize: 18,
-      color: 'white',
-    }
-  });
-}
+  },
+  loginButton: {
+    marginTop: 20,
+    width: Dimensions.get('window').width - 130,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: "#3e9ce9",
+    borderRadius: 5,
+  },
+  btnText: {
+    fontSize: 18,
+    color: 'white',
+  }
+});
