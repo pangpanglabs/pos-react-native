@@ -117,8 +117,8 @@ styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   backContainer: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height * 0.7,
+    width: deviceW,
+    height: deviceH * 0.7,
     backgroundColor: '#3e9ce9'
   },
   withoutBackContainer: {
@@ -135,7 +135,7 @@ styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 50,
     padding: 20,
-    top: Dimensions.get('window').height * 0.38,
+    top: deviceH * (isIOS ? 0.42 : 0.38),
     borderColor: 'rgb(201,216,218)',
     borderRadius: 5,
     borderWidth: 2,
@@ -145,11 +145,11 @@ styles = StyleSheet.create({
     height: 40,
     color: 'gray',
     fontSize: 20,
-    width: 200,
+    width: deviceW - 145,
     textAlign: 'center',
   },
   inputTextLine: {
-    width: Dimensions.get('window').width - 130,
+    width: deviceW - 130,
     borderWidth: 0.5,
     borderColor: 'gray',
     marginBottom: 10,
@@ -157,7 +157,7 @@ styles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 20,
-    width: Dimensions.get('window').width - 130,
+    width: deviceW - 130,
     height: 45,
     alignItems: 'center',
     justifyContent: 'center',
