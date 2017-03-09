@@ -69,7 +69,9 @@ export default class LeftMenu extends Component {
             <View>
                 <View style={styles.userContainer}>
                     <View style={styles.userImg}>
-                        <Text style={{ fontSize: 60, color: 'grey' }}>❌</Text>
+                        <Text style={{
+                            fontSize: 60
+                        }}>❌</Text>
                     </View>
                     <Text style={styles.userName}>XXXXXXXX</Text>
                 </View>
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     menuBottom: {
-        height: 55,
+        height: 200,
         backgroundColor: '#22242f',
     }
 

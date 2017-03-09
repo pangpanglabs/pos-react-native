@@ -329,15 +329,11 @@ styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         alignItems: 'center',
-        height: 40,
-        lineHeight: 40,
     },
     custHintText: {
         fontSize: 20,
         textAlign: 'center',
         alignItems: 'center',
-        height: 40,
-        lineHeight: 40,
         color: 'gray',
     },
     priceContent: {
