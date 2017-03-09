@@ -19,7 +19,6 @@
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
@@ -42,12 +41,13 @@
 		C1027A3E1E65050A0012CF70 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3D1E65050A0012CF70 /* AVFoundation.framework */; };
 		C1027A401E6505100012CF70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */; };
 		C10D0FDE1E692DBC003ADCFD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C10D0FDC1E692DBC003ADCFD /* LaunchScreen.xib */; };
-		C10D0FF61E693BD2003ADCFD /* Pos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D0FF51E693BD2003ADCFD /* Pos.framework */; };
 		C10F7AA01E04066F00711137 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C10F7A971E04066F00711137 /* FontAwesome.ttf */; };
 		C16B7BF91E077C5200D3229D /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C16B7BF81E077C5200D3229D /* Ionicons.ttf */; };
 		C16B7C141E11F6CE00D3229D /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = C16B7C131E11F6CE00D3229D /* bundle */; };
 		C17E3A281DFE80F900CBDCEC /* PangPangBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = C17E3A271DFE80F900CBDCEC /* PangPangBridge.m */; };
 		C17E3A291DFE80F900CBDCEC /* PangPangBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = C17E3A271DFE80F900CBDCEC /* PangPangBridge.m */; };
+		C1C0F1D61E71475600437767 /* Pos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1C0F1D51E71475600437767 /* Pos.framework */; };
+		C1C0F1D81E714E0100437767 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1C0F1D71E714E0100437767 /* Images.xcassets */; };
 		C7EDD25006534EA4BDF3DC50 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C64F40849A2492B84F1C477 /* EvilIcons.ttf */; };
 		EF6C379E5F3D41EC899E76A1 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F73D9FD4D8444D809B3065EA /* Entypo.ttf */; };
 /* End PBXBuildFile section */
@@ -231,7 +231,6 @@
 		13B07F961A680F5B00A75B9A /* pangpangPos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pangpangPos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = pangpangPos/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = pangpangPos/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = pangpangPos/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = pangpangPos/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = pangpangPos/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
@@ -254,13 +253,14 @@
 		C1027A3D1E65050A0012CF70 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C10D0FDD1E692DBC003ADCFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = pangpangPos/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		C10D0FF51E693BD2003ADCFD /* Pos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Pos.framework; sourceTree = "<group>"; };
 		C10F7A971E04066F00711137 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = pangpangPos/FontAwesome.ttf; sourceTree = "<group>"; };
 		C16B7BF81E077C5200D3229D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		C16B7C131E11F6CE00D3229D /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
 		C17E3A261DFE80F900CBDCEC /* PangPangBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PangPangBridge.h; sourceTree = "<group>"; };
 		C17E3A271DFE80F900CBDCEC /* PangPangBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PangPangBridge.m; sourceTree = "<group>"; };
 		C19609011E1D5817008CB991 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		C1C0F1D51E71475600437767 /* Pos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Pos.framework; sourceTree = "<group>"; };
+		C1C0F1D71E714E0100437767 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = pangpangPos/Images.xcassets; sourceTree = "<group>"; };
 		C1C304A61E1D120E00DF2B28 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		C1F905741E1D45140055530F /* dylib1.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = dylib1.o; path = usr/lib/dylib1.o; sourceTree = SDKROOT; };
 		C1F905831E1D45A10055530F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -301,7 +301,7 @@
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				C1027A341E6504D40012CF70 /* PgyUpdate.framework in Frameworks */,
-				C10D0FF61E693BD2003ADCFD /* Pos.framework in Frameworks */,
+				C1C0F1D61E71475600437767 /* Pos.framework in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
@@ -395,12 +395,12 @@
 		13B07FAE1A68108700A75B9A /* pangpangPos */ = {
 			isa = PBXGroup;
 			children = (
+				C1C0F1D71E714E0100437767 /* Images.xcassets */,
 				C10D0FDC1E692DBC003ADCFD /* LaunchScreen.xib */,
 				C16B7BF81E077C5200D3229D /* Ionicons.ttf */,
 				C10F7A971E04066F00711137 /* FontAwesome.ttf */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				C17E3A261DFE80F900CBDCEC /* PangPangBridge.h */,
@@ -511,7 +511,7 @@
 		AC571909827A41A9A6ADFA2C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C10D0FF51E693BD2003ADCFD /* Pos.framework */,
+				C1C0F1D51E71475600437767 /* Pos.framework */,
 				C1027A3F1E6505100012CF70 /* SystemConfiguration.framework */,
 				C1027A3D1E65050A0012CF70 /* AVFoundation.framework */,
 				C1027A3B1E6505040012CF70 /* AudioToolbox.framework */,
@@ -856,7 +856,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C16B7C141E11F6CE00D3229D /* bundle in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C10F7AA01E04066F00711137 /* FontAwesome.ttf in Resources */,
 				C16B7BF91E077C5200D3229D /* Ionicons.ttf in Resources */,
 				EF6C379E5F3D41EC899E76A1 /* Entypo.ttf in Resources */,
@@ -865,6 +864,7 @@
 				7120E29CF5E44E399BC32718 /* Foundation.ttf in Resources */,
 				0F02D51B5E44468E8F6DE4B1 /* Ionicons.ttf in Resources */,
 				4DFA3278425643C8ACC2F320 /* MaterialIcons.ttf in Resources */,
+				C1C0F1D81E714E0100437767 /* Images.xcassets in Resources */,
 				C10D0FDE1E692DBC003ADCFD /* LaunchScreen.xib in Resources */,
 				6169C869ED054AD2B6B5EC1C /* Octicons.ttf in Resources */,
 				B2139D47E1C34D5894F0F006 /* SimpleLineIcons.ttf in Resources */,
