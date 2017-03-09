@@ -44,10 +44,21 @@ export default class CatalogList extends React.Component {
 
     componentWillMount() {
         this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
+        // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        // this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     }
     componentWillUnmount() {
         this.subscription.remove();
+        // this.keyboardDidShowListener.remove();
+        // this.keyboardDidHideListener.remove();
     }
+    // _keyboardDidShow() {
+    //     // alert('Keyboard Shown');
+    // }
+
+    // _keyboardDidHide() {
+    //     // alert('Keyboard Hidden');
+    // }
     async componentDidMount() {
         await setTimeout(() => {
             this.initCard();
@@ -232,6 +243,9 @@ export default class CatalogList extends React.Component {
 
             }, 500);
     }
+    _keboardSubmit = () =>{
+        this.searchProducts();
+    }
     render() {
         return (
             <View style={{ backgroundColor: '#f0f0f0', }}>
@@ -247,7 +261,7 @@ export default class CatalogList extends React.Component {
                         clearButtonMode="always"
                         underlineColorAndroid={'transparent'}
                         returnKeyType='search'
-                        onSubmitEditing={Keyboard.dismiss}
+                        onSubmitEditing={this._keboardSubmit}
                     />
                     <TouchableOpacity style={styles.rightBtn} onPress={this._pressSearchButton}>
                         <Icon name="search" style={styles.searchBtnImg} ></Icon>
