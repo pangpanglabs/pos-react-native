@@ -101,9 +101,9 @@ export default class Login extends Component {
             {loginButtonContent}
           </TouchableHighlight>
         </View>
-        <View style={styles.withoutBackContainer}>
+      
           <Text style={styles.versionText}>Pang Pang Pos V1.0</Text>
-        </View>
+        
       </View>
     );
   }
@@ -128,6 +128,10 @@ styles = StyleSheet.create({
     paddingBottom: 20,
   },
   versionText: {
+    width:deviceW,
+    textAlign:'center',
+    position:'absolute',
+    bottom:30,
     color: 'rgb(178,178,178)',
   },
   formContainer: {
@@ -135,7 +139,7 @@ styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 50,
     padding: 20,
-    top: deviceH * (isIOS ? 0.42 : 0.38),
+    top: deviceH * (isIOS ? 0.38 : 0.38),
     borderColor: 'rgb(201,216,218)',
     borderRadius: 5,
     borderWidth: 2,
