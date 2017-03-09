@@ -600,11 +600,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 5RV6D9LK9L;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 5RV6D9LK9L;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -936,6 +937,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 5RV6D9LK9L;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -964,6 +966,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 5RV6D9LK9L;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -987,8 +990,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 澈 李 (2J39M8YWJZ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 澈 李 (2J39M8YWJZ)";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 5RV6D9LK9L;
@@ -1017,8 +1020,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.liche.pangpangPos;
 				PRODUCT_NAME = pangpangPos;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "7c633b65-899e-4943-b49d-2d12d2bcb8f5";
+				PROVISIONING_PROFILE_SPECIFIER = pangpang_pos_rn_dev;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1028,7 +1031,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Elandsystems Technology Development Co., Ltd";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Elandsystems Technology Development Co., Ltd";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5RV6D9LK9L;
 				ENABLE_BITCODE = NO;
@@ -1056,8 +1059,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.liche.pangpangPos;
 				PRODUCT_NAME = pangpangPos;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "42b7e476-592f-4cd9-a9d7-3947fb385f98";
+				PROVISIONING_PROFILE_SPECIFIER = pangpang_pos_rn_prd;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
