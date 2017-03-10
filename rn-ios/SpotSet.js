@@ -46,9 +46,10 @@ class SpotSet extends Component {
                     dataSource: this.state.dataSource.cloneWithRows(rs.result.spots),
                     currentSpotId: rs.result.currentSpotId
                 });
+                DeviceEventEmitter.emit("refreshUser",rs.result.userName);
             } else {
                 console.log(rs);
-                alert('get user faild')
+                // alert('get user faild from spot')
             }
         });
     }

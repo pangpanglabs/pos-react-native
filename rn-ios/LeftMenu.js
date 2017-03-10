@@ -7,7 +7,8 @@ import {
     Text,
     View,
     ListView,
-    NativeModules
+    NativeModules,
+    AsyncStorage
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
@@ -32,28 +33,38 @@ export default class LeftMenu extends Component {
 
         this.state = {
             dataSource: ds.cloneWithRows(tempMenuData),
-            userName:'',
+            userName: '',
         };
         this._renderRow = this._renderRow.bind(this);
     }
-    componentDidMount() {
-        this._getContextUser();
+
+    componentWillMount() {
+        this.subscription = DeviceEventEmitter.addListener('refreshUser', this.refreshUser);
+
     }
-    
+    componentWillUnmount() {
+        this.subscription.remove();
+    }
+    componentDidMount() {
+        AsyncStorage.getItem("spot").then((spot) => {
+            spot && this._getContextUser();
+        })
+    }
+
     _getContextUser() {
         PangPangBridge.callAPI("/context/user", null).then((data) => {
             var rs = JSON.parse(data);
-            console.log(rs.result);
+            // console.log(rs.result);
             if (rs.success) {
                 this.refreshUser(rs.result.userName)
             } else {
                 console.log(rs);
-                alert('get user faild')
+                alert('get user faild from leftMenu')
             }
         });
     }
     refreshUser = (userName) => {
-        userName && this.setState({userName:userName});
+        userName && this.setState({ userName: userName });
     }
     _pressRow(rowID) {
         // console.log(tempMenuData[rowID].menuCode);

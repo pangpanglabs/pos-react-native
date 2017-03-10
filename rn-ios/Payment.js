@@ -9,7 +9,8 @@ import {
     Button,
     AsyncStorage,
     NativeModules,
-    ListView
+    ListView,
+    Alert
 } from 'react-native';
 
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
@@ -89,12 +90,12 @@ class Payment extends Component {
                 <View style={styles.listItem}>
                     <View />
                     <Text style={styles.itemText}>{rowData.payType}</Text>
-                    <Icon name="check-circle-o" style= {[styles.checkIcon, this.state.currentPayId === rowData.id&&{opacity:1}]}  />
+                    <Icon name="check-circle-o" style={[styles.checkIcon, this.state.currentPayId === rowData.id && { opacity: 1 }]} />
                 </View>
                 <View style={styles.line}></View>
             </TouchableOpacity>);
     }
-      
+
     _pressConfirmButton = async () => {
         let setinfoResult = null;
         let param = {
@@ -207,6 +208,37 @@ class Payment extends Component {
         });
     }
 
+    _pressOrderClose = async () => {
+        Alert.alert(
+            '提示',
+            '确定删除订单？',
+            [
+                {
+                    text: 'Cancel', onPress: () => {
+                    }
+                },
+                {
+                    text: 'OK', onPress: () => {
+                        PangPangBridge.callAPI("/cart/remove-cart", { cartId: this.props.cardId }).then((card) => {
+                            var rs = JSON.parse(card);
+                            if (rs.success) {
+                                const { navigator } = this.props;
+                                AsyncStorage.setItem("cartId", "").then(() => {
+                                    if (navigator) {
+                                        navigator.replace({
+                                            name: 'CatalogList',
+                                            component: CatalogList
+                                        })
+                                    }
+                                })
+
+                            }
+                        });
+                    }
+                },
+            ]
+        );
+    }
     render() {
         return (
             <View style={{ backgroundColor: '#f0f0f0', height: deviceH }}>
@@ -217,7 +249,8 @@ class Payment extends Component {
                     <View style={styles.navigatorTitle}>
                         <Text style={styles.navigatorTitleText}>{navigatorTitle}</Text>
                     </View>
-                    <TouchableOpacity style={styles.rightBtn}>
+                    <TouchableOpacity style={styles.rightBtn} onPress={this._pressOrderClose}>
+                        <Text style={styles.rightBtnText}>关闭</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.cust}>
@@ -309,6 +342,12 @@ styles = StyleSheet.create({
         width: 50,
         justifyContent: 'center',
     },
+    rightBtnText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: '600',
+        // backgroundColor:'red',
+    },
     cust: {
         height: 60,
         marginBottom: 15,
@@ -358,7 +397,7 @@ styles = StyleSheet.create({
     discountText: {
         fontSize: 18,
         fontWeight: '500',
-        color:'orange',
+        color: 'orange',
     },
     listView: {
         backgroundColor: 'white',
@@ -375,12 +414,12 @@ styles = StyleSheet.create({
     itemText: {
         fontSize: 16,
         fontWeight: 'bold',
-        width:200,
+        width: 200,
         textAlign: 'center',
         // backgroundColor: 'red',
     },
     checkIcon: {
-        opacity:0,
+        opacity: 0,
         fontSize: 20,
         textAlign: 'center',
         color: '#3e9ce9',

@@ -43,6 +43,8 @@ export default class CatalogList extends React.Component {
 
     componentWillMount() {
         this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
+        this.subscription = DeviceEventEmitter.addListener('initCard', this.initCard);
+        
         // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
         // this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     }
@@ -90,6 +92,7 @@ export default class CatalogList extends React.Component {
         });
     }
     initCard = () => {
+        console.log("initCard");
         AsyncStorage.getItem("cartId").then((data) => {
             if (data) {
                 this.setState({ cardId: parseInt(data) });
@@ -118,7 +121,7 @@ export default class CatalogList extends React.Component {
         await PangPangBridge.callAPI("/catalog/search-contents", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
-                // console.log("search->", rs.result, pageNum);
+                console.log("search->", rs.result, pageNum);
                 if (rs.success && rs.result.items !== null) {
                     this.setState({
                         dataSource: this.state.dataSource.cloneWithRows(rs.result.items),
