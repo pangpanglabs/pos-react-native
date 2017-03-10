@@ -16,15 +16,13 @@ export default class BasketCell extends Component {
     }
     static propTypes = {
         rowData: React.PropTypes.shape({
-            brandCode: React.PropTypes.string.isRequired,
-            contentCode: React.PropTypes.string.isRequired,
+            // images:React.PropTypes.any.isRequired,
             discount: React.PropTypes.number.isRequired,
             listPrice: React.PropTypes.number.isRequired,
-            name: React.PropTypes.string.isRequired,
             quantity: React.PropTypes.number.isRequired,
             salePrice: React.PropTypes.number.isRequired,
-            skuCode: React.PropTypes.string.isRequired,
-            uid: React.PropTypes.string.isRequired,
+            // name: React.PropTypes.string.isRequired,
+            skuId: React.PropTypes.number.isRequired,
             unitListPrice: React.PropTypes.number.isRequired,
             unitSalePrice: React.PropTypes.number.isRequired,
         }),
@@ -32,9 +30,9 @@ export default class BasketCell extends Component {
     }
     render() {
         // console.log(this.props.rowData.name);
-        let nameArr = this.props.rowData.name.split(",");
-        let nameSub = nameArr.length > 1 ? nameArr[0] : this.props.rowData.name;
-        let styleName = nameArr[1] + (nameArr[2]);
+        // let nameArr = this.props.rowData.name.split(",");
+        // let nameSub = nameArr.length > 1 ? nameArr[0] : this.props.rowData.name;
+        // let styleName = nameArr[1] + (nameArr[2]);
         // console.log(styleName);
         return (
             <TouchableHighlight onPress={this.props.onPress} style={styles.rowFront} underlayColor={'#fff'}>
@@ -43,14 +41,14 @@ export default class BasketCell extends Component {
                         <View style={styles.rowIcon}></View>
                         <View style={styles.rowRightContent}>
                             <View style={styles.rowRightSub}>
-                                <Text style={styles.rowContentCode}>{nameSub}</Text>
+                                <Text style={styles.rowContentCode}>name....</Text>
                             </View>
                             <View style={styles.rowRightSub}>
-                                <Text style={styles.rowContentCode}>{this.props.rowData.skuCode}</Text>
+                                <Text style={styles.rowContentCode}>{this.props.rowData.skuId}</Text>
                                 <Text style={styles.rowContentListPrice}>¥{this.props.rowData.listPrice}</Text>
                             </View>
                             <View style={styles.rowRightSub}>
-                                <Text style={styles.rowContentSize}>{styleName.trim()}</Text>
+                                <Text style={styles.rowContentSize}>styleName...</Text>
                                 <Text style={styles.rowContentQty}>x{this.props.rowData.quantity}</Text>
                             </View>
                             <View style={styles.rowRightSub}>
@@ -107,18 +105,18 @@ const styles = StyleSheet.create({
         // paddingLeft: 10,
         fontSize: 14,
     },
-    rowContentSize:{
+    rowContentSize: {
         overflow: 'hidden',
         height: 20,
         flex: 8,
         fontSize: 14,
-        fontWeight:"600",      
+        fontWeight: "600",
     },
     rowContentQty: {
         overflow: 'hidden',
         height: 20,
         flex: 5,
-        fontWeight:"600",
+        fontWeight: "600",
         fontSize: 14,
     },
     rowContentListPrice: {

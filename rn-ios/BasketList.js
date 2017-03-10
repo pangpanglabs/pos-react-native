@@ -44,7 +44,7 @@ export default class BasketList extends React.Component {
             DeviceEventEmitter.emit('showLoading');
             PangPangBridge.callAPI("/cart/get-cart", { cartId: this.props.cardId }).then((card) => {
                 var rs = JSON.parse(card);
-                // console.log(rs.result)
+                console.log(rs.result)
                 this.refreshDataSource(rs.result);
                 DeviceEventEmitter.emit('dismissLoading');
             });
@@ -111,7 +111,7 @@ export default class BasketList extends React.Component {
                 {
                     text: 'OK', onPress: () => {
                         rowMap[`${secId}${rowId}`].closeRow();
-                        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, uid: rowData.uid, quantity: rowData.quantity }).then((card) => {
+                        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: rowData.skuId, quantity: rowData.quantity }).then((card) => {
                             var rs = JSON.parse(card);
                             // console.log(rs);
                             this.refreshDataSource(rs.result);
@@ -136,7 +136,7 @@ export default class BasketList extends React.Component {
         }
     }
     _modalConfirmBtn = () => {
-        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, uid: this.state.selectedProduct.uid, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
+        PangPangBridge.callAPI("/cart/remove-item", { cartId: this.props.cardId, skuId: this.state.selectedProduct.skuId, quantity: this.state.selectedOriginalProduct.quantity - this.state.selectedProduct.quantity }).then((card) => {
             var rs = JSON.parse(card);
             this.refreshDataSource(rs.result);
             this.setState({ showModalCss: {} });
