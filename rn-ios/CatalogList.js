@@ -112,6 +112,7 @@ export default class CatalogList extends React.Component {
     }
 
     searchProducts = async () => {
+        pageNum = 0;
         var key = this.state.searchKey;
         DeviceEventEmitter.emit('showLoading');
         await PangPangBridge.callAPI("/catalog/search-contents", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
@@ -162,7 +163,6 @@ export default class CatalogList extends React.Component {
     }
 
     _pressTopButton = () => {
-        pageNum = 0;
         const { navigator } = this.props;
         if (navigator) {
             navigator.push({

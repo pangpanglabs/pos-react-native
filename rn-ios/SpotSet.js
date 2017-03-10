@@ -40,7 +40,7 @@ class SpotSet extends Component {
     _getContextUser() {
         PangPangBridge.callAPI("/context/user", null).then((data) => {
             var rs = JSON.parse(data);
-            // console.log(rs.result.spots);
+            // console.log(rs.result);
             if (rs.success) {
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(rs.result.spots),
@@ -86,22 +86,22 @@ class SpotSet extends Component {
         this.props.toggle();
     }
     _pressSyncButton() {
-        DeviceEventEmitter.emit('showLoading');
-        PangPangBridge.callAPI("/catalog/download", null).then((data) => {
-            console.log(JSON.parse(data))
-            DeviceEventEmitter.emit('dismissLoading');
-            // if (navigator) {
-            //     navigator.replace({
-            //         name: 'CatalogList',
-            //         component: CatalogList,
-            //     })
-            // }
-            AsyncStorage.setItem("dbDownload", "true");
-        });
+        // DeviceEventEmitter.emit('showLoading');
+        // PangPangBridge.callAPI("/catalog/download", null).then((data) => {
+        //     console.log(JSON.parse(data))
+        //     DeviceEventEmitter.emit('dismissLoading');
+        //     // if (navigator) {
+        //     //     navigator.replace({
+        //     //         name: 'CatalogList',
+        //     //         component: CatalogList,
+        //     //     })
+        //     // }
+        //     AsyncStorage.setItem("dbDownload", "true");
+        // });
     }
     render() {
         return (
-            <View style={{ backgroundColor: '#f0f0f0', height: deviceH }}>
+            <View style={{ backgroundColor: 'white', height: deviceH }}>
                 <View style={styles.navigatorBar} >
                     <TouchableOpacity onPress={this._pressMenuButton.bind(this)} style={styles.backBtn}>
                         <Icon name="bars" style={styles.backBtnImg} ></Icon>
@@ -165,7 +165,7 @@ styles = StyleSheet.create({
         margin: 5,
     },
     groupContent: {
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         paddingLeft: 10,
         paddingRight: 10,
     },
@@ -222,6 +222,7 @@ styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color: 'white',
+        opacity:0,
     },
 });
 
