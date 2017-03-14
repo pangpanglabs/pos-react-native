@@ -14,6 +14,8 @@ import {
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import BasketList from './BasketList';
 import ProductCell from './ProductCell';
+import ProductDetail from './ProductDetail';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
@@ -28,14 +30,21 @@ let ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 export default class CatalogList extends React.Component {
 
-    state = {
-        searchKey: "",
-        dataSource: ds,
-        totalPrice: 0,
-        totalCount: 0,
-        cardId: 0,
-        foot: 0, // 控制foot， 0：隐藏foot  1：已加载完成   2 ：显示加载中
+    constructor() {
+        super();
+        this.state = {
+            searchKey: "",
+            dataSource: ds,
+            totalPrice: 0,
+            totalCount: 0,
+            cardId: 0,
+            foot: 0, // 控制foot， 0：隐藏foot  1：已加载完成   2 ：显示加载中
+            showModal: false,
+            skusData: [],
+            productStyles: [],
+        }
     }
+
     static propTypes = {
         toggle: React.PropTypes.func.isRequired,
         navigator: React.PropTypes.any.isRequired,
@@ -44,7 +53,7 @@ export default class CatalogList extends React.Component {
     componentWillMount() {
         this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
         this.subscription = DeviceEventEmitter.addListener('initCard', this.initCard);
-        
+
         // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
         // this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     }
@@ -92,7 +101,7 @@ export default class CatalogList extends React.Component {
         });
     }
     initCard = () => {
-        console.log("initCard");
+        // console.log("initCard");
         AsyncStorage.getItem("cartId").then((data) => {
             if (data) {
                 this.setState({ cardId: parseInt(data) });
@@ -121,7 +130,7 @@ export default class CatalogList extends React.Component {
         await PangPangBridge.callAPI("/catalog/search-contents", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
-                console.log("search->", rs.result, pageNum);
+                // console.log("search->", rs.result, pageNum);
                 if (rs.success && rs.result.items !== null) {
                     this.setState({
                         dataSource: this.state.dataSource.cloneWithRows(rs.result.items),
@@ -177,20 +186,27 @@ export default class CatalogList extends React.Component {
             })
         }
     }
-    _genRows = () => {
-        // const dataBlob = [];
-        // for(let i = 0 ; i< 30 ; i ++ ){
-        //     dataBlob.push("aa"+i);
-        // }
-        // return dataBlob;
-    }
-
     _pressRow = (rowData) => {
-        PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: rowData.id, quantity: 1 }).then((data) => {
-            var rs = JSON.parse(data);
-            // console.log(rs);
-            this.refreshCartData();
+        // console.log(rowData.id);
+        PangPangBridge.callAPI("/catalog/get-content", { id: rowData.id }).then((data) => {
+            var rsContent = JSON.parse(data);
+            // console.log(rsContent.result);
+            // this.setState({ skusData: rsContent.result.skus });
+            this.setState({
+                skusData:rsContent.result.skus,
+                productStyles:rsContent.result.options,
+            });
+
+            return rsContent.result;
+        }).then((data) => {
+            // PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: data.skus[0].id, quantity: 1 }).then((data) => {
+            //     var rs = JSON.parse(data);
+            //     // console.log(rs);
+            //     // this.refreshCartData();
+            // })
+            this._openModal();
         });
+
     }
 
     _renderRow = (rowData, sectionID, rowID) => {
@@ -235,7 +251,16 @@ export default class CatalogList extends React.Component {
     _keboardSubmit = () => {
         this.searchProducts();
     }
+
+    _openModal = () => {
+        this.setState({ showModal: true });
+    }
+    _closeModal = () => {
+        this.setState({ showModal: false });
+
+    }
     render() {
+
         return (
             <View style={{ backgroundColor: '#f0f0f0', }}>
                 <View style={styles.navigatorBar} >
@@ -278,7 +303,14 @@ export default class CatalogList extends React.Component {
                         pageSize={pageSize}
                     />
                 </View>
-
+                {(() => {
+                    return this.state.showModal && <ProductDetail
+                        skusData={this.state.skusData}
+                        productStyles={this.state.productStyles} 
+                        openModal={this._openModal}
+                        closeModal={this._closeModal}
+                    />;
+                })()}
             </View>
         );
     }

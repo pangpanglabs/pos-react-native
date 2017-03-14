@@ -247,6 +247,8 @@ export default class BasketList extends React.Component {
     }
 }
 
+
+const modalContentHeight = px2dp(350);
 let styles;
 
 styles = StyleSheet.create({
@@ -264,8 +266,8 @@ styles = StyleSheet.create({
     modalContent: {
         position: 'absolute',
         width: deviceW,
-        height: 350,
-        marginTop: deviceH - 350,
+        height: modalContentHeight,
+        marginTop: deviceH - modalContentHeight,
         backgroundColor: 'white',
     },
     modalContentTop: {
