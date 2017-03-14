@@ -51,14 +51,16 @@ export default class CatalogList extends React.Component {
     };
 
     componentWillMount() {
-        this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
-        this.subscription = DeviceEventEmitter.addListener('initCard', this.initCard);
-
+        this.subscription1 = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
+        this.subscription2 = DeviceEventEmitter.addListener('initCard', this.initCard);
+        this.subscription3 = DeviceEventEmitter.addListener('addCard', this.addCard);
         // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
         // this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     }
     componentWillUnmount() {
-        this.subscription.remove();
+        this.subscription1.remove();
+        this.subscription2.remove();
+        this.subscription3.remove();
         // this.keyboardDidShowListener.remove();
         // this.keyboardDidHideListener.remove();
     }
@@ -193,20 +195,23 @@ export default class CatalogList extends React.Component {
             // console.log(rsContent.result);
             // this.setState({ skusData: rsContent.result.skus });
             this.setState({
-                skusData:rsContent.result.skus,
-                productStyles:rsContent.result.options,
+                skusData: rsContent.result.skus,
+                productStyles: rsContent.result.options,
             });
 
             return rsContent.result;
         }).then((data) => {
-            // PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: data.skus[0].id, quantity: 1 }).then((data) => {
-            //     var rs = JSON.parse(data);
-            //     // console.log(rs);
-            //     // this.refreshCartData();
-            // })
+
             this._openModal();
         });
 
+    }
+    addCard = (skuId, qty) => {
+        PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: skuId, quantity: qty }).then((data) => {
+            var rs = JSON.parse(data);
+            // console.log(rs);
+            this.refreshCartData();
+        })
     }
 
     _renderRow = (rowData, sectionID, rowID) => {
@@ -306,7 +311,7 @@ export default class CatalogList extends React.Component {
                 {(() => {
                     return this.state.showModal && <ProductDetail
                         skusData={this.state.skusData}
-                        productStyles={this.state.productStyles} 
+                        productStyles={this.state.productStyles}
                         openModal={this._openModal}
                         closeModal={this._closeModal}
                     />;

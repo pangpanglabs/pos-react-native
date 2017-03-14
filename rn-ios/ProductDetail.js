@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    DeviceEventEmitter,
     TouchableWithoutFeedback,
     TouchableOpacity,
     StyleSheet,
@@ -17,7 +18,7 @@ export default class ProductDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            qtyCount: 1,
+            qtyCount: 0,
             selectSizeKey: "",
             selectColorKey: "",
         }
@@ -48,7 +49,7 @@ export default class ProductDetail extends Component {
     selectFirstCondition = (size) => {
         let skusData = this.props.skusData;
         this.meetFirstConditionData = [];
-        // this.meetSecondConditionData = [];
+        this.meetSecondConditionData = [];
         let selectFirstCondition = size;
 
         skusData.map((sku) => {
@@ -65,9 +66,7 @@ export default class ProductDetail extends Component {
     }
     selectSecondCondition = (color) => {
         let skusData = this.props.skusData;
-        // this.meetFirstConditionData = [];
         this.meetSecondConditionData = [];
-
         let selectSecondCondition = color; //Popcorn
 
         this.meetFirstConditionData.map((sku) => {
@@ -91,25 +90,35 @@ export default class ProductDetail extends Component {
 
     }
     _pressConfirmButton = () => {
-        alert("confirm")
+        if (this.meetSecondConditionData.length == 1 && this.state.qtyCount > 0) {
+            DeviceEventEmitter.emit('addCard', this.meetSecondConditionData[0].id, this.state.qtyCount);
+            this.props.closeModal();
+        }
     }
 
     _sizeItemPress = async (size) => {
-        console.log("size->", size);
+        if (this.state.selectSizeKey == size) {
+            return;
+        }
+        // console.log("size->", size);
         await this.selectFirstCondition(size);
-        console.log(this.meetFirstConditionData);
-        // alert(this.meetFirstConditionData);
+        // console.log(this.meetFirstConditionData);
         await this.setState({ selectSizeKey: size });
-        await this.setState({ selectColorKey: "1" });
+        await this.setState({ selectColorKey: "" });
 
     }
     _colorItemPress = async (color) => {
+        if (!this._existColor(color) || this.state.selectColorKey == color) {
+            return;
+        }
         await this.selectSecondCondition(color);
         await this.setState({ selectColorKey: color });
-        await console.log(this.meetSecondConditionData);
+        // await console.log(this.meetSecondConditionData[0].images.medium.url );
+
+
 
     }
-    _exist = (color) => {
+    _existColor = (color) => {
         let isExist = false;
         for (let i = 0; i < this.meetFirstConditionData.length; i++) {
             if (this.meetFirstConditionData[i].options[1].v == color) {
@@ -135,12 +144,12 @@ export default class ProductDetail extends Component {
         })
 
         let colorContent = this.props.productStyles["Color"].map((color) => {
-            if (this._exist(color)) {
+            if (this._existColor(color)) {
                 return (
                     <View style={styles.colorItem} key={color}>
                         <TouchableWithoutFeedback onPress={() => this._colorItemPress(color)}>
                             <View style={[styles.colorItemTop, this.state.selectColorKey == color ? { backgroundColor: "#3e9ce9", } : {}]}>
-                                <Text  numberOfLines={1} style={[styles.colorItemTopBtnText, this.state.selectColorKey == color ? { color: "white", } : {},]}>{color}</Text>
+                                <Text numberOfLines={1} style={[styles.colorItemTopBtnText, this.state.selectColorKey == color ? { color: "white", } : {},]}>{color}</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
@@ -177,11 +186,11 @@ export default class ProductDetail extends Component {
                                 <Image style={styles.rowIcon} source={{ uri: this.props.skusData[0].images.medium.url }}></Image>
                             </View>
                             <View style={styles.topRightContainer}>
-                                <Text style={styles.topRightText}>羽绒服</Text>
-                                <Text style={styles.topRightText}>货号:</Text>
-                                <Text style={styles.topRightText}>价格:</Text>
-                                <Text style={styles.topRightText}>已选择尺码:</Text>
-                                <Text style={styles.topRightText}>颜色:</Text>
+                                <Text numberOfLines={1} style={styles.topRightText}>{this.meetSecondConditionData.length == 1 && this.meetSecondConditionData[0].name}</Text>
+                                <Text style={styles.topRightText}>货号: {this.meetSecondConditionData.length == 1 && this.meetSecondConditionData[0].code}</Text>
+                                <Text style={styles.topRightText}>价格: {this.meetSecondConditionData.length == 1 && this.meetSecondConditionData[0].listPrice}</Text>
+                                <Text style={styles.topRightText}>已选择尺码: {this.meetSecondConditionData.length == 1 && this.meetSecondConditionData[0].options[0].v}</Text>
+                                <Text style={styles.topRightText}>颜色: {this.meetSecondConditionData.length == 1 && this.meetSecondConditionData[0].options[1].v}</Text>
                             </View>
                         </View>
                         <View style={styles.line} />
@@ -214,7 +223,7 @@ export default class ProductDetail extends Component {
                             <Text style={styles.qtyTitle}>数量</Text>
                             <View style={styles.qtyRight}>
                                 <TouchableOpacity style={styles.qtyBtn} onPress={() => {
-                                    this.setState({ qtyCount: this.state.qtyCount <= 1 ? 1 : this.state.qtyCount - 1 });
+                                    this.setState({ qtyCount: this.state.qtyCount <= 0 ? 0 : this.state.qtyCount - 1 });
                                 }}>
                                     <Text style={styles.btnText}>-</Text>
                                 </TouchableOpacity>
@@ -320,15 +329,15 @@ const styles = StyleSheet.create({
     },
     topRightText: {
         color: 'gray',
-        fontSize: 18,
-        fontWeight: "500",
+        fontSize: 16,
+        // fontWeight: "500",
         lineHeight: 30,
     },
 
 
     sizeContainer: {
         width: deviceW,
-        paddingHorizontal:marginValue/2,
+        paddingHorizontal: marginValue / 2,
         // height: 100,
         // backgroundColor: "red",
         // flexDirection:"row",
@@ -350,7 +359,7 @@ const styles = StyleSheet.create({
     sizeItem: {
         // margin: marginValue,
         width: 90,
-        height: 70,
+        height: 55,
         // backgroundColor: "red",
         alignItems: "center",
         justifyContent: "center",
@@ -367,23 +376,23 @@ const styles = StyleSheet.create({
     sizeItemTopBtnText: {
         color: "#b1a9a9",
         fontWeight: "500",
-        paddingHorizontal:marginValue,
+        paddingHorizontal: marginValue,
         fontSize: 12,
-        overflow:"hidden",
+        overflow: "hidden",
     },
     sizeItemBottom: {
         textAlign: "center",
         color: "#7474ac",
-        paddingHorizontal:marginValue,
+        paddingHorizontal: marginValue,
         fontSize: 12,
         fontWeight: "500",
-        overflow:"hidden",
+        overflow: "hidden",
     },
 
 
     colorContainer: {
         width: deviceW,
-        paddingHorizontal:marginValue/2,
+        paddingHorizontal: marginValue / 2,
     },
     colorTitle: {
         color: 'gray',
@@ -416,12 +425,12 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     colorItemTopBtnText: {
-        paddingHorizontal:marginValue,
+        paddingHorizontal: marginValue,
         color: "#b1a9a9",
         fontSize: 12,
         fontWeight: "500",
-        overflow:"hidden",
-        textAlign:"center",
+        overflow: "hidden",
+        textAlign: "center",
     },
 
 
