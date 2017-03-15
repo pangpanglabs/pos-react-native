@@ -14,6 +14,8 @@ import {
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import BasketList from './BasketList';
 import ProductCell from './ProductCell';
+import ProductDetail from './ProductDetail';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var PangPangBridge = NativeModules.PangPangBridge;
@@ -28,26 +30,47 @@ let ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 export default class CatalogList extends React.Component {
 
-    state = {
-        searchKey: "",
-        catalogData: [],
-        dataSource: ds,
-        totalPrice: 0,
-        totalCount: 0,
-        cardId: 0,
-        foot: 0, // 控制foot， 0：隐藏foot  1：已加载完成   2 ：显示加载中
+    constructor() {
+        super();
+        this.state = {
+            searchKey: "",
+            dataSource: ds,
+            totalPrice: 0,
+            totalCount: 0,
+            cardId: 0,
+            foot: 0, // 控制foot， 0：隐藏foot  1：已加载完成   2 ：显示加载中
+            showModal: false,
+            skusData: [],
+            productStyles: [],
+        }
     }
+
     static propTypes = {
         toggle: React.PropTypes.func.isRequired,
         navigator: React.PropTypes.any.isRequired,
     };
 
     componentWillMount() {
-        this.subscription = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
+        this.subscription1 = DeviceEventEmitter.addListener('changeTotal', this.changeTotal);
+        this.subscription2 = DeviceEventEmitter.addListener('initCard', this.initCard);
+        this.subscription3 = DeviceEventEmitter.addListener('addCard', this.addCard);
+        // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        // this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     }
     componentWillUnmount() {
-        this.subscription.remove();
+        this.subscription1.remove();
+        this.subscription2.remove();
+        this.subscription3.remove();
+        // this.keyboardDidShowListener.remove();
+        // this.keyboardDidHideListener.remove();
     }
+    // _keyboardDidShow() {
+    //     // alert('Keyboard Shown');
+    // }
+
+    // _keyboardDidHide() {
+    //     // alert('Keyboard Hidden');
+    // }
     async componentDidMount() {
         await setTimeout(() => {
             this.initCard();
@@ -58,7 +81,6 @@ export default class CatalogList extends React.Component {
     }
 
     changeTotal = (data) => {
-        // console.log('changeTotal');
         this.initCard();
     }
     refreshCartData = () => {
@@ -81,11 +103,10 @@ export default class CatalogList extends React.Component {
         });
     }
     initCard = () => {
+        // console.log("initCard");
         AsyncStorage.getItem("cartId").then((data) => {
-            // console.log(data);
             if (data) {
                 this.setState({ cardId: parseInt(data) });
-                // global.cardId = parseInt(data);
                 PangPangBridge.callAPI("/cart/get-cart", { cartId: data }).then((card) => {
                     var rs = JSON.parse(card);
                     // console.log(rs.result);
@@ -94,7 +115,6 @@ export default class CatalogList extends React.Component {
             } else {
                 PangPangBridge.callAPI("/cart/create-cart", null).then((data) => {
                     var rs = JSON.parse(data);
-                    // console.log(rs.result);
                     this.setState({ cardId: parseInt(rs.result.id) });
                     AsyncStorage.setItem("cartId", rs.result.id.toString()).then(() => {
                         this.refreshCartData();
@@ -106,20 +126,19 @@ export default class CatalogList extends React.Component {
     }
 
     searchProducts = async () => {
+        pageNum = 0;
         var key = this.state.searchKey;
         DeviceEventEmitter.emit('showLoading');
-        await PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
+        await PangPangBridge.callAPI("/catalog/search-contents", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
-                // console.log(rs.result);
-                // console.log(this.state.catalogData);
+                // console.log("search->", rs.result, pageNum);
                 if (rs.success && rs.result.items !== null) {
                     this.setState({
-                        catalogData: [...this.state.catalogData, ...rs.result.items],
                         dataSource: this.state.dataSource.cloneWithRows(rs.result.items),
                     });
 
-                    if (pageSize * pageNum > rs.result.totalCount || rs.result.items.length < pageSize) {
+                    if (rs.result.items.length < pageSize) {
                         this.setState({ foot: 1 });
                     } else {
                         this.setState({ foot: 0 });
@@ -134,16 +153,17 @@ export default class CatalogList extends React.Component {
     searchMoreProducts = async () => {
         var key = this.state.searchKey;
         DeviceEventEmitter.emit('showLoading');
-        await PangPangBridge.callAPI("/catalog/search-products", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
+        await PangPangBridge.callAPI("/catalog/search-contents", { q: key, skipCount: pageSize * pageNum, maxResultCount: pageSize }).then(
             (data) => {
                 var rs = JSON.parse(data);
+                // console.log("more", rs.result);
+                // console.log("more", this.state.dataSource._dataBlob.s1);
                 if (rs.success && rs.result.items !== null) {
                     this.setState({
-                        catalogData: [...this.state.catalogData, ...rs.result.items],
-                        dataSource: this.state.dataSource.cloneWithRows(this.state.catalogData),
+                        dataSource: this.state.dataSource.cloneWithRows([...this.state.dataSource._dataBlob.s1, ...rs.result.items]),
                     });
 
-                    if (pageSize * pageNum > rs.result.totalCount) {
+                    if (rs.result.items.length < pageSize) {
                         this.setState({ foot: 1 });
                     } else {
                         this.setState({ foot: 0 });
@@ -168,20 +188,30 @@ export default class CatalogList extends React.Component {
             })
         }
     }
-    _genRows = () => {
-        // const dataBlob = [];
-        // for(let i = 0 ; i< 30 ; i ++ ){
-        //     dataBlob.push("aa"+i);
-        // }
-        // return dataBlob;
-    }
-
     _pressRow = (rowData) => {
-        PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, uid: rowData.uid, quantity: 1 }).then((data) => {
+        // console.log(rowData.id);
+        PangPangBridge.callAPI("/catalog/get-content", { id: rowData.id }).then((data) => {
+            var rsContent = JSON.parse(data);
+            // console.log(rsContent.result);
+            // this.setState({ skusData: rsContent.result.skus });
+            this.setState({
+                skusData: rsContent.result.skus,
+                productStyles: rsContent.result.options,
+            });
+
+            return rsContent.result;
+        }).then((data) => {
+
+            this._openModal();
+        });
+
+    }
+    addCard = (skuId, qty) => {
+        PangPangBridge.callAPI("/cart/add-item", { cartId: this.state.cardId, skuId: skuId, quantity: qty }).then((data) => {
             var rs = JSON.parse(data);
             // console.log(rs);
             this.refreshCartData();
-        });
+        })
     }
 
     _renderRow = (rowData, sectionID, rowID) => {
@@ -211,28 +241,31 @@ export default class CatalogList extends React.Component {
                 </View>);
         }
     }
-    _endReached = () => {
-        // console.log("_endReached");
-        // console.log(this.state.catalogData.length);
-        if (this.state.catalogData.length === 0) {
-            return;
-        }
+    _endReached = async () => {
         if (this.state.foot != 0) {
             return;
         }
+        this.setState({ foot: 2, });
 
-        this.setState({
-            foot: 2,
-        });
         this.timer = setTimeout(
             () => {
                 pageNum++;
-                // this._fetchListData();
                 this.searchMoreProducts();
-
             }, 500);
     }
+    _keboardSubmit = () => {
+        this.searchProducts();
+    }
+
+    _openModal = () => {
+        this.setState({ showModal: true });
+    }
+    _closeModal = () => {
+        this.setState({ showModal: false });
+
+    }
     render() {
+
         return (
             <View style={{ backgroundColor: '#f0f0f0', }}>
                 <View style={styles.navigatorBar} >
@@ -247,7 +280,7 @@ export default class CatalogList extends React.Component {
                         clearButtonMode="always"
                         underlineColorAndroid={'transparent'}
                         returnKeyType='search'
-                        onSubmitEditing={Keyboard.dismiss}
+                        onSubmitEditing={this._keboardSubmit}
                     />
                     <TouchableOpacity style={styles.rightBtn} onPress={this._pressSearchButton}>
                         <Icon name="search" style={styles.searchBtnImg} ></Icon>
@@ -272,9 +305,17 @@ export default class CatalogList extends React.Component {
                         renderFooter={this._renderFooter}
                         onEndReached={this._endReached}
                         onEndReachedThreshold={20}
+                        pageSize={pageSize}
                     />
                 </View>
-
+                {(() => {
+                    return this.state.showModal && <ProductDetail
+                        skusData={this.state.skusData}
+                        productStyles={this.state.productStyles}
+                        openModal={this._openModal}
+                        closeModal={this._closeModal}
+                    />;
+                })()}
             </View>
         );
     }

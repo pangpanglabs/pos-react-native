@@ -3,7 +3,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     View,
-    Text
+    Text,
+    Image
 } from 'react-native';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,32 +15,28 @@ export default class ProductCell extends Component {
     }
     static propTypes = {
         rowData: React.PropTypes.shape({
-            brandCode: React.PropTypes.string.isRequired,
-            contentCode: React.PropTypes.string.isRequired,
+            images:React.PropTypes.any.isRequired,
+            code: React.PropTypes.string.isRequired,
             listPrice: React.PropTypes.any.isRequired,
             name: React.PropTypes.string.isRequired,
-            salePrice: React.PropTypes.any.isRequired,
-            skuCode: React.PropTypes.string.isRequired,
-            uid: React.PropTypes.string.isRequired,
+            // salePrice: React.PropTypes.any.isRequired,
         }),
         onPress: React.PropTypes.func.isRequired,
     }
     render() {
-        let nameArr = this.props.rowData.name.split(",");
-        let nameSub = nameArr.length > 1 ? nameArr[0] : this.props.rowData.name;
+        // let nameArr = this.props.rowData.name.split(",");
+        // let nameSub = nameArr.length > 1 ? nameArr[0] : this.props.rowData.name;
         return (
             <TouchableOpacity onPress={this.props.onPress} style={styles.row}>
                 <View style={styles.rowContent}>
-                    <View style={styles.rowIcon}></View>
+                    <Image style={styles.rowIcon} source={{uri:this.props.rowData.images.small.url}} ></Image>
                     <View style={styles.rowRightContent}>
                         <View style={styles.rowRightSub}>
-                            <Text style={styles.rowContentCode}>{nameSub}</Text>
-
+                            <Text style={styles.rowContentCode}>{this.props.rowData.name}</Text>
                         </View>
                         <View style={styles.rowRightSub}>
-                            <Text style={styles.rowContentCode}>{this.props.rowData.skuCode}</Text>
+                            <Text style={styles.rowContentCode}>{this.props.rowData.code}</Text>
                             <Text style={styles.rowContentListPrice}>¥{this.props.rowData.listPrice}</Text>
-
                         </View>
                         <View style={styles.rowRightSub}>
                             <Text style={styles.rowContentCode}>9.5折</Text>

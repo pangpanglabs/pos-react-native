@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import {
+    DeviceEventEmitter,
     Dimensions,
     TouchableOpacity,
     StyleSheet,
     Text,
     View,
-    ListView
+    ListView,
+    NativeModules,
+    AsyncStorage
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
+
+var PangPangBridge = NativeModules.PangPangBridge;
 
 let tempMenuData = [
     { menuName: "销售", menuCode: "catalogList" },
@@ -28,8 +33,38 @@ export default class LeftMenu extends Component {
 
         this.state = {
             dataSource: ds.cloneWithRows(tempMenuData),
+            userName: '',
         };
         this._renderRow = this._renderRow.bind(this);
+    }
+
+    componentWillMount() {
+        this.subscription = DeviceEventEmitter.addListener('refreshUser', this.refreshUser);
+
+    }
+    componentWillUnmount() {
+        this.subscription.remove();
+    }
+    componentDidMount() {
+        AsyncStorage.getItem("spot").then((spot) => {
+            spot && this._getContextUser();
+        })
+    }
+
+    _getContextUser() {
+        PangPangBridge.callAPI("/context/user", null).then((data) => {
+            var rs = JSON.parse(data);
+            // console.log(rs.result);
+            if (rs.success) {
+                this.refreshUser(rs.result.userName)
+            } else {
+                console.log(rs);
+                alert('get user faild from leftMenu')
+            }
+        });
+    }
+    refreshUser = (userName) => {
+        userName && this.setState({ userName: userName });
     }
     _pressRow(rowID) {
         // console.log(tempMenuData[rowID].menuCode);
@@ -73,7 +108,7 @@ export default class LeftMenu extends Component {
                             fontSize: 60
                         }}>❌</Text>
                     </View>
-                    <Text style={styles.userName}>XXXXXXXX</Text>
+                    <Text style={styles.userName}>{this.state.userName}</Text>
                 </View>
                 <View style={styles.menuContainer}>
                     <ListView
