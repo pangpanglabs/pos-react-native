@@ -48,7 +48,7 @@ export default class BasketCell extends Component {
                             </View>
                             <View style={styles.rowRightSub}>
                                 <Text style={styles.rowContentCode}>{this.props.rowData.sku.code}</Text>
-                                <Text style={styles.rowContentListPrice}>¥{this.props.rowData.listPrice}</Text>
+                                <Text style={styles.rowContentListPrice}></Text>
                             </View>
                             <View style={styles.rowRightSub}>
                                 <Text style={styles.rowContentSize}>styleName...</Text>

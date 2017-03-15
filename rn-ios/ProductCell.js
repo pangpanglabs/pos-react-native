@@ -36,11 +36,11 @@ export default class ProductCell extends Component {
                         </View>
                         <View style={styles.rowRightSub}>
                             <Text style={styles.rowContentCode}>{this.props.rowData.code}</Text>
-                            <Text style={styles.rowContentListPrice}>¥{this.props.rowData.listPrice}</Text>
+                            <Text style={styles.rowContentListPrice}></Text>
                         </View>
                         <View style={styles.rowRightSub}>
                             <Text style={styles.rowContentCode}>9.5折</Text>
-                            <Text style={styles.rowContentSalePrice}>¥{this.props.rowData.salePrice}</Text>
+                            <Text style={styles.rowContentSalePrice}>¥{this.props.rowData.listPrice}</Text>
                         </View>
 
                     </View>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         textDecorationLine: 'line-through',
     },
     rowContentSalePrice: {
-        flex: 2,
+        flex: 5,
         // backgroundColor:'green',
         paddingRight: 20,
         fontSize: 16,
