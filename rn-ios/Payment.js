@@ -337,7 +337,7 @@ styles = StyleSheet.create({
         color: 'white',
     },
     rightBtn: {
-        marginTop: 20,
+        marginTop: isIOS ? 20 : 0,
         height: 40,
         width: 50,
         justifyContent: 'center',

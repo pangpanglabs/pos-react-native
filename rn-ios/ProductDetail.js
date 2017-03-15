@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
         height: modalContentHeight,
         marginTop: deviceH - modalContentHeight,
         backgroundColor: 'white',
-        paddingBottom: 50,
+        paddingBottom: isIOS ? 50 : 90,
     },
     modalContentTop: {
         width: deviceW,
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
         // flexDirection: "row",
         width: deviceW,
         // justifyContent: "center",
-        paddingBottom:marginValue,
+        paddingBottom: marginValue,
     },
     sizeItem: {
         // margin: marginValue,
@@ -401,8 +401,8 @@ const styles = StyleSheet.create({
         // flexDirection: "row",
         width: deviceW,
         // justifyContent: "center",
-        paddingBottom:marginValue,
-        
+        paddingBottom: marginValue,
+
     },
     colorItem: {
         width: 110,
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: 'white',
         position: "absolute",
-        bottom: 0,
+        bottom: isIOS ? 0 : 40,
         justifyContent: "center",
         alignItems: "center",
     },
