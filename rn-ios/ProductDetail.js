@@ -115,8 +115,6 @@ export default class ProductDetail extends Component {
         await this.setState({ selectColorKey: color });
         // await console.log(this.meetSecondConditionData[0].images.medium.url );
 
-
-
     }
     _existColor = (color) => {
         let isExist = false;
@@ -138,7 +136,6 @@ export default class ProductDetail extends Component {
                             <Text numberOfLines={1} style={[styles.sizeItemTopBtnText, this.state.selectSizeKey == val ? { color: "white", } : {}]}>{val}</Text>
                         </View>
                     </TouchableWithoutFeedback>
-                    <Text style={styles.sizeItemBottom}>150/76</Text>
                 </View>
             )
         })
@@ -159,7 +156,7 @@ export default class ProductDetail extends Component {
                     <View style={styles.colorItem} key={color}>
                         <TouchableWithoutFeedback onPress={() => this._colorItemPress(color)}>
                             <View style={[styles.colorItemTop,]}>
-                                <Text style={[styles.colorItemTopBtnText, { color: "red" }]}>{color}</Text>
+                                <Text style={[styles.colorItemTopBtnText, { color: "#cccccc" }]}>{color}</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
@@ -200,10 +197,9 @@ export default class ProductDetail extends Component {
                         <View style={styles.sizeContainer}>
                             <View>
                                 <Text style={styles.sizeTitle}>尺码</Text>
-                                <Text style={styles.sizeContext}>
+                                <ScrollView horizontal={true} style={styles.sizeContext}>
                                     {sizeContent}
-
-                                </Text>
+                                </ScrollView>
                             </View>
                         </View>
                         <View style={styles.line} />
@@ -211,10 +207,9 @@ export default class ProductDetail extends Component {
                         <View style={styles.colorContainer}>
                             <View>
                                 <Text style={styles.colorTitle}>颜色</Text>
-                                <Text style={styles.colorContext}>
+                                <ScrollView horizontal={true} style={styles.colorContext}>
                                     {colorContent}
-
-                                </Text>
+                                </ScrollView>
                             </View>
                         </View>
                         <View style={styles.line} />
@@ -351,15 +346,15 @@ const styles = StyleSheet.create({
         marginBottom: marginValue,
     },
     sizeContext: {
-        flexDirection: "row",
+        // flexDirection: "row",
         width: deviceW,
-        justifyContent: "center",
-        // textAlign:"center",
+        // justifyContent: "center",
+        paddingBottom:marginValue,
     },
     sizeItem: {
         // margin: marginValue,
         width: 90,
-        height: 55,
+        height: 40,
         // backgroundColor: "red",
         alignItems: "center",
         justifyContent: "center",
@@ -371,23 +366,23 @@ const styles = StyleSheet.create({
         borderRadius: radiusValue,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 5,
+        // marginBottom: 5,
     },
     sizeItemTopBtnText: {
-        color: "#b1a9a9",
+        color: "#808080",
         fontWeight: "500",
         paddingHorizontal: marginValue,
         fontSize: 12,
         overflow: "hidden",
     },
-    sizeItemBottom: {
-        textAlign: "center",
-        color: "#7474ac",
-        paddingHorizontal: marginValue,
-        fontSize: 12,
-        fontWeight: "500",
-        overflow: "hidden",
-    },
+    // sizeItemBottom: {
+    //     textAlign: "center",
+    //     color: "#7474ac",
+    //     paddingHorizontal: marginValue,
+    //     fontSize: 12,
+    //     fontWeight: "500",
+    //     overflow: "hidden",
+    // },
 
 
     colorContainer: {
@@ -403,10 +398,11 @@ const styles = StyleSheet.create({
         marginBottom: marginValue,
     },
     colorContext: {
-        flexDirection: "row",
+        // flexDirection: "row",
         width: deviceW,
-        justifyContent: "center",
-        // textAlign:"center",
+        // justifyContent: "center",
+        paddingBottom:marginValue,
+        
     },
     colorItem: {
         width: 110,
@@ -422,11 +418,11 @@ const styles = StyleSheet.create({
         borderRadius: radiusValue,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 5,
+        // marginBottom: 5,
     },
     colorItemTopBtnText: {
         paddingHorizontal: marginValue,
-        color: "#b1a9a9",
+        color: "#808080",
         fontSize: 12,
         fontWeight: "500",
         overflow: "hidden",
