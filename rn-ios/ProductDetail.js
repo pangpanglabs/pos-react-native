@@ -18,7 +18,7 @@ export default class ProductDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            qtyCount: 0,
+            qtyCount: 1,
             selectSizeKey: "",
             selectColorKey: "",
         }
@@ -86,8 +86,11 @@ export default class ProductDetail extends Component {
     }
 
     componentDidMount() {
-        // this._sizeItemPress(this.props.productStyles["Size"][0]);
-
+        this._sizeItemPress(this.props.productStyles["Size"][0]).then(() => {
+            if (this.meetFirstConditionData.length > 0) {
+                this._colorItemPress(this.meetFirstConditionData[0].options[1].v);
+            }
+        });
     }
     _pressConfirmButton = () => {
         if (this.meetSecondConditionData.length == 1 && this.state.qtyCount > 0) {

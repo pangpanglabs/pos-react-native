@@ -40,13 +40,13 @@ class SpotSet extends Component {
     _getContextUser() {
         PangPangBridge.callAPI("/context/user", null).then((data) => {
             var rs = JSON.parse(data);
-            // console.log(rs.result);
+            console.log(rs.result);
             if (rs.success) {
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(rs.result.spots),
                     currentSpotId: rs.result.currentSpotId
                 });
-                DeviceEventEmitter.emit("refreshUser",rs.result.userName);
+                DeviceEventEmitter.emit("refreshUser", rs.result.userName);
             } else {
                 console.log(rs);
                 // alert('get user faild from spot')
@@ -83,7 +83,11 @@ class SpotSet extends Component {
         );
     }
     async _pressMenuButton() {
-        if (! await validateLocaStorage()) return;
+        // if (! await validateLocaStorage()) return;
+        if (this.state.currentSpotId == 0) {
+            alert("请选择卖场");
+            return
+        }
         this.props.toggle();
     }
     _pressSyncButton() {
@@ -223,7 +227,7 @@ styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color: 'white',
-        opacity:0,
+        opacity: 0,
     },
 });
 
