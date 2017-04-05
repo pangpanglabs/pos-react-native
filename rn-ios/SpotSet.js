@@ -59,6 +59,7 @@ class SpotSet extends Component {
         let spotsResult = null;
         await PangPangBridge.callAPI("/account/set-spot", { spotId: spotId }).then((data) => {
             spotsResult = JSON.parse(data);
+            // console.log(spotsResult)
         });
 
         if (spotsResult.success) {
