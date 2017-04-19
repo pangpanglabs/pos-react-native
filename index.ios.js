@@ -5,15 +5,13 @@
  */
 
 import React, { Component } from 'react';
-// import Navi from './rn-ios/Navi'
-import MenuContainer from './rn-ios/MenuContainer'
-import User from './rn-ios/User'
+// import Navi from './src/Navi'
+// import MenuContainer from './src/MenuContainer'
+// import User from './src/User'
+import Main from './src/Main'
 
 import {
   AppRegistry
-
 } from 'react-native';
 
-
- 
-AppRegistry.registerComponent('pangpangPos', () => MenuContainer);
+AppRegistry.registerComponent('pangpangPos', () => Main);

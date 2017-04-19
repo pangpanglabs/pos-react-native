@@ -5,8 +5,8 @@
  */
 
 import React, { Component } from 'react';
-// import Navi from './rn-ios/Navi'
-import MenuContainer from './rn-ios/MenuContainer'
+// import Navi from './src/Navi'
+import MenuContainer from './src/MenuContainer'
 import {
   AppRegistry
 
