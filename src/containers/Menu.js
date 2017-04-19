@@ -16,7 +16,7 @@ import {
 import SplashScreen from 'react-native-splash-screen'
 import { signalObj } from './Signals';
 
-export default class MenuContainer extends Component {
+export default class Menu extends Component {
   constructor() {
     super();
     this.state = {

@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 // import Navi from './src/Navi'
-import MenuContainer from './src/MenuContainer'
+import Menu from './src/Menu'
 import {
   AppRegistry
 
@@ -14,4 +14,4 @@ import {
 
 
  
-AppRegistry.registerComponent('platform_PosRN', () => MenuContainer);
+AppRegistry.registerComponent('platform_PosRN', () => Menu);
