@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import BasketList from './BasketList';
-import ProductCell from './ProductCell';
-import ProductDetail from './ProductDetail';
+import ProductCell from './components/ProductCell';
+import ProductDetail from './components/ProductDetail';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 

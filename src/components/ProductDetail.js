@@ -10,7 +10,7 @@ import {
     Button,
     ScrollView,
 } from 'react-native';
-import { px2dp, isIOS, deviceW, deviceH } from '../util';
+import { px2dp, isIOS, deviceW, deviceH } from '../../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
