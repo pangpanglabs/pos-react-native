@@ -7,6 +7,7 @@ import {
     Navigator,
     NativeModules
 } from 'react-native';
+import { connect } from 'react-redux';
 import CatalogList from './CatalogList';
 import Login from './Login';
 import SpotSet from './SpotSet';
@@ -22,7 +23,7 @@ class Loading extends React.Component {
         )
     }
 }
-export default class Validate extends React.Component {
+class Validate extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -31,7 +32,7 @@ export default class Validate extends React.Component {
 
     async componentWillMount() {
         const { navigator } = this.props;
-        global.myNavigator = navigator;
+        // global.myNavigator = navigator;
         let token = "";
         let autoLoginSucccess = false;
         await AsyncStorage.getItem("token").then((data) => {
@@ -77,6 +78,17 @@ export default class Validate extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Validate)
 
 const styles = StyleSheet.create({
     loading: {

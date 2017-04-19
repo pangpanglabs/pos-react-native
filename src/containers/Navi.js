@@ -12,10 +12,11 @@ import {
     StyleSheet,
     Navigator,
 } from 'react-native';
-import { signalObj } from './Signals';
+import { connect } from 'react-redux';
+import { setNavi} from '../actions/navi.js';
 import LoadingComponent from '../components/Loading';
 
-export default class Navi extends React.Component {
+class Navi extends React.Component {
     state = {
         isShow: false,
     }
@@ -25,44 +26,41 @@ export default class Navi extends React.Component {
 
     renderScene = (route, navigator) => {
         let Component = route.component;
+        this.props.setNavi(navigator)
         return (
-            <Component  {...route.params}   {...this.props} navigator={navigator} />
+            <Component  {...route.params}   {...this.props} navigator={navigator} />
         );
     }
-
-    componentDidMount() {
-        // Event
-        signalObj.removeAll();
-        signalObj.add(function (signal, param) {
-            if (signal === "naviReplace") {
-                // console.log(param);
-                switch (param) {
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.menuStatus.menuCode){
+            let param = nextProps.menuStatus.menuCode
+            switch (param) {
                     case "settings":
-                        global.myNavigator.replace({
+                        nextProps.naviStatus.replace({
                             name: 'Setting',
                             component: Setting,
                         });
                         break;
                     case "user":
-                        global.myNavigator.replace({
+                        nextProps.naviStatus.replace({
                             name: 'User',
                             component: User,
                         });
                         break;
                     case "catalogList":
-                        global.myNavigator.replace({
+                        nextProps.naviStatus.replace({
                             name: 'CatalogList',
                             component: CatalogList,
                         });
                         break;
                     case "validate":
-                        global.myNavigator.replace({
+                        nextProps.naviStatus.replace({
                             name: 'Validate',
                             component: Validate,
                         });
                         break;
                     case "spotset":
-                        global.myNavigator.replace({
+                        nextProps.naviStatus.replace({
                             name: 'SpotSet',
                             component: SpotSet,
                         });
@@ -70,11 +68,10 @@ export default class Navi extends React.Component {
                     default:
                         break;
                 }
-
-            }
-        });
+        }
     }
     render() {
+        console.log("navi render menuStatus ==>",this.props.menuStatus)
         let defaultName = 'Validate';
         let defaultComponent = Validate;
         return (
@@ -94,6 +91,18 @@ export default class Navi extends React.Component {
         );
     }
 }
+function mapStateToProps(state) {
+    return {
+        naviStatus: state.navi,
+        menuStatus: state.menu
+    };
+}
 
+function mapDispatchToProps(dispatch) {
+    return {
+        setNavi:(navi)=>dispatch(setNavi(navi))
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Navi)
 
 

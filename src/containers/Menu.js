@@ -6,17 +6,18 @@ import {
   Dimensions,
   TouchableOpacity,
   AppRegistry,
-  StyleSheet,
   Text,
   View,
   AsyncStorage,
   Platform,
   BackAndroid,
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen'
-import { signalObj } from './Signals';
+import { connect } from 'react-redux';
+import { selectMenu } from '../actions/menu.js';
 
-export default class Menu extends Component {
+import SplashScreen from 'react-native-splash-screen'
+
+class Menu extends Component {
   constructor() {
     super();
     this.state = {
@@ -63,7 +64,7 @@ export default class Menu extends Component {
           isOpen: false,
           // selectedItem: item,
         });
-        signalObj.dispatch("naviReplace", 'validate');
+        this.props.selectMenu({menuCode:"validate"})
       })
     }
     else {
@@ -71,12 +72,12 @@ export default class Menu extends Component {
         isOpen: false,
         selectedItem: item,
       });
-      signalObj.dispatch("naviReplace", item);
+
+      this.props.selectMenu({menuCode:item})
     }
   }
   render() {
     const menu = <LeftMenu onItemSelected={this.onMenuItemSelected} />;
-
     return (
       <SideMenu
         menu={menu}
@@ -89,6 +90,15 @@ export default class Menu extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
 
-});
+function mapStateToProps(state) {
+    return {
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        selectMenu:(menuCode,naviStatus)=>dispatch(selectMenu(menuCode,naviStatus))
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Menu)

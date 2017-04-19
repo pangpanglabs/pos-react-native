@@ -75,20 +75,24 @@ export default class LeftMenu extends Component {
     }
     _renderRow(rowData, sectionID, rowID) {
         let iconContent;
-        if (rowData.menuCode === "user") {
-            iconContent = <Icon name="user-o" style={styles.backBtnImg} ></Icon>
-        }
-        if (rowData.menuCode === "catalogList") {
-            iconContent = <Icon name="shopping-cart" style={styles.backBtnImg} ></Icon>
-        }
-        if (rowData.menuCode === "settings") {
-            iconContent = <Icon name="cog" style={styles.backBtnImg} ></Icon>
-        }
-        if (rowData.menuCode === "logout") {
-            iconContent = <Icon name="sign-out" style={styles.backBtnImg} ></Icon>
-        }
-        if (rowData.menuCode === "spotset") {
-            iconContent = <Icon name="bank" style={styles.backBtnImg} ></Icon>
+        switch(rowData.menuCode){
+            case "user":
+                iconContent = <Icon name="user-o" style={styles.backBtnImg} ></Icon>
+            break;
+            case "catalogList":
+                iconContent = <Icon name="shopping-cart" style={styles.backBtnImg} ></Icon>
+            break;
+            case "settings":
+                iconContent = <Icon name="cog" style={styles.backBtnImg} ></Icon>
+            break;
+            case "logout":
+                iconContent = <Icon name="sign-out" style={styles.backBtnImg} ></Icon>
+            break;
+            case "spotset":
+                iconContent = <Icon name="bank" style={styles.backBtnImg} ></Icon>
+            break;
+            default:
+            break;
         }
         return (
             <TouchableOpacity onPress={(rowData) => { this._pressRow(rowID) }} >
