@@ -15,7 +15,7 @@ export default class ProductCell extends Component {
     }
     static propTypes = {
         rowData: React.PropTypes.shape({
-            images:React.PropTypes.any.isRequired,
+            images:React.PropTypes.any,
             code: React.PropTypes.string.isRequired,
             listPrice: React.PropTypes.any.isRequired,
             name: React.PropTypes.string.isRequired,
@@ -29,7 +29,8 @@ export default class ProductCell extends Component {
         return (
             <TouchableOpacity onPress={this.props.onPress} style={styles.row}>
                 <View style={styles.rowContent}>
-                    <Image style={styles.rowIcon} source={{uri:this.props.rowData.images.small.url}} ></Image>
+                    {this.props.rowData.images?<Image style={styles.rowIcon} source={{uri:this.props.rowData.images.small.url}} ></Image>:<Image style={styles.rowIcon} ></Image>}
+                    
                     <View style={styles.rowRightContent}>
                         <View style={styles.rowRightSub}>
                             <Text style={styles.rowContentCode}>{this.props.rowData.name}</Text>

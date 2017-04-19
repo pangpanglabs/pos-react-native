@@ -24,7 +24,7 @@ export default class BasketCell extends Component {
             sku: React.PropTypes.shape({
                 code:React.PropTypes.string.isRequired,
                 name:React.PropTypes.string.isRequired,
-                images:React.PropTypes.any.isRequired,
+                images:React.PropTypes.any,
                 
             }),
         }),
@@ -40,7 +40,8 @@ export default class BasketCell extends Component {
             <TouchableHighlight onPress={this.props.onPress} style={styles.rowFront} underlayColor={'#fff'}>
                 <View >
                     <View style={styles.rowContent}>
-                        <Image style={styles.rowIcon} source={{uri:this.props.rowData.sku.images.small.url}} ></Image>
+                        {this.props.rowData.sku.images?<Image style={styles.rowIcon} source={{uri:this.props.rowData.sku.images.small.url}} ></Image>:<Image style={styles.rowIcon} ></Image>}
+                        
 
                         <View style={styles.rowRightContent}>
                             <View style={styles.rowRightSub}>

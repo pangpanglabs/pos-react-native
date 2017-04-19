@@ -31,7 +31,7 @@ export default class ProductDetail extends Component {
         skusData: React.PropTypes.arrayOf(React.PropTypes.shape({
             code: React.PropTypes.string.isRequired,
             id: React.PropTypes.number.isRequired,
-            images: React.PropTypes.object.isRequired,
+            images: React.PropTypes.object,
             options: React.PropTypes.array.isRequired,
             salePrice: React.PropTypes.any.isRequired,
         })),
@@ -183,7 +183,8 @@ export default class ProductDetail extends Component {
                     <View>
                         <View style={styles.topContainer}>
                             <View style={styles.topLeftContainer}>
-                                <Image style={styles.rowIcon} source={{ uri: this.props.skusData[0].images.medium.url }}></Image>
+                                {this.props.skusData[0].images?<Image style={styles.rowIcon} source={{ uri: this.props.skusData[0].images.medium.url }}></Image>:<Image style={styles.rowIcon}></Image>}
+                                
                             </View>
                             <View style={styles.topRightContainer}>
                                 <Text numberOfLines={1} style={styles.topRightText}>{this.meetSecondConditionData.length == 1 && this.meetSecondConditionData[0].name}</Text>
