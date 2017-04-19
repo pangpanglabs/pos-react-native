@@ -3,7 +3,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from './reducers';
-import Menu from './MenuContainer'
+import Menu from './containers/MenuContainer'
 
 const middlewares = [thunk];
 if (process.env.NODE_ENV === `development`) {

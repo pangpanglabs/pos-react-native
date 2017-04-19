@@ -13,7 +13,7 @@ import {
     NativeModules,
     Alert
 } from 'react-native';
-import BasketCell from './components/BasketCell';
+import BasketCell from '../components/BasketCell';
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';

@@ -15,7 +15,7 @@ import {
 
 import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import QRCodeScreen from './QRCodeScreen';
+import QRCodeScreen from '../components/QRCodeScreen';
 import CatalogList from './CatalogList.js'
 
 var PangPangBridge = NativeModules.PangPangBridge;

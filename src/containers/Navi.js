@@ -13,7 +13,7 @@ import {
     Navigator,
 } from 'react-native';
 import { signalObj } from './Signals';
-import LoadingComponent from './Loading';
+import LoadingComponent from '../components/Loading';
 
 export default class Navi extends React.Component {
     state = {

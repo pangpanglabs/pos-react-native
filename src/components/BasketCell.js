@@ -7,7 +7,7 @@ import {
     Text,
     Image
 } from 'react-native';
-import { px2dp, isIOS, deviceW, deviceH } from '../../util';
+import { px2dp, isIOS, deviceW, deviceH } from '../util';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class BasketCell extends Component {
